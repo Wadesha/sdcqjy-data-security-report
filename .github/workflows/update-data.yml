@@ -1,0 +1,52 @@
+name: 自动更新数据
+
+on:
+  schedule:
+    # 每天北京时间 08:00 运行 (UTC 00:00)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # 支持手动触发
+    inputs:
+      reason:
+        description: '触发原因'
+        required: false
+        default: '手动触发'
+
+jobs:
+  update-data:
+    name: 获取最新数据并更新 d.html
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 执行数据获取脚本
+        run: node scripts/fetch-data.js
+
+      - name: 检查是否有变更
+        id: check-changes
+        run: |
+          if git diff --quiet d.html; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "数据无变化，跳过提交"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "数据有更新，准备提交"
+          fi
+
+      - name: 提交并推送更新
+        if: steps.check-changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add d.html
+          git commit -m "chore: auto-update data $(date +'%Y-%m-%d')"
+          git push
