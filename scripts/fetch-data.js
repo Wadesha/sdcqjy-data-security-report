@@ -209,7 +209,44 @@ function generateHTML(records) {
   const sortedPrices = [...prices].sort((a, b) => a - b);
   const medianPrice = sortedPrices[Math.floor(sortedPrices.length / 2)];
 
-  // ========== 智能分组：按主体聚合 ==========
+  /**
+ * 计算距截止日期的天数及状态解析
+ */
+function analyzeRecord(r) {
+  const now = new Date();
+  const end = new Date(r.endDate.replace(/\//g, '-'));
+  const days = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+
+  let urgency = '';
+  let urgencyColor = '';
+  let action = '';
+
+  if (r.proStage === '等待挂牌') {
+    action = '尚未开放，关注开始日期';
+    urgency = days <= 3 ? '即将开放' : '待开放';
+    urgencyColor = days <= 3 ? '#1565c0' : '#999';
+  } else if (r.proStage === '正在报名') {
+    action = '可提交报名材料';
+    if (days <= 1) { urgency = '最后机会'; urgencyColor = '#c62828'; }
+    else if (days <= 3) { urgency = '即将截止'; urgencyColor = '#e65100'; }
+    else if (days <= 7) { urgency = '报名中'; urgencyColor = '#e89500'; }
+    else { urgency = '充裕'; urgencyColor = '#2e7d32'; }
+  } else if (r.proStage === '正在报价') {
+    action = '已注册方可竞价';
+    if (days <= 1) { urgency = '竞拍最后'; urgencyColor = '#c62828'; }
+    else if (days <= 3) { urgency = '即将结拍'; urgencyColor = '#e65100'; }
+    else if (days <= 7) { urgency = '竞价中'; urgencyColor = '#e89500'; }
+    else { urgency = '竞价中'; urgencyColor = '#2e7d32'; }
+  } else {
+    action = '—';
+    urgency = r.proStage || '—';
+    urgencyColor = '#999';
+  }
+
+  return { days, urgency, urgencyColor, action };
+}
+
+// ========== 智能分组：按主体聚合 ==========
   const entityGroups = {};
   const standalone = [];
 
@@ -410,16 +447,18 @@ details summary::-webkit-details-marker{display:none}
 <div class="gs-item"><span class="gs-num">${(groupMin / 10000).toFixed(1)}~${(groupMax / 10000).toFixed(0)}万</span><span class="gs-lbl">价格区间</span></div>
 <div class="gs-item"><span class="gs-num">${Object.entries(groupStages).map(([k, v]) => v + k).join(' ')}</span><span class="gs-lbl">阶段分布</span></div>
 </div>
-<table class="group-table"><tr><th>#</th><th>编号</th><th>位置/名称</th><th>挂牌价格</th><th>截止日期</th><th>状态</th></tr>`;
+<table class="group-table"><tr><th>#</th><th>编号</th><th>位置/名称</th><th>挂牌价格</th><th>截止日期</th><th>剩余</th><th>状态</th><th>解析</th></tr>`;
     sorted.forEach((r, i) => {
       const priceStr = r.price >= 10000 ? (r.price / 10000).toFixed(r.price % 10000 === 0 ? 0 : 2) + '万' : r.price + '元';
       const stageClass = r.proStage === '等待挂牌' ? 'st0' : (r.proStage === '正在报名' ? 'st1' : 'st2');
+      const a = analyzeRecord(r);
       // 提取具体位置
       let displayName = r.name;
       const dnMatch = r.name.match(/^([^--]+)/);
       if (dnMatch) displayName = dnMatch[1].trim();
       if (displayName.length > 50) displayName = displayName.substring(0, 50) + '...';
-      html += `<tr><td style="color:#aaa">${i + 1}</td><td style="font-size:11px;color:#888">${r.code}</td><td class="n">${displayName}</td><td class="p">${priceStr}</td><td style="font-size:11px;color:#888">${r.endDate.replace(/\//g, '-')}</td><td><span class="st ${stageClass}">${r.proStage}</span></td></tr>`;
+      const codeShort = r.code.length > 10 ? r.code.substring(0, 8) + '..' : r.code;
+      html += `<tr><td style="color:#aaa">${i + 1}</td><td style="font-size:10px;color:#aaa;cursor:help" title="${r.code}">${codeShort}</td><td class="n">${displayName}</td><td class="p">${priceStr}</td><td style="font-size:11px;color:#888">${r.endDate.replace(/\//g, '-')}</td><td style="font-size:11px;color:${a.urgencyColor};font-weight:500">${a.days > 0 ? a.days + '天' : '已截止'}</td><td><span class="st ${stageClass}">${r.proStage}</span></td><td style="font-size:11px"><span style="color:${a.urgencyColor};font-weight:500">${a.urgency}</span> <span style="color:#999">${a.action}</span></td></tr>`;
     });
     html += `</table>
 </div>
@@ -431,13 +470,15 @@ details summary::-webkit-details-marker{display:none}
   html += `<div class="s2" style="margin-top:32px">独立项目 <em>(${sortedStandalone.length} 项)</em></div>`;
   html += `<p style="font-size:12px;color:#888;margin-bottom:16px">未归属批量分组的独立挂牌项目，按价格降序排列。</p>`;
   html += `<div style="overflow-x:auto;max-height:500px;overflow-y:auto">`;
-  html += `<table><tr><th>#</th><th>编号</th><th>项目名称</th><th>挂牌价格</th><th>截止日期</th><th>状态</th><th>分类</th></tr>`;
+  html += `<table><tr><th>#</th><th>编号</th><th>项目名称</th><th>挂牌价格</th><th>截止日期</th><th>剩余</th><th>状态</th><th>解析</th><th>分类</th></tr>`;
   sortedStandalone.forEach((r, i) => {
     const priceStr = r.price >= 10000 ? (r.price / 10000).toFixed(r.price % 10000 === 0 ? 0 : 2) + '万' : r.price + '元';
     const stageClass = r.proStage === '等待挂牌' ? 'st0' : (r.proStage === '正在报名' ? 'st1' : 'st2');
     const cat = classifyRecord(r.name);
     const tagClass = cat === '房产' ? 'tag-blue' : cat === '车辆' ? 'tag-orange' : cat === '金融资产' ? 'tag-green' : 'tag-grey';
-    html += `<tr><td style="color:#aaa">${i + 1}</td><td style="font-size:11px;color:#888">${r.code}</td><td class="n">${r.name.substring(0, 80)}</td><td class="p">${priceStr}</td><td style="font-size:11px;color:#888">${r.endDate.replace(/\//g, '-')}</td><td><span class="st ${stageClass}">${r.proStage}</span></td><td><span class="tag ${tagClass}">${cat}</span></td></tr>`;
+    const a = analyzeRecord(r);
+    const codeShort = r.code.length > 10 ? r.code.substring(0, 8) + '..' : r.code;
+    html += `<tr><td style="color:#aaa">${i + 1}</td><td style="font-size:10px;color:#aaa;cursor:help" title="${r.code}">${codeShort}</td><td class="n">${r.name.substring(0, 80)}</td><td class="p">${priceStr}</td><td style="font-size:11px;color:#888">${r.endDate.replace(/\//g, '-')}</td><td style="font-size:11px;color:${a.urgencyColor};font-weight:500">${a.days > 0 ? a.days + '天' : '已截止'}</td><td><span class="st ${stageClass}">${r.proStage}</span></td><td style="font-size:11px"><span style="color:${a.urgencyColor};font-weight:500">${a.urgency}</span> <span style="color:#999">${a.action}</span></td><td><span class="tag ${tagClass}">${cat}</span></td></tr>`;
   });
   html += `</table></div>`;
 
@@ -448,11 +489,13 @@ details summary::-webkit-details-marker{display:none}
     const tagClass = cat === '房产' ? 'tag-blue' : cat === '车辆' ? 'tag-orange' : cat === '金融资产' ? 'tag-green' : 'tag-grey';
     html += `<details style="margin-bottom:8px"><summary style="padding:8px 12px;background:#fff;border-radius:6px;border:1px solid #e8e8e8;font-size:13px;font-weight:500;color:#1a1a2e;cursor:pointer;display:flex;align-items:center;gap:8px"><span class="tag ${tagClass}">${cat}</span><span>${items.length} 项</span><span style="color:#888;font-weight:400;font-size:12px">点击展开</span></summary>`;
     html += `<div style="overflow-x:auto;max-height:400px;overflow-y:auto;margin-top:4px;border-radius:6px;border:1px solid #e8e8e8">`;
-    html += `<table><tr><th>#</th><th>编号</th><th>项目名称</th><th>挂牌价格</th><th>截止日期</th><th>状态</th></tr>`;
+    html += `<table><tr><th>#</th><th>编号</th><th>项目名称</th><th>挂牌价格</th><th>截止日期</th><th>剩余</th><th>状态</th><th>解析</th></tr>`;
     sorted.forEach((r, i) => {
       const priceStr = r.price >= 10000 ? (r.price / 10000).toFixed(r.price % 10000 === 0 ? 0 : 2) + '万' : r.price + '元';
       const stageClass = r.proStage === '等待挂牌' ? 'st0' : (r.proStage === '正在报名' ? 'st1' : 'st2');
-      html += `<tr><td style="color:#aaa">${i + 1}</td><td style="font-size:11px;color:#888">${r.code}</td><td class="n">${r.name.substring(0, 80)}</td><td class="p">${priceStr}</td><td style="font-size:11px;color:#888">${r.endDate.replace(/\//g, '-')}</td><td><span class="st ${stageClass}">${r.proStage}</span></td></tr>`;
+      const a = analyzeRecord(r);
+      const codeShort = r.code.length > 10 ? r.code.substring(0, 8) + '..' : r.code;
+      html += `<tr><td style="color:#aaa">${i + 1}</td><td style="font-size:10px;color:#aaa;cursor:help" title="${r.code}">${codeShort}</td><td class="n">${r.name.substring(0, 80)}</td><td class="p">${priceStr}</td><td style="font-size:11px;color:#888">${r.endDate.replace(/\//g, '-')}</td><td style="font-size:11px;color:${a.urgencyColor};font-weight:500">${a.days > 0 ? a.days + '天' : '已截止'}</td><td><span class="st ${stageClass}">${r.proStage}</span></td><td style="font-size:11px"><span style="color:${a.urgencyColor};font-weight:500">${a.urgency}</span> <span style="color:#999">${a.action}</span></td></tr>`;
     });
     html += `</table></div></details>`;
   });
