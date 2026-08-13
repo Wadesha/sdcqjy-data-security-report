@@ -1,10 +1,18 @@
-https://wadesha.github.io/sdcqjy-data-security-report/
+**在线访问：** https://wadesha.github.io/sdcqjy-data-security-report/
+
+**数据视图：** https://wadesha.github.io/sdcqjy-data-security-report/d.html
 
 # 产权交易平台数据安全保护与防误爬综合治理体系研究报告
 
 本报告基于山东产权交易中心（sdcqjy.com）的实证分析，从数据安全保护视角出发，系统评估了该平台的防误爬机制与数据安全防护体系。
 
-## 报告内容概览
+## 页面内容说明
+
+### 主报告页面
+
+报告地址：https://wadesha.github.io/sdcqjy-data-security-report/
+
+一份完整的 HTML 交互式报告，包含以下内容：
 
 | 章节 | 内容 |
 |------|------|
@@ -19,6 +27,19 @@ https://wadesha.github.io/sdcqjy-data-security-report/
 | **九、安全加固与持续改进路径** | 12项改进建议，按优先级排序 |
 | **附录：网络从业者与爱好者数据获取使用的安全指引** | 数据获取前中后的合规审查、安全规范、存储管理、主动避免误抓误爬、应急处理措施 |
 
+### 数据视图页面
+
+地址：https://wadesha.github.io/sdcqjy-data-security-report/d.html
+
+一个轻量级数据展示页面，提供以下功能：
+
+- **统计概览** — 总记录数、总估值、价格区间、均值中位数
+- **价格分布直方图** — 按价格区间可视化分布
+- **资产分类统计** — 7大类资产（房产、车辆、设备物资、金融资产等）的项数、总值、均值
+- **分阶段明细** — 按等待挂牌/正在报名/正在报价分类，每类按价格降序排列
+- **批量资产分组** — 识别同一主体的批量挂牌资产并分组展示
+- **数据每日自动更新** — 通过 GitHub Actions 每天定时获取最新数据
+
 ## 报告看点
 
 ### 数据保护核心要点
@@ -32,9 +53,11 @@ https://wadesha.github.io/sdcqjy-data-security-report/
 - 事中安全规范：控制请求频率、尊重反自动化机制、做好日志记录
 - 事后数据管理：加密存储、权限控制、最小化保留、及时销毁
 
-## 查看完整报告
+## 技术架构
 
-打开 [https://wadesha.github.io/sdcqjy-data-security-report/](https://wadesha.github.io/sdcqjy-data-security-report/) 查看完整的 HTML 版本报告。
+- **前端**：纯 HTML/CSS/JavaScript，无框架依赖，GitHub Pages 托管
+- **数据获取**：Node.js 脚本，定时调用数据接口并解析
+- **自动化**：GitHub Actions 每日定时运行，自动更新数据并推送
 
 ## 研究性质
 
