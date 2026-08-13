@@ -15,6 +15,7 @@ const path = require('path');
 const BASE_URL = 'http://www.sdcqjy.com';
 const API_PATH = '/projlist/getdata';
 const OUTPUT_FILE = path.join(__dirname, '..', 'd.html');
+const HISTORY_FILE = path.join(__dirname, '..', 'history.json');
 
 // 分类配置
 const CATEGORIES = [
@@ -96,6 +97,69 @@ function parseRecords(html) {
   }
 
   return records;
+}
+
+/**
+ * 历史数据追踪：记录每个项目第一次进入"正在报价"的日期
+ * 结构: { proId: { code, name, startDate, firstSeenDate, firstBidDate, lastStage, lastSeenDate } }
+ */
+function loadHistory() {
+  try {
+    if (fs.existsSync(HISTORY_FILE)) {
+      return JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf-8'));
+    }
+  } catch (e) {
+    console.error('读取 history.json 失败:', e.message);
+  }
+  return {};
+}
+
+function updateHistory(records, history) {
+  const today = new Date().toISOString().split('T')[0];
+
+  records.forEach(r => {
+    if (!history[r.proId]) {
+      history[r.proId] = {
+        code: r.code,
+        name: r.name.substring(0, 80),
+        startDate: r.startDate || '',
+        firstSeenDate: today,
+        firstBidDate: null,
+        lastStage: r.proStage,
+        lastSeenDate: today,
+      };
+    }
+
+    const h = history[r.proId];
+    h.lastSeenDate = today;
+    h.lastStage = r.proStage;
+    if (r.startDate && !h.startDate) h.startDate = r.startDate;
+
+    // 第一次进入"正在报价" → 记录日期
+    if (r.proStage === '正在报价' && !h.firstBidDate) {
+      h.firstBidDate = today;
+    }
+  });
+
+  // 清理 90 天未更新的项目
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 90);
+  let cleaned = 0;
+  Object.keys(history).forEach(k => {
+    if (history[k].lastSeenDate && new Date(history[k].lastSeenDate) < cutoff) {
+      delete history[k];
+      cleaned++;
+    }
+  });
+
+  try {
+    fs.writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 0), 'utf-8');
+    console.log(`history.json 已更新: ${Object.keys(history).length} 条记录 (清理 ${cleaned} 条过期)`);
+  } catch (e) {
+    console.error('写入 history.json 失败:', e.message);
+  }
+
+  return history;
 }
 
 /**
@@ -191,7 +255,7 @@ function extractLocation(name) {
 /**
  * 生成 d.html
  */
-function generateHTML(records) {
+function generateHTML(records, history) {
   if (records.length === 0) {
     console.error('无数据，不生成 HTML');
     return false;
@@ -212,92 +276,87 @@ function generateHTML(records) {
   /**
  * 市场洞察分析
  *
- * 核心市场逻辑：
- *   - 正在报名 = 还没人出价 → 无人问津 / 滞销
- *       距截止日越近仍无人报价 → 流拍风险越高
- *   - 正在报价 = 已有人出价 → 抢手
- *       刚开放就有人报价 → 火热 或 内部预定/疑似安排
- *       临近截止且有人报价 → 竞价白热化
- *   - 等待挂牌 = 未开放
+ * 核心逻辑：
+ *   正在报价 = 已有人出价 → 畅销
+ *     · 有 firstBidDate 记录 → 第一次出价距发布日越近越畅销
+ *     · 无 firstBidDate（首次抓取）→ 距截止日越远/跟踪越久越畅销
+ *   正在报名 = 无人出价 → 就标"无人出价"，不硬贴滞销标签
+ *   等待挂牌 = 未开放
  */
-function analyzeRecord(r, categoryMedian, categoryAvg) {
+function analyzeRecord(r, categoryMedian, categoryAvg, h) {
   const now = new Date();
   const end = new Date(r.endDate.replace(/\//g, '-'));
   const start = r.startDate ? new Date(r.startDate.replace(/\//g, '-')) : null;
   const days = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
   const totalDuration = start ? Math.ceil((end - start) / (1000 * 60 * 60 * 24)) : 0;
   const elapsed = start ? Math.ceil((now - start) / (1000 * 60 * 60 * 24)) : 0;
-  const progress = totalDuration > 0 ? elapsed / totalDuration : 0;
 
-  // 价格相对分类中位数
   let priceVsMedian = 0;
   if (categoryMedian > 0 && r.price > 0) {
     priceVsMedian = (r.price - categoryMedian) / categoryMedian;
   }
 
   let insights = [];
-  let heat = 0; // 热度评分：<0 滞销, >0 抢手
+  let heat = 0;
 
-  // ========== 阶段 × 时间 = 核心市场信号 ==========
-  if (r.proStage === '正在报名') {
-    // 还没人报价 = 无人问津
+  if (r.proStage === '正在报价') {
+    // ===== 已有人出价 → 畅销 =====
+    const firstBidDate = h && h.firstBidDate ? h.firstBidDate : null;
+    const firstSeenDate = h && h.firstSeenDate ? h.firstSeenDate : null;
+    const firstSeenDays = firstSeenDate
+      ? Math.ceil((now - new Date(firstSeenDate)) / (1000 * 60 * 60 * 24))
+      : 0;
+
+    if (firstBidDate && start) {
+      // 有历史记录：精确计算第一次出价距发布日的天数
+      const daysToFirstBid = Math.ceil(
+        (new Date(firstBidDate) - start) / (1000 * 60 * 60 * 24)
+      );
+      if (daysToFirstBid <= 1) {
+        insights.push({ text: '畅销·秒配(' + daysToFirstBid + '天)', color: '#c62828', weight: 'bold' });
+        heat = 5;
+      } else if (daysToFirstBid <= 3) {
+        insights.push({ text: '畅销·速配(' + daysToFirstBid + '天)', color: '#c62828', weight: 'bold' });
+        heat = 4;
+      } else if (daysToFirstBid <= 7) {
+        insights.push({ text: '畅销(' + daysToFirstBid + '天)', color: '#e65100', weight: 'bold' });
+        heat = 3;
+      } else {
+        insights.push({ text: '有人出价(' + daysToFirstBid + '天)', color: '#2e7d32', weight: 'normal' });
+        heat = 2;
+      }
+    } else {
+      // 无历史记录（首次抓取）：用距截止日远近 / 跟踪时长近似
+      if (elapsed <= 3 || (totalDuration > 0 && days > totalDuration * 0.6) || firstSeenDays > 14) {
+        // 刚发布就有人出价 / 离截止还远就有人出价 / 跟踪已久持续报价
+        insights.push({ text: '畅销', color: '#c62828', weight: 'bold' });
+        heat = 3;
+      } else if (days > 0 && days <= 2) {
+        insights.push({ text: '竞价白热化', color: '#c62828', weight: 'bold' });
+        heat = 3;
+      } else {
+        insights.push({ text: '有人出价', color: '#2e7d32', weight: 'normal' });
+        heat = 2;
+      }
+    }
+  } else if (r.proStage === '正在报名') {
+    // ===== 无人出价 → 就标"无人出价" =====
+    insights.push({ text: '无人出价', color: '#888', weight: 'normal' });
     heat = -1;
-    if (days > 0 && days <= 3) {
-      // 临近截止仍无人报价 → 流拍风险
-      insights.push({text: '临近流拍', color: '#c62828', weight: 'bold'});
-      heat = -3;
-    } else if (progress > 0.6 && days > 0 && days <= 7) {
-      // 报名过半仍无人报价 → 滞销加剧
-      insights.push({text: '滞销', color: '#e65100', weight: 'bold'});
-      heat = -2;
-    } else if (elapsed <= 2) {
-      // 刚开放，正常观望期
-      insights.push({text: '观望期', color: '#1565c0', weight: 'normal'});
-      heat = 0;
-    } else {
-      insights.push({text: '无人报价', color: '#888', weight: 'normal'});
-    }
-  } else if (r.proStage === '正在报价') {
-    // 已有人出价 = 抢手
-    heat = 2;
-    if (elapsed <= 1 || (progress <= 0.2 && elapsed <= 3)) {
-      // 刚开放就有人报价 → 火热 或 内部预定/疑似安排
-      insights.push({text: '速配·疑内部预定', color: '#6a1b9a', weight: 'bold'});
-      heat = 3;
-    } else if (days > 0 && days <= 2) {
-      // 临近截止且已有人报价 → 竞价白热化
-      insights.push({text: '竞价白热化', color: '#c62828', weight: 'bold'});
-      heat = 4;
-    } else if (progress > 0.5) {
-      // 后半段已有报价 → 有竞争
-      insights.push({text: '有竞争', color: '#2e7d32', weight: 'bold'});
-      heat = 3;
-    } else {
-      insights.push({text: '有人出价', color: '#2e7d32', weight: 'normal'});
-    }
   } else if (r.proStage === '等待挂牌') {
-    insights.push({text: '未开放', color: '#999', weight: 'normal'});
+    insights.push({ text: '未开放', color: '#999', weight: 'normal' });
     heat = 0;
   }
 
-  // ========== 价格维度（辅助信号）==========
+  // ===== 价格维度（辅助信号）=====
   if (priceVsMedian < -0.3) {
-    insights.push({text: '低价急出', color: '#1565c0', weight: 'normal'});
+    insights.push({ text: '低价', color: '#1565c0', weight: 'normal' });
   } else if (priceVsMedian > 1) {
-    insights.push({text: '高估值', color: '#888', weight: 'normal'});
-  }
-
-  // ========== 挂牌周期维度 ==========
-  if (totalDuration > 0 && r.proStage !== '等待挂牌') {
-    if (totalDuration <= 5) {
-      insights.push({text: '短窗口', color: '#e89500', weight: 'normal'});
-    } else if (totalDuration > 30) {
-      insights.push({text: '长周期挂牌', color: '#888', weight: 'normal'});
-    }
+    insights.push({ text: '高估值', color: '#888', weight: 'normal' });
   }
 
   if (insights.length === 0) {
-    insights.push({text: '—', color: '#ccc', weight: 'normal'});
+    insights.push({ text: '—', color: '#ccc', weight: 'normal' });
   }
 
   return { days, totalDuration, elapsed, insights, heat };
@@ -463,19 +522,20 @@ details summary::-webkit-details-marker{display:none}
   html += `<details style="margin:8px 0 24px"><summary style="font-size:11px;color:#aaa;cursor:pointer;padding:4px 8px">· 解析逻辑</summary>
 <div style="font-size:11px;color:#666;padding:10px 14px;background:#fafbfc;border:1px solid #eee;border-radius:6px;line-height:1.9">
 <div style="margin-bottom:6px"><b style="color:#444">阶段含义</b></div>
-<div>· <span style="color:#6b7c93">等待挂牌</span> — 尚未开放报名</div>
-<div>· <span style="color:#e89500">正在报名</span> — 已开放，<b>尚无人报价</b>，距截止日越近越滞销</div>
-<div>· <span style="color:#2e7d32">正在报价</span> — <b>已有人出价</b>，距截止日越近竞价越激烈</div>
-<div style="margin:8px 0 6px"><b style="color:#444">解析标签</b></div>
-<div>· <span style="color:#c62828;font-weight:600">临近流拍</span> — 报名阶段、剩 ≤3 天仍无人报价</div>
-<div>· <span style="color:#e65100;font-weight:600">滞销</span> — 报名过半仍无人报价</div>
-<div>· <span style="color:#1565c0">观望期</span> — 刚开放报名 (≤2 天)</div>
-<div>· <span style="color:#6a1b9a;font-weight:600">速配·疑内部预定</span> — 刚开放即有人报价，疑似提前安排</div>
+<div>· <span style="color:#6b7c93">等待挂牌</span> — 尚未开放</div>
+<div>· <span style="color:#e89500">正在报名</span> — <b>无人出价</b>（事实陈述，不贴标签）</div>
+<div>· <span style="color:#2e7d32">正在报价</span> — <b>已有人出价</b> → 畅销</div>
+<div style="margin:8px 0 6px"><b style="color:#444">畅销度（基于历史追踪 firstBidDate）</b></div>
+<div>· <span style="color:#c62828;font-weight:600">畅销·秒配</span> — 发布 1 天内即有人出价</div>
+<div>· <span style="color:#c62828;font-weight:600">畅销·速配</span> — 发布 ≤3 天有人出价</div>
+<div>· <span style="color:#e65100;font-weight:600">畅销</span> — 发布 ≤7 天有人出价</div>
+<div>· <span style="color:#2e7d32">有人出价</span> — 有人出价但出价较晚</div>
 <div>· <span style="color:#c62828;font-weight:600">竞价白热化</span> — 报价阶段、剩 ≤2 天</div>
-<div>· <span style="color:#2e7d32;font-weight:600">有竞争</span> — 报价阶段已过半</div>
-<div>· <span style="color:#1565c0">低价急出</span> — 价格低于分类中位数 30%+</div>
-<div>· <span style="color:#888">高估值</span> — 价格高于中位数 100%+</div>
-<div>· <span style="color:#e89500">短窗口</span> / <span style="color:#888">长周期挂牌</span> — 挂牌周期 ≤5 天 / >30 天</div>
+<div>· <span style="color:#888">无人出价</span> — 报名阶段，无修饰</div>
+<div style="margin:8px 0 6px"><b style="color:#444">辅助信号</b></div>
+<div>· <span style="color:#1565c0">低价</span> — 低于分类中位数 30%+</div>
+<div>· <span style="color:#888">高估值</span> — 高于中位数 100%+</div>
+<div style="margin-top:8px;color:#999;font-size:10px">历史数据通过 history.json 追踪，首次抓取的项目用距截止日远近近似判断。</div>
 </div></details>`;
 
   html += `<div class="s2">资产分类统计</div>`;
@@ -538,7 +598,7 @@ details summary::-webkit-details-marker{display:none}
       const stageClass = r.proStage === '等待挂牌' ? 'st0' : (r.proStage === '正在报名' ? 'st1' : 'st2');
       const cat = classifyRecord(r.name);
       const cs = categoryStats[cat] || { median: 0, avg: 0 };
-      const a = analyzeRecord(r, cs.median, cs.avg);
+      const a = analyzeRecord(r, cs.median, cs.avg, history[r.proId]);
       // 提取具体位置
       let displayName = r.name;
       const dnMatch = r.name.match(/^([^--]+)/);
@@ -565,7 +625,7 @@ details summary::-webkit-details-marker{display:none}
     const cat = classifyRecord(r.name);
     const tagClass = cat === '房产' ? 'tag-blue' : cat === '车辆' ? 'tag-orange' : cat === '金融资产' ? 'tag-green' : 'tag-grey';
     const cs = categoryStats[cat] || { median: 0, avg: 0 };
-    const a = analyzeRecord(r, cs.median, cs.avg);
+    const a = analyzeRecord(r, cs.median, cs.avg, history[r.proId]);
     const codeShort = r.code.length > 10 ? r.code.substring(0, 8) + '..' : r.code;
     const insightHtml = a.insights.map(ins => `<span style="color:${ins.color};font-weight:${ins.weight === 'bold' ? 600 : 400};margin-right:4px">${ins.text}</span>`).join('');
     html += `<tr><td style="color:#aaa">${i + 1}</td><td style="font-size:10px;color:#aaa;cursor:help" title="${r.code}">${codeShort}</td><td class="n">${r.name.substring(0, 80)}</td><td class="p">${priceStr}</td><td style="font-size:11px;color:#888">${r.endDate.replace(/\//g, '-')}</td><td style="font-size:11px;color:${a.days <= 3 ? '#c62828' : a.days <= 7 ? '#e65100' : '#666'};font-weight:500">${a.days > 0 ? a.days + '天' : '已截止'}</td><td><span class="st ${stageClass}">${r.proStage}</span></td><td style="font-size:11px">${insightHtml}</td><td><span class="tag ${tagClass}">${cat}</span></td></tr>`;
@@ -585,7 +645,7 @@ details summary::-webkit-details-marker{display:none}
       const stageClass = r.proStage === '等待挂牌' ? 'st0' : (r.proStage === '正在报名' ? 'st1' : 'st2');
       const cat = classifyRecord(r.name);
       const cs = categoryStats[cat] || { median: 0, avg: 0 };
-      const a = analyzeRecord(r, cs.median, cs.avg);
+      const a = analyzeRecord(r, cs.median, cs.avg, history[r.proId]);
       const codeShort = r.code.length > 10 ? r.code.substring(0, 8) + '..' : r.code;
       const insightHtml = a.insights.map(ins => `<span style="color:${ins.color};font-weight:${ins.weight === 'bold' ? 600 : 400};margin-right:4px">${ins.text}</span>`).join('');
       html += `<tr><td style="color:#aaa">${i + 1}</td><td style="font-size:10px;color:#aaa;cursor:help" title="${r.code}">${codeShort}</td><td class="n">${r.name.substring(0, 80)}</td><td class="p">${priceStr}</td><td style="font-size:11px;color:#888">${r.endDate.replace(/\//g, '-')}</td><td style="font-size:11px;color:${a.days <= 3 ? '#c62828' : a.days <= 7 ? '#e65100' : '#666'};font-weight:500">${a.days > 0 ? a.days + '天' : '已截止'}</td><td><span class="st ${stageClass}">${r.proStage}</span></td><td style="font-size:11px">${insightHtml}</td></tr>`;
@@ -626,7 +686,11 @@ async function main() {
     }
     console.log(`去重后: ${unique.length} 条`);
 
-    generateHTML(unique);
+    // 更新历史数据（记录 firstBidDate 等）
+    const history = loadHistory();
+    updateHistory(unique, history);
+
+    generateHTML(unique, history);
   } catch (e) {
     console.error('脚本执行失败:', e.message);
     process.exit(1);

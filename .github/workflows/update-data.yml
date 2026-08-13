@@ -37,7 +37,7 @@ jobs:
       - name: 检查是否有变更
         id: check-changes
         run: |
-          if git diff --quiet d.html; then
+          if git diff --quiet d.html history.json; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "数据无变化，跳过提交"
           else
@@ -50,6 +50,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add d.html
+          git add d.html history.json
           git commit -m "chore: auto-update data $(date +'%Y-%m-%d')"
           git push
