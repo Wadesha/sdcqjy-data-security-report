@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>山东产权交易中心 - 反扒措施分析与数据采集报告</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card-hover: #222632;
+    --border: #2a2e3a;
+    --text: #e0e0e0;
+    --text-dim: #888;
+    --accent: #4fc3f7;
+    --accent-dim: #29b6f6;
+    --green: #66bb6a;
+    --red: #ef5350;
+    --orange: #ffa726;
+    --purple: #ab47bc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #0277bd 100%);
+    padding: 48px 24px 40px;
+    text-align: center;
+    border-bottom: 3px solid var(--accent);
+  }
+  .header h1 {
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    color: #b3e5fc;
+    font-size: 15px;
+  }
+  .header .meta {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header .meta span {
+    background: rgba(255,255,255,0.12);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #e1f5fe;
+  }
+
+  /* Container */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 36px;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 12px;
+    transition: background 0.2s;
+  }
+  .card:hover {
+    background: var(--card-hover);
+  }
+
+  /* Badge */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-red { background: rgba(239,83,80,0.15); color: var(--red); }
+  .badge-green { background: rgba(102,187,106,0.15); color: var(--green); }
+  .badge-orange { background: rgba(255,167,38,0.15); color: var(--orange); }
+  .badge-blue { background: rgba(79,195,247,0.15); color: var(--accent); }
+  .badge-purple { background: rgba(171,71,188,0.15); color: var(--purple); }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead {
+    background: #242830;
+  }
+  th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  tbody tr:hover {
+    background: rgba(79,195,247,0.05);
+  }
+  .text-right { text-align: right; }
+  .text-center { text-align: center; }
+  .text-dim { color: var(--text-dim); }
+  .text-green { color: var(--green); }
+  .text-red { color: var(--red); }
+  .text-orange { color: var(--orange); }
+  .text-blue { color: var(--accent); }
+  .nowrap { white-space: nowrap; }
+  .mono { font-family: "Cascadia Code", "Fira Code", monospace; font-size: 13px; }
+
+  /* Code block */
+  .code-block {
+    background: #0d0f14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-family: "Cascadia Code", "Fira Code", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #a5d6a7;
+  }
+  .code-block .key { color: var(--accent); }
+  .code-block .val { color: var(--orange); }
+  .code-block .comment { color: var(--text-dim); }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .stat-card .label {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Progress bar */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .progress-label {
+    width: 160px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 10px;
+    background: var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.5s;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 8px 18px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    font-size: 14px;
+    transition: all 0.2s;
+    border-radius: 6px 6px 0 0;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: rgba(79,195,247,0.08);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Financial table */
+  .fin-table th { background: #1e222c; }
+  .fin-table td:nth-child(1) { color: var(--text-dim); white-space: nowrap; }
+  .fin-table .num-cell { text-align: right; font-family: "Cascadia Code", monospace; }
+
+  /* Note */
+  .note {
+    background: rgba(79,195,247,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  .note-warn {
+    background: rgba(255,167,38,0.08);
+    border-left-color: var(--orange);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-dim);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  /* Highlight */
+  .highlight {
+    background: rgba(255,235,59,0.1);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  @media (max-width: 768px) {
+    .header h1 { font-size: 22px; }
+    .progress-label { width: 100px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HEADER ==================== -->
+<div class="header">
+  <h1>山东产权交易中心 反扒措施分析与数据采集报告</h1>
+  <div class="subtitle">目标站点：http://www.sdcqjy.com</div>
+  <div class="meta">
+    <span>报告日期：2026-08-13</span>
+    <span>目标页面：/proj/tc/9ec1a881769e49f7a0c26c6f106b04f1</span>
+    <span>分析工具：Browser Automation + Network Analysis</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ==================== 概览 ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon" style="background:rgba(79,195,247,0.15);">1</span>
+      采集概览
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num">327</div>
+        <div class="label">项目总数（首页分页显示）</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">10</div>
+        <div class="label">每页显示条数</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">3</div>
+        <div class="label">发现可用API端点</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">6</div>
+        <div class="label">反扒措施层级</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 反扒措施 ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon" style="background:rgba(239,83,80,0.15);">2</span>
+      反扒措施分析
+    </div>
+
+    <div class="note note-warn">
+      <strong>核心发现：</strong>该网站采用"<strong>路径白名单制</strong>"——仅允许首页 <code>/</code> 和带有有效UUID的详情页
+      <code>/proj/tc/{uuid}</code> 访问，其余所有非标准路径（robots.txt、sitemap.xml、目录列表、带参数URL）全部直接断连 <code>ERR_CONNECTION_CLOSED</code>。
+    </div>
+
+    <div class="table-wrap" style="margin-top:12px;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30px;">#</th>
+            <th>反扒措施</th>
+            <th>技术细节</th>
+            <th>实测结果</th>
+            <th class="text-center">严重度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>路径白名单</strong></td>
+            <td>仅 <code>/</code> 和 <code>/proj/tc/{uuid}</code> 可访问</td>
+            <td>测试30+路径全部 <span class="text-red">ERR_CONNECTION_CLOSED</span></td>
+            <td class="text-center"><span class="badge badge-red">高</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>robots.txt 封锁</strong></td>
+            <td>访问 <code>/robots.txt</code> 直接断连</td>
+            <td><span class="text-red">连接被拒绝</span></td>
+            <td class="text-center"><span class="badge badge-orange">中</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>sitemap.xml 封锁</strong></td>
+            <td>访问 <code>/sitemap.xml</code> 直接断连</td>
+            <td><span class="text-red">连接被拒绝</span></td>
+            <td class="text-center"><span class="badge badge-orange">中</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>目录列表禁用</strong></td>
+            <td><code>/proj/</code>、<code>/proj/tc/</code> 等目录路径全部断连</td>
+            <td><span class="text-red">连接被拒绝</span></td>
+            <td class="text-center"><span class="badge badge-orange">中</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>URL UUID 防遍历</strong></td>
+            <td>项目ID为32位随机UUID，无法自增遍历</td>
+            <td>需先获取UUID才能访问详情页</td>
+            <td class="text-center"><span class="badge badge-orange">中</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><strong>调试器检测</strong></td>
+            <td>JS中包含 <code>endebug()</code> 反调试函数，检测Firebug</td>
+            <td>当前已注释禁用 <code>// endebug(false, ...)</code></td>
+            <td class="text-center"><span class="badge badge-green">低</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><strong>Referer 策略</strong></td>
+            <td><code>&lt;meta name="referrer" content="no-referrer"&gt;</code></td>
+            <td>不发送Referer头，不影响爬取</td>
+            <td class="text-center"><span class="badge badge-green">低</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 未发现 -->
+    <div class="card" style="margin-top:16px;">
+      <strong style="color:var(--green);">未检测到的反扒措施：</strong>
+      <span class="badge badge-green" style="margin-left:8px;">频率限制</span>
+      <span class="badge badge-green" style="margin-left:4px;">IP封禁</span>
+      <span class="badge badge-green" style="margin-left:4px;">验证码</span>
+      <span class="badge badge-green" style="margin-left:4px;">JS渲染验证</span>
+      <span class="badge badge-green" style="margin-left:4px;">User-Agent检测</span>
+      <span class="badge badge-green" style="margin-left:4px;">Cookie验证</span>
+      <p style="margin-top:8px;font-size:13px;color:var(--text-dim);">连续3次快速请求同一页面均成功，未触发任何限制。</p>
+    </div>
+  </div>
+
+  <!-- ==================== 发现的API ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon" style="background:rgba(102,187,106,0.15);">3</span>
+      发现的隐藏API接口
+    </div>
+    <div class="note">
+      <strong>突破方式：</strong>通过浏览器开发者工具的 Network 面板，捕获页面加载时的 AJAX 请求，成功发现后端 API 端点。
+    </div>
+
+    <div class="table-wrap" style="margin-top:12px;">
+      <table>
+        <thead>
+          <tr>
+            <th>API端点</th>
+            <th class="text-center">方法</th>
+            <th>Content-Type</th>
+            <th>参数</th>
+            <th class="text-center">状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono text-green"><strong>/getZCData</strong></td>
+            <td class="text-center">POST</td>
+            <td class="mono">application/x-www-form-urlencoded</td>
+            <td class="mono">assetsType=</td>
+            <td class="text-center"><span class="badge badge-green">可用</span></td>
+          </tr>
+          <tr>
+            <td class="mono text-green"><strong>/api/qryServiceImg</strong></td>
+            <td class="text-center">GET</td>
+            <td class="text-dim">-</td>
+            <td class="text-dim">无</td>
+            <td class="text-center"><span class="badge badge-green">可用</span></td>
+          </tr>
+          <tr>
+            <td class="mono text-orange">/bidding-ms-manager/noauth/bcproject/listPageByBiddingLobbyOnRedis</td>
+            <td class="text-center">POST</td>
+            <td class="mono">application/json</td>
+            <td class="text-dim">未知（返回500）</td>
+            <td class="text-center"><span class="badge badge-orange">参数不明</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="code-block" style="margin-top:12px;">
+<span class="comment">// 核心API调用示例 — /getZCData</span>
+<span class="key">POST</span> /getZCData HTTP/1.1
+Host: www.sdcqjy.com
+Content-Type: application/x-www-form-urlencoded
+
+assetsType=<span class="val"></span>   <span class="comment">// 空字符串 = 获取全部项目</span>
+assetsType=<span class="val">1</span>      <span class="comment">// 分类代码 = 获取特定分类</span>
+
+<span class="comment">// 响应格式：HTML表格片段（非JSON）</span>
+<span class="comment">// 每行 &lt;tr data-proId="UUID"&gt; 包含：编号、名称、价格、截止日期、状态</span>
+<span class="comment">// 总数据量：327条，每页10条，支持分页</span>
+    </div>
+  </div>
+
+  <!-- ==================== 采集到的项目列表 ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon" style="background:rgba(171,71,188,0.15);">4</span>
+      采集到的项目数据
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(event,'tab-lobby')">竞价大厅列表（10条）</div>
+      <div class="tab" onclick="switchTab(event,'tab-detail')">项目详情：渤海恒通轮渡</div>
+    </div>
+
+    <!-- Tab 1: 项目列表 -->
+    <div id="tab-lobby" class="tab-content active">
+      <div class="note">
+        通过 <code>/getZCData</code> API 获取，返回HTML表格片段，已解析为结构化数据。
+      </div>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>项目编号</th>
+              <th>项目名称</th>
+              <th class="text-right">挂牌价格</th>
+              <th class="text-center">截止日期</th>
+              <th class="text-center">状态</th>
+              <th class="text-center">项目UUID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td class="mono">SWZC26057902H</td>
+              <td>7辆车（待处置车）</td>
+              <td class="text-right">24.579万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">728aea37...</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td class="mono">SWZC26045102H3</td>
+              <td>鲁V12763-潍柴雷沃智慧农业3台车辆资产</td>
+              <td class="text-right">1.407万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">fd173ce7...</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td class="mono">SWZC260112H109</td>
+              <td>重汽集团济南动力-曲轴箱线设备资产包</td>
+              <td class="text-right">91.23万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">851d2cd6...</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td class="mono">SWZC260112H108</td>
+              <td>重汽集团济南动力-公共设备资产包</td>
+              <td class="text-right">15.38万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">ad4f9f3c...</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td class="mono">SWZC260112H107</td>
+              <td>重汽集团济南动力-飞轮飞轮壳线资产包</td>
+              <td class="text-right">17.24万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">b3404f7a...</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td class="mono">SWZC260112H106</td>
+              <td>重汽集团济南动力-缸盖线设备资产包</td>
+              <td class="text-right">369.07万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">cd386064...</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td class="mono">SWZC260112H105</td>
+              <td>重汽集团济南动力-齿轮室线设备资产包</td>
+              <td class="text-right">24万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">3f317f9d...</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td class="mono">SWZC260112H104</td>
+              <td>重汽集团济南动力-连杆线设备资产包</td>
+              <td class="text-right">50.78万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">9845b416...</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td class="mono">SWZC260112H103</td>
+              <td>重汽集团济南动力-粗精加工线设备资产包</td>
+              <td class="text-right">172.99万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">c5694f30...</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td class="mono">SWZC260112H102</td>
+              <td>重汽集团济南动力-曲轴线设备资产包</td>
+              <td class="text-right">116.92万元</td>
+              <td class="text-center nowrap">2026-08-20</td>
+              <td class="text-center"><span class="badge badge-orange">等待挂牌</span></td>
+              <td class="mono text-dim" style="font-size:11px;">c07da713...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:8px;font-size:13px;color:var(--text-dim);">* 仅展示第1页数据，总计327条，可通过分页参数获取全部</p>
+    </div>
+
+    <!-- Tab 2: 项目详情 -->
+    <div id="tab-detail" class="tab-content">
+      <div class="note">
+        通过 <code>/proj/tc/9ec1a881769e49f7a0c26c6f106b04f1</code> 获取的完整详情页数据。
+      </div>
+
+      <!-- 基本信息 -->
+      <div class="card">
+        <h3 style="color:var(--accent);margin-bottom:12px;">基本信息</h3>
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr><td style="width:140px;" class="text-dim">项目名称</td><td><strong>渤海恒通轮渡有限公司5%国有股权挂牌转让</strong></td></tr>
+              <tr><td class="text-dim">项目编号</td><td class="mono">SZZR260048</td></tr>
+              <tr><td class="text-dim">转让底价</td><td><strong class="text-orange">2,069.484万元</strong></td></tr>
+              <tr><td class="text-dim">保证金</td><td><strong>200万元</strong>（银行转账）</td></tr>
+              <tr><td class="text-dim">挂牌起止</td><td>2026-07-22 至 2026-08-18</td></tr>
+              <tr><td class="text-dim">转让方</td><td>龙口港集团有限公司</td></tr>
+              <tr><td class="text-dim">围观数</td><td>340</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 标的企业 -->
+      <div class="card">
+        <h3 style="color:var(--accent);margin-bottom:12px;">标的企业基本情况</h3>
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr><td style="width:140px;" class="text-dim">企业名称</td><td>渤海恒通轮渡有限公司</td></tr>
+              <tr><td class="text-dim">注册地</td><td>山东省烟台市龙口市龙港街道水产二场营业楼101铺</td></tr>
+              <tr><td class="text-dim">法定代表人</td><td>于新建</td></tr>
+              <tr><td class="text-dim">成立日期</td><td>2018-08-10</td></tr>
+              <tr><td class="text-dim">注册资本</td><td>10,000万元（人民币）</td></tr>
+              <tr><td class="text-dim">企业类型</td><td>有限责任公司</td></tr>
+              <tr><td class="text-dim">经营范围</td><td>客运轮渡运输，沿海货物运输（货滚运输、集装箱运输、甩挂车运输、商品车运输），物流代理，贸易经纪与代理</td></tr>
+              <tr><td class="text-dim">职工人数</td><td>2人</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 股权结构 -->
+      <div class="card">
+        <h3 style="color:var(--accent);margin-bottom:12px;">股权结构</h3>
+        <div class="table-wrap">
+          <table class="fin-table">
+            <thead>
+              <tr><th>序号</th><th>股东名称</th><th class="text-right">持股比例</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>渤海轮渡集团股份有限公司</td><td class="num-cell text-blue"><strong>51%</strong></td></tr>
+              <tr><td>2</td><td>龙口市恒通船务有限公司</td><td class="num-cell">44%</td></tr>
+              <tr><td>3</td><td>龙口港集团有限公司 <span class="badge badge-purple" style="margin-left:4px;">转让方</span></td><td class="num-cell text-orange"><strong>5%</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 财务数据 -->
+      <div class="card">
+        <h3 style="color:var(--accent);margin-bottom:12px;">主要财务指标（万元）</h3>
+        <div class="table-wrap">
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>报告期</th>
+                <th class="text-right">资产总额</th>
+                <th class="text-right">负债总额</th>
+                <th class="text-right">所有者权益</th>
+                <th class="text-right">营业收入</th>
+                <th class="text-right">净利润</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>2024年度审计</strong></td>
+                <td class="num-cell">44,010.13</td>
+                <td class="num-cell">24,408.46</td>
+                <td class="num-cell">19,601.67</td>
+                <td class="num-cell">20,416.36</td>
+                <td class="num-cell text-green">2,777.82</td>
+              </tr>
+              <tr>
+                <td><strong>2025-07-31基准日</strong></td>
+                <td class="num-cell">42,925.37</td>
+                <td class="num-cell">21,764.54</td>
+                <td class="num-cell">21,160.83</td>
+                <td class="num-cell">11,781.20</td>
+                <td class="num-cell text-green">1,535.84</td>
+              </tr>
+              <tr>
+                <td><strong>2026-05-31月报</strong></td>
+                <td class="num-cell">41,851.58</td>
+                <td class="num-cell">18,535.48</td>
+                <td class="num-cell">23,316.10</td>
+                <td class="num-cell">7,160.74</td>
+                <td class="num-cell text-green">750.62</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 资产评估 -->
+      <div class="card">
+        <h3 style="color:var(--accent);margin-bottom:12px;">资产评估情况</h3>
+        <div class="table-wrap">
+          <table class="fin-table">
+            <thead>
+              <tr><th>评估项目</th><th class="text-right">账面价值（万元）</th><th class="text-right">评估价值（万元）</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>资产总计</td><td class="num-cell">42,925.37</td><td class="num-cell text-dim">未提供</td></tr>
+              <tr><td>负债总计</td><td class="num-cell">21,764.54</td><td class="num-cell text-dim">未提供</td></tr>
+              <tr><td>净资产</td><td class="num-cell">21,160.83</td><td class="num-cell text-orange"><strong>41,389.68</strong></td></tr>
+              <tr><td>转让标的对应评估值</td><td colspan="2" class="text-center"><strong class="text-orange">2,069.484万元</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:8px;font-size:13px;color:var(--text-dim);">评估机构：北京卓信大华资产评估有限公司 | 核准日期：2025-11-10</p>
+      </div>
+
+      <!-- 交易条件 -->
+      <div class="card">
+        <h3 style="color:var(--accent);margin-bottom:12px;">交易条件与联系方式</h3>
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr><td style="width:160px;" class="text-dim">交易方式</td><td>网络竞价</td></tr>
+              <tr><td class="text-dim">价款支付方式</td><td>一次支付</td></tr>
+              <tr><td class="text-dim">信息公告期</td><td>20个工作日</td></tr>
+              <tr><td class="text-dim">是否允许联合受让</td><td><span class="text-red">不允许</span></td></tr>
+              <tr><td class="text-dim">原股东优先受让权</td><td><span class="text-orange">不放弃</span></td></tr>
+              <tr><td class="text-dim">交易机构联系人</td><td>裴女士</td></tr>
+              <tr><td class="text-dim">联系电话</td><td class="mono text-blue">0531-81272777</td></tr>
+              <tr><td class="text-dim">联系邮箱</td><td class="mono text-blue">peym@sdcqjy.com</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 防护强度评估 ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon" style="background:rgba(255,167,38,0.15);">5</span>
+      防护强度评估
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <div class="progress-row">
+        <div class="progress-label">路径/参数校验</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%;background:var(--red);"></div></div>
+        <span class="badge badge-red">高</span>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">URL 防遍历</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--red);"></div></div>
+        <span class="badge badge-red">高</span>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">数据接口隐蔽性</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%;background:var(--orange);"></div></div>
+        <span class="badge badge-orange">中</span>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">频率限制</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:10%;background:var(--green);"></div></div>
+        <span class="badge badge-green">低</span>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">身份认证</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:20%;background:var(--green);"></div></div>
+        <span class="badge badge-green">低</span>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Robots协议</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%;background:var(--orange);"></div></div>
+        <span class="badge badge-orange">中</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong>综合评估：中等偏上</strong>
+      <p style="margin-top:8px;font-size:14px;">
+        该网站反扒强度属于<strong class="text-orange">中等偏上</strong>。核心策略是<strong>路径白名单制 + URL UUID 防遍历</strong>，
+        对于直接访问非标准路径的爬虫会直接断连。但<span class="highlight">未部署频率限制、验证码、JS 渲染验证等高级反爬措施</span>，
+        且后端存在无需认证的公开 API <code>/getZCData</code>，可通过浏览器网络请求分析直接调用获取完整项目列表。
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== 突破策略 ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon" style="background:rgba(102,187,106,0.15);">6</span>
+      突破策略总结
+    </div>
+    <div class="card">
+      <table>
+        <tbody>
+          <tr>
+            <td style="width:40px;" class="text-center"><span class="badge badge-green">1</span></td>
+            <td>
+              <strong>浏览器网络请求分析</strong><br>
+              <span class="text-dim">通过浏览器 DevTools Network 面板，捕获页面 AJAX 请求，发现后端 API 端点 <code>/getZCData</code></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center"><span class="badge badge-green">2</span></td>
+            <td>
+              <strong>API 参数逆向</strong><br>
+              <span class="text-dim">通过页面内联 JS 脚本中的 <code>getZCProj()</code> 函数，逆向出 API 参数格式：<code>assetsType</code> 字段，空字符串=全部</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center"><span class="badge badge-green">3</span></td>
+            <td>
+              <strong>HTML 表格解析</strong><br>
+              <span class="text-dim">API 返回 HTML 表格片段而非 JSON，通过解析 <code>&lt;tr data-proId="UUID"&gt;</code> 获取项目 UUID 和完整字段</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center"><span class="badge badge-green">4</span></td>
+            <td>
+              <strong>详情页直接访问</strong><br>
+              <span class="text-dim">获取 UUID 后，可直接访问 <code>/proj/tc/{uuid}</code> 获取 SSR 渲染的完整详情页，无需 JS 执行</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  山东产权交易中心（sdcqjy.com）反扒措施分析与数据采集报告<br>
+  生成时间：2026-08-13 | 采集方式：Browser Network Analysis + API Reverse Engineering
+</div>
+
+<script>
+function switchTab(evt, tabId) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  evt.target.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+
+</body>
+</html>
