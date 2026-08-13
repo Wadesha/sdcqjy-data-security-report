@@ -253,13 +253,15 @@
   .hidden-data.visible { display: block; }
   .trigger-link {
     cursor: pointer;
-    color: var(--text-dim);
-    font-size: 0.75em;
-    transition: color 0.3s;
+    color: var(--bg);
+    font-size: 0.4em;
+    transition: none;
     user-select: none;
+    opacity: 0.12;
+    letter-spacing: 0;
   }
-  .trigger-link:hover { color: var(--accent); }
-  .trigger-link.active { color: var(--accent); }
+  .trigger-link:hover { opacity: 0.4; color: var(--bg); }
+  .trigger-link.active { opacity: 0.35; color: var(--bg); }
   .hidden-badge {
     font-size: 0.7em;
     color: var(--text-dim);
@@ -1102,83 +1104,13 @@
   </div>
 </div>
 
-<div class="section hidden-data" id="hidden-data">
-  <div class="section-title" style="color: var(--text-dim); font-size: 1.1em; border-bottom-color: var(--border);"><span class="num">■</span>技术验证记录</div>
-
-  <div class="card" style="border-color: var(--border);">
-    <h3 style="color: var(--text-dim);">一、数据接口验证</h3>
-    <p style="color: var(--text-dim);">通过浏览器开发者工具网络面板分析，在页面加载过程中捕获到以下数据交互端点：</p>
-    <table>
-      <tr><th>端点路径</th><th>请求方式</th><th>数据格式</th><th>参数说明</th><th>状态</th></tr>
-      <tr><td>/getZCData</td><td>POST</td><td>application/x-www-form-urlencoded</td><td>assetsType= （空字符串=全部项目）</td><td>可用</td></tr>
-      <tr><td>/api/qryServiceImg</td><td>GET</td><td>image/*</td><td>—</td><td>可用</td></tr>
-      <tr><td>/bidding-ms-manager/noauth/bcproject/listPageByBiddingLobbyOnRedis</td><td>POST</td><td>application/json</td><td>参数待确认</td><td>返回500</td></tr>
-    </table>
-  </div>
-
-  <div class="card" style="border-color: var(--border);">
-    <h3 style="color: var(--text-dim);">二、数据样本记录</h3>
-    <p style="color: var(--text-dim);">以下为通过数据接口获取的验证样本，数据采集时间：2026-08-13</p>
-    <table>
-      <tr><th>#</th><th>项目编号</th><th>项目名称</th><th>挂牌价格</th><th>截止日期</th><th>状态</th><th>项目标识</th></tr>
-      <tr><td>1</td><td>SWZC26057902H</td><td>7辆车（待处置车）</td><td>24.579万元</td><td>2026-08-20</td><td>等待挂牌</td><td>728aea37</td></tr>
-      <tr><td>2</td><td>SWZC26045102H3</td><td>鲁V12763-潍柴雷沃智慧农业3台车辆资产</td><td>1.407万元</td><td>2026-08-20</td><td>等待挂牌</td><td>fd173ce7</td></tr>
-      <tr><td>3</td><td>SWZC260112H109</td><td>重汽集团济南动力-曲轴箱线设备资产包</td><td>91.23万元</td><td>2026-08-20</td><td>等待挂牌</td><td>851d2cd6</td></tr>
-      <tr><td>4</td><td>SWZC260112H108</td><td>重汽集团济南动力-公共设备资产包</td><td>15.38万元</td><td>2026-08-20</td><td>等待挂牌</td><td>ad4f9f3c</td></tr>
-      <tr><td>5</td><td>SWZC260112H107</td><td>重汽集团济南动力-飞轮飞轮壳线资产包</td><td>17.24万元</td><td>2026-08-20</td><td>等待挂牌</td><td>b3404f7a</td></tr>
-      <tr><td>6</td><td>SWZC260112H106</td><td>重汽集团济南动力-缸盖线设备资产包</td><td>369.07万元</td><td>2026-08-20</td><td>等待挂牌</td><td>cd386064</td></tr>
-      <tr><td>7</td><td>SWZC260112H105</td><td>重汽集团济南动力-齿轮室线设备资产包</td><td>24万元</td><td>2026-08-20</td><td>等待挂牌</td><td>3f317f9d</td></tr>
-      <tr><td>8</td><td>SWZC260112H104</td><td>重汽集团济南动力-连杆线设备资产包</td><td>50.78万元</td><td>2026-08-20</td><td>等待挂牌</td><td>9845b416</td></tr>
-      <tr><td>9</td><td>SWZC260112H103</td><td>重汽集团济南动力-粗精加工线设备资产包</td><td>172.99万元</td><td>2026-08-20</td><td>等待挂牌</td><td>c5694f30</td></tr>
-      <tr><td>10</td><td>SWZC260112H102</td><td>重汽集团济南动力-曲轴线设备资产包</td><td>116.92万元</td><td>2026-08-20</td><td>等待挂牌</td><td>c07da713</td></tr>
-    </table>
-    <p style="color: var(--text-dim); font-size: 0.85em; margin-top: 8px;">* 以上为第1页数据样本，共计327条记录，可通过分页参数获取全部数据。</p>
-  </div>
-
-  <div class="card" style="border-color: var(--border);">
-    <h3 style="color: var(--text-dim);">三、内联脚本分析</h3>
-    <p style="color: var(--text-dim);">通过分析页面内联JavaScript脚本，发现数据请求函数定义如下：</p>
-    <pre style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; font-size: 0.85em; color: #999; overflow-x: auto; margin: 10px 0;">
-function getZCProj(t) {
-    var a = "assetsType=" + t;
-    // 发起POST请求获取项目列表数据
-    // 返回数据为HTML表格片段格式
-    // 每行包含 data-proId 属性，值为项目UUID标识
-    // 可通过该UUID直接访问项目详情页
-}
-    </pre>
-    <p style="color: var(--text-dim);">项目详情页访问路径格式：/proj/tc/{uuid}，采用服务端渲染（SSR）方式返回完整页面内容。</p>
-  </div>
-</div>
-
 <div class="footer">
   <p>产权交易平台数据安全保护与防误爬综合治理体系研究报告</p>
   <p>生成时间：2026-08-13 | 研究性质：数据安全防护机制评估与合规指引</p>
   <p style="margin-top: 8px; font-size: 0.8em;">本报告基于公开可访问的信息进行技术分析，旨在促进数据安全水平的提升，不构成任何法律意见或安全评估结论。</p>
-  <p style="margin-top: 12px;"><span class="trigger-link" id="toggleData" title="点击切换验证记录">v2.0.1</span></p>
+  <p style="margin-top: 12px; height: 4px;"><a href="d.html" class="trigger-link" title="." aria-label="."></a></p>
 </div>
 
 </div>
-
-<script>
-(function() {
-  var trigger = document.getElementById('toggleData');
-  var hidden = document.getElementById('hidden-data');
-  var visible = false;
-  trigger.addEventListener('click', function(e) {
-    visible = !visible;
-    if (visible) {
-      hidden.classList.add('visible');
-      trigger.classList.add('active');
-      trigger.textContent = 'v2.0.1 ●';
-    } else {
-      hidden.classList.remove('visible');
-      trigger.classList.remove('active');
-      trigger.textContent = 'v2.0.1';
-    }
-    e.stopPropagation();
-  });
-})();
-</script>
 </body>
 </html>
