@@ -253,15 +253,14 @@
   .hidden-data.visible { display: block; }
   .trigger-link {
     cursor: pointer;
-    color: var(--bg);
-    font-size: 0.4em;
-    transition: none;
+    color: var(--text-dim);
+    font-size: 0.7em;
+    opacity: 0.25;
+    text-decoration: none;
+    transition: opacity 0.2s;
     user-select: none;
-    opacity: 0.12;
-    letter-spacing: 0;
   }
-  .trigger-link:hover { opacity: 0.4; color: var(--bg); }
-  .trigger-link.active { opacity: 0.35; color: var(--bg); }
+  .trigger-link:hover { opacity: 0.7; color: var(--accent); }
   .hidden-badge {
     font-size: 0.7em;
     color: var(--text-dim);
@@ -1108,7 +1107,7 @@
   <p>产权交易平台数据安全保护与防误爬综合治理体系研究报告</p>
   <p>生成时间：2026-08-13 | 研究性质：数据安全防护机制评估与合规指引</p>
   <p style="margin-top: 8px; font-size: 0.8em;">本报告基于公开可访问的信息进行技术分析，旨在促进数据安全水平的提升，不构成任何法律意见或安全评估结论。</p>
-  <p style="margin-top: 12px; height: 4px;"><a href="d.html" class="trigger-link" title="." aria-label="."></a></p>
+  <p style="margin-top: 12px; font-size: 0.75em; color: var(--text-dim); opacity: 0.3;"><a href="d.html" class="trigger-link">·</a></p>
 </div>
 
 </div>
