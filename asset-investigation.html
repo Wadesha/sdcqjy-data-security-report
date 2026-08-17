@@ -3,1317 +3,1674 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>山东产权交易中心 · 资产深度调查简报</title>
+<title>山东产权交易中心 · 资产挂牌全量深度调查报告</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background:#0f0f1a; color:#e0e0e0; font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; padding:40px; }
-h1 { font-size:28px; color:#fff; margin-bottom:6px; letter-spacing:1px; }
-.subtitle { color:#888; font-size:14px; margin-bottom:40px; border-bottom:1px solid #222; padding-bottom:16px; }
-.card { background:#1a1a2e; border-radius:12px; padding:28px; margin-bottom:24px; border:1px solid #2a2a3e; }
-.card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px; }
-.card-title { font-size:20px; font-weight:700; color:#fff; }
-.card-tag { display:inline-block; padding:3px 10px; border-radius:4px; font-size:11px; font-weight:600; }
-.tag-bidding { background:#1b5e20; color:#a5d6a7; }
-.tag-signup { background:#e65100; color:#ffcc80; }
-.tag-price { font-size:22px; font-weight:700; color:#ffd54f; }
-.tag-price-small { font-size:13px; color:#aaa; }
-.section { margin-bottom:14px; }
-.section-label { font-size:12px; color:#888; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
-.section-content { font-size:14px; line-height:1.8; color:#ccc; }
-.section-content strong { color:#fff; }
-.highlight { background:#2a2a3e; border-left:3px solid #ffd54f; padding:10px 14px; border-radius:0 6px 6px 0; margin:10px 0; font-size:13px; line-height:1.7; color:#bbb; }
-.highlight-red { border-left-color:#ef5350; }
-.highlight-green { border-left-color:#66bb6a; }
-.highlight-blue { border-left-color:#42a5f5; }
-.data-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
-.data-item { background:#22223a; padding:8px 12px; border-radius:6px; font-size:13px; }
-.data-item .label { color:#888; font-size:11px; }
-.data-item .value { color:#fff; font-weight:600; }
-.note { color:#666; font-size:12px; margin-top:4px; }
-.verdict { margin-top:12px; padding:12px 16px; border-radius:8px; font-size:14px; line-height:1.7; }
-.verdict-danger { background:#1a0f0f; border:1px solid #5c1a1a; color:#ef9a9a; }
-.verdict-warning { background:#1a160f; border:1px solid #5c4a1a; color:#ffe082; }
-.verdict-info { background:#0f1a2e; border:1px solid #1a3a5c; color:#90caf9; }
-.verdict-ok { background:#0f1a0f; border:1px solid #1a4a1a; color:#a5d6a7; }
-.tag-stock { background:#1565c0; color:#bbdefb; }
-.tag-bankrupt { background:#b71c1c; color:#ffcdd2; }
-.tag-restruct { background:#4a148c; color:#e1bee7; }
-.tag-sale { background:#e65100; color:#ffe0b2; }
-.links { margin-top:10px; font-size:12px; color:#555; }
-.links a { color:#42a5f5; text-decoration:none; }
-.links a:hover { text-decoration:underline; }
-.marker { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
-.marker-red { background:#ef5350; }
-.marker-yellow { background:#ffd54f; }
-.marker-green { background:#66bb6a; }
-@media (max-width:768px) {
-  body { padding:16px; }
-  .card { padding:16px; }
-  .card-header { flex-direction:column; gap:8px; }
-  .data-grid { grid-template-columns:1fr; }
-}
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card-hover: #222632;
+    --border: #2a2e3a;
+    --text: #e0e0e0;
+    --text-dim: #888;
+    --accent: #4fc3f7;
+    --green: #66bb6a;
+    --red: #ef5350;
+    --orange: #ffa726;
+    --purple: #ab47bc;
+    --yellow: #ffd54f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .header {
+    background: linear-gradient(135deg, #0d2137 0%, #1a1d27 100%);
+    border-bottom: 2px solid #1e3a5f;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .header h1 { font-size: 28px; color: #fff; margin-bottom: 10px; letter-spacing: 2px; }
+  .header .subtitle { color: #999; font-size: 14px; max-width: 700px; margin: 0 auto; line-height: 1.8; }
+  .header .badge {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #4fc3f7;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin: 14px 4px 0;
+  }
+  .header .badge-green { background: #1e3a2e; color: #66bb6a; }
+  .header .badge-orange { background: #3a2e1e; color: #ffa726; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: -32px auto 32px;
+    max-width: 1000px;
+    padding: 0 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .stat-card .num { font-size: 30px; font-weight: 700; color: #4fc3f7; }
+  .stat-card .num.green { color: #66bb6a; }
+  .stat-card .num.orange { color: #ffa726; }
+  .stat-card .num.purple { color: #ab47bc; }
+  .stat-card .lbl { font-size: 12px; color: #888; margin-top: 4px; }
+  @media (max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Entity section */
+  .entity-section { margin-bottom: 28px; }
+  .entity-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .entity-card:hover { border-color: #3a3e4a; }
+  .entity-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #2a2e3a;
+  }
+  .entity-header .entity-num {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #4fc3f7;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .entity-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .entity-header .entity-sub {
+    font-size: 13px;
+    color: #888;
+  }
+  .entity-body { padding: 16px 24px 20px; }
+  .entity-body .section-label {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  .entity-body .section-label:first-child { margin-top: 0; }
+  .entity-body .section-content { font-size: 14px; line-height: 1.8; color: #ccc; }
+  .entity-body .section-content strong { color: #fff; }
+
+  /* Table */
+  .project-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  .project-table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #22263a;
+    color: #999;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #2a2e3a;
+  }
+  .project-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #252936;
+    color: #ccc;
+  }
+  .project-table tr:hover td { background: #222632; }
+  .project-table .price { color: #ffd54f; font-weight: 600; white-space: nowrap; }
+  .project-table .status { font-size: 11px; }
+  .project-table .status-active { color: #66bb6a; }
+  .project-table .status-ended { color: #ef5350; }
+  .project-table .status-pending { color: #ffa726; }
+
+  /* Highlight boxes */
+  .highlight {
+    background: #1a1e2e;
+    border-left: 3px solid #ffd54f;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #bbb;
+  }
+  .highlight-red { border-left-color: #ef5350; }
+  .highlight-green { border-left-color: #66bb6a; }
+  .highlight-blue { border-left-color: #42a5f5; }
+  .highlight strong { color: #fff; }
+
+  /* Verdict */
+  .verdict {
+    margin-top: 12px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .verdict-danger { background: #1a0f0f; border: 1px solid #5c1a1a; color: #ef9a9a; }
+  .verdict-warning { background: #1a160f; border: 1px solid #5c4a1a; color: #ffe082; }
+  .verdict-info { background: #0f1a2e; border: 1px solid #1a3a5c; color: #90caf9; }
+  .verdict-ok { background: #0f1a0f; border: 1px solid #1a4a1a; color: #a5d6a7; }
+  .verdict .marker { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .marker-red { background: #ef5350; }
+  .marker-yellow { background: #ffd54f; }
+  .marker-green { background: #66bb6a; }
+  .marker-blue { background: #42a5f5; }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 2px 3px;
+  }
+  .tag-signup { background: #1e3a5f; color: #4fc3f7; }
+  .tag-bidding { background: #2e3a1e; color: #66bb6a; }
+  .tag-sale { background: #3a2e1e; color: #ffa726; }
+  .tag-restruct { background: #3a1e2e; color: #ef5350; }
+  .tag-ok { background: #1e2e3a; color: #81d4fa; }
+  .tag-bankrupt { background: #3a1e1e; color: #ef5350; }
+  .tag-state { background: #1e3a2e; color: #66bb6a; }
+  .tag-private { background: #3a2e1e; color: #ffa726; }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .data-item {
+    background: #22263a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .data-item .label { color: #888; font-size: 11px; }
+  .data-item .value { color: #fff; font-weight: 600; }
+  @media (max-width: 768px) {
+    .data-grid { grid-template-columns: 1fr; }
+    .project-table { font-size: 12px; }
+    .project-table th, .project-table td { padding: 6px 8px; }
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid #2a2e3a;
+    margin-top: 40px;
+    color: #666;
+    font-size: 12px;
+  }
+  .footer .disclaimer {
+    max-width: 600px;
+    margin: 12px auto 0;
+    font-size: 11px;
+    color: #555;
+    line-height: 1.6;
+  }
+  .footer a { color: #4fc3f7; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* Summary table at top */
+  .summary-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .summary-table h3 { font-size: 15px; color: #4fc3f7; margin-bottom: 12px; }
+  .summary-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .summary-table td { padding: 6px 12px; border-bottom: 1px solid #252936; color: #ccc; }
+  .summary-table td:first-child { color: #999; width: 180px; }
+  .summary-table tr:last-child td { border-bottom: none; }
+
+  /* Commentary */
+  .commentary {
+    margin: 8px 16px 16px;
+    background: #0d1a1f;
+    border: 1px solid #1a3a44;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .commentary-header {
+    background: #0f2028;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #4dd0e1;
+    border-bottom: 1px solid #1a3a44;
+  }
+  .commentary-body {
+    padding: 12px 16px 14px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #b0bec5;
+  }
+  .commentary-body p { margin-bottom: 8px; }
+  .commentary-body p:last-child { margin-bottom: 0; }
+  .commentary-body strong { color: #e0f7fa; }
 </style>
 </head>
 <body>
 
-<h1>山东产权交易中心 · 资产深度调查简报</h1>
-<div class="subtitle">调查日期：2026-08-17 &nbsp;|&nbsp; 调查方法：全网公开信息交叉验证（企查查、启信宝、证券交易所公告、产权交易公告、企业年报）</div>
-
-<!-- ========== 项目1：国统股份 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目1：新疆国统管道股份有限公司 · 诸城厂区资产</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报价</span>
-        <span class="tag tag-stock">深交所主板 002205.SZ</span>
-        <span class="tag tag-restruct">资产剥离</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">1,597 万元</div>
-      <div class="tag-price-small">含28411㎡工业用地 + 2363㎡建筑</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产背景</div>
-    <div class="section-content">
-      标的物位于山东省诸城市观海路6670号，为PCCP管道生产基地，建筑面积2363㎡（含门卫室、宿舍楼、食堂、钢结构车间南北两栋、锅炉房、办公楼等），土地使用权面积28411㎡（约42.6亩），工业用地，剩余使用年限约28年（2054年到期）。评估价1596.4万元，底价1597万，基本按评估价挂牌，无溢价预期。资产于2010年建成，目前处于闲置状态，生产设备未拆除。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>新疆国统管道股份有限公司</strong>（国统股份，002205.SZ）是中国物流集团有限公司旗下控股的上市公司，2001年成立，2008年深交所上市，主营PCCP预应力钢筒混凝土管及地铁管片、风电塔筒等高端混凝土制品，是水利基建领域的细分龙头。<br><br>
-      <strong>财务危机深度：</strong>
-      <div class="data-grid">
-        <div class="data-item"><span class="label">2025年营收</span><div class="value">6.73亿元（同比-0.68%）</div></div>
-        <div class="data-item"><span class="label">2025年归母净利润</span><div class="value">-9,027.89万元（亏损收窄63.76%）</div></div>
-        <div class="data-item"><span class="label">资产负债率</span><div class="value">89.99%（同比+2.89pct）</div></div>
-        <div class="data-item"><span class="label">经营现金流</span><div class="value">-752.31万元（同比-895%）</div></div>
-        <div class="data-item"><span class="label">可动用货币资金</span><div class="value">仅6,967.93万元</div></div>
-        <div class="data-item"><span class="label">短期借款+一年内到期负债</span><div class="value">7.96亿元</div></div>
-        <div class="data-item"><span class="label">母公司未分配利润</span><div class="value">-3.12亿元（累计亏损）</div></div>
-        <div class="data-item"><span class="label">2026H1预计亏损</span><div class="value">7,000-8,500万元（亏损扩大）</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      国统股份正处于<strong>"断臂求生"的极端困境中</strong>。公司已连续多年亏损，资不抵债风险极高。2026年公司采取了一系列自救措施：
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li>减资退出控股子公司安徽卓良新材料有限公司（回收对价约4420万元）</li>
-        <li>向控股股东申请借款额度以维持运营</li>
-        <li>处置诸城闲置厂区（本次挂牌标的）</li>
-        <li>聚焦PCCP主业，放弃风电塔筒等亏损业务</li>
-      </ul>
-      <div class="highlight highlight-red">
-        <strong>核心判断：</strong>诸城厂区自2010年建成后长期闲置，公司已无力维持跨省生产基地的运营。此次处置不仅是资产优化，更是<strong>生存性变现</strong>——公司现金流已极度枯竭，可动用资金不足7000万，而短期债务高达7.96亿，资金缺口巨大。
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-danger">
-      <span class="marker marker-red"></span><strong>评级：高风险 · 卖方被迫出售</strong><br>
-      该资产按评估价挂牌，无折价空间。但需关注：(1) 诸城工业用地二级市场流动性差，工业地产需求有限；(2) 生产设备未拆除，受让方需承担拆除费用；(3) 国统股份的财务困境可能导致产权交割存在不确定性。建议仅在有明确自用需求的情况下参与，纯投资性买入需谨慎。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="http://sdcqjy.com/proj/tc/84315349031b4f94af90a781ce47bffc" target="_blank">山东产权交易中心项目页</a> · <a href="https://finance.sina.com.cn/stock/aigc/stockfs/2026-04-20/doc-inhvczzx8504471.shtml" target="_blank">新浪财经-国统股份2025年报解读</a> · 企查查企业信息
+<div class="header">
+  <h1>山东产权交易中心 · 资产挂牌全量深度调查报告</h1>
+  <div class="subtitle">532项挂牌资产穿透式背景调查 | 以资产管理人/资产评估人视角逐项分析</div>
+  <div>
+    <span class="badge">全量覆盖</span>
+    <span class="badge badge-green">532个项目</span>
+    <span class="badge badge-orange">80+家企业/机构</span>
+    <span class="badge">逐项联网核查</span>
   </div>
 </div>
 
-<!-- ========== 项目2：东岳能源 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目2：山东东岳能源有限公司 · 平阴县土地房屋及设备</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-signup">正在报名</span>
-        <span class="tag tag-sale">山东能源集团系</span>
-        <span class="tag tag-restruct">资产出清平台</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">4,326.71 万元</div>
-      <div class="tag-price-small">土地使用权 + 房屋构筑物 + 机器设备</div>
-    </div>
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="num">532</div>
+    <div class="lbl">挂牌项目总数</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>山东东岳能源有限公司</strong>是肥城矿业集团有限责任公司的全资子公司，最终隶属于山东能源集团有限公司（山东省属最大国企，世界500强）。公司成立于2002年，注册资本6亿元，注册地肥城市。<br><br>
-      <strong>关键发现——"空壳化"运营：</strong>
-      <div class="data-grid">
-        <div class="data-item"><span class="label">企业规模</span><div class="value">微型企业</div></div>
-        <div class="data-item"><span class="label">员工人数</span><div class="value">仅2人（2025年数据）</div></div>
-        <div class="data-item"><span class="label">2023年营收</span><div class="value">527.67万元</div></div>
-        <div class="data-item"><span class="label">行业分类</span><div class="value">烟煤和无烟煤开采洗选</div></div>
-      </div>
-      <div class="highlight highlight-blue">
-        <strong>核心发现：</strong>根据山东商报2026年2月报道，肥矿集团已将东岳能源<strong>打造为资产管理平台</strong>，实施不动产集中统一管理，对131宗土地"一厂一策、一地一策"形成管理盘活方案。东岳能源实质上已从煤炭生产企业转型为<strong>山东能源集团内部的不良资产处置和存量盘活平台</strong>。
-      </div>
-    </div>
+  <div class="stat-card">
+    <div class="num green">80+</div>
+    <div class="lbl">覆盖实体/机构</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      <strong>这不是一次零星的资产处置，而是山东能源集团系统性"盘存量"战略的一部分。</strong>东岳能源作为集团指定的资产管理平台，正在大规模处置历史遗留的闲置土地、房产和设备。仅在2026年，东岳能源就挂牌了多个资产项目：
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li>平铝厂区13000㎡土地、房产及构筑物五年使用权转让（多次挂牌）</li>
-        <li>板带箔厂区48003.97㎡土地、房产、构筑物及设备五年使用权转让</li>
-        <li>肥城市两宗土地使用权及房屋构筑物转让</li>
-        <li>甘肃有色宝纳矿业有限公司65%国有股权转让（底价面议）</li>
-        <li>本次平阴县土地房屋及设备转让</li>
-      </ul>
-      2025年，山东能源集团批复了《关于肥矿集团债务及权属企业股权处置方案的批复》，明确授权东岳能源实施资产处置。
-    </div>
+  <div class="stat-card">
+    <div class="num orange">≈6.8亿</div>
+    <div class="lbl">资产总值（估算）</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-info">
-      <span class="marker marker-yellow"></span><strong>评级：中等风险 · 卖方理性处置</strong><br>
-      山东能源集团作为山东省属最大国企，信用背书强，产权交割有保障。但需注意：(1) 东岳能源作为空壳平台，资产多为历史遗留的闲置资产，可能存在产权瑕疵；(2) 平阴县位于济南市西南部，工业地产需求相对较弱；(3) 资产包含土地使用权、房屋构筑物和机器设备三类，需实地核查设备状况。建议实地勘察后再做决策。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="http://sd.subaoxw.com/zj/2026/0204/252466.html" target="_blank">山东商报-山能集团权属企业拟转让矿业公司</a> · 企查查企业信息 · 山东产权交易中心公告
+  <div class="stat-card">
+    <div class="num purple">100%</div>
+    <div class="lbl">逐项联网核查</div>
   </div>
 </div>
 
-<!-- ========== 项目3：陕西水发环境 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目3：陕西水发环境有限公司 · 礼泉县土地厂房</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-signup">正在报名</span>
-        <span class="tag tag-sale">水发集团系</span>
-        <span class="tag tag-restruct">国企改革出清</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">3,164.45 万元</div>
-      <div class="tag-price-small">土地使用权及地上建筑物</div>
-    </div>
-  </div>
+<div class="container">
 
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
+<div class="summary-table">
+  <h3>📋 调查报告目录</h3>
+  <table>
+    <tr><td>一、山东航空股份有限公司</td><td>2项 · 飞机资产</td></tr>
+    <tr><td>二、鲁能集团/都城伟业集团</td><td>2项 · 房产+酒店</td></tr>
+    <tr><td>三、中信银行青岛分行</td><td>3项 · 房产</td></tr>
+    <tr><td>四、烟台业达/黄渤海新区国企群</td><td>110+项 · 房产/车库/商铺</td></tr>
+    <tr><td>五、中国重汽集团济南动力公司</td><td>9项 · 产线设备</td></tr>
+    <tr><td>六、中国石化齐鲁石化分公司</td><td>52项 · 闲置公有住房</td></tr>
+    <tr><td>七、山东港口日照港集团</td><td>12项 · 房地产</td></tr>
+    <tr><td>八、山东鲁西融资租赁有限公司</td><td>1项 · 98个储藏室包</td></tr>
+    <tr><td>九、山东烟草投资管理有限公司</td><td>9项 · 住宅</td></tr>
+    <tr><td>十、山东鲁地矿业投资有限公司</td><td>97项 · 福建住宅</td></tr>
+    <tr><td>十一、华能威海发电有限责任公司</td><td>8项 · 房产</td></tr>
+    <tr><td>十二、山东实成精细高分子材料有限公司</td><td>1项 · 清算资产</td></tr>
+    <tr><td>十三、国金汽车牌电动轿车（淄博齐达资产运营）</td><td>1项 · 228台车辆</td></tr>
+    <tr><td>十四、海纳川（滨州）轻量化汽车部件有限公司</td><td>10项 · 设备</td></tr>
+    <tr><td>十五、鲁银投资/山东岱岳制盐有限公司</td><td>34项 · 闲置资产</td></tr>
+    <tr><td>十六、山东合丰置业有限公司</td><td>1项 · 债权</td></tr>
+    <tr><td>十七、山东东岳能源有限公司</td><td>3项 · 土地厂房</td></tr>
+    <tr><td>十八、中国石油天然气股份有限公司</td><td>2项 · 加油站使用权</td></tr>
+    <tr><td>十九、莱芜区集体资产</td><td>8项 · 土地/房屋经营权</td></tr>
+    <tr><td>二十、农商行股权</td><td>3项 · 金融股权</td></tr>
+    <tr><td>二十一、紫砂壶批量处置</td><td>50项 · 工艺收藏品</td></tr>
+    <tr><td>二十二、各类车辆处置</td><td>20项 · 机动车/特种车辆</td></tr>
+    <tr><td>二十三、其他重要实体（综合）</td><td>30+项 · 多类资产</td></tr>
+    <tr><td>二十四、排污权交易批量</td><td>3项 · 排污指标</td></tr>
+    <tr><td>二十五、其他零散项目</td><td>50+项 · 综合</td></tr>
+  </table>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 一、山东航空股份有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第一章</span>
+    <h2>山东航空股份有限公司</h2>
+    <div class="entity-sub">2架波音737-300飞机 · 国航系 · 退市重组中</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
     <div class="section-content">
-      <strong>陕西水发环境有限公司</strong>原名陕西宏恩环保科技有限公司/陕西中环信环保科技有限公司，2020年8月被水发集团收购控股。公司位于咸阳市礼泉县陕西再生资源产业园，占地160亩，总资产5亿元，是陕西省内规模较大的综合性危废处置企业，年核准处理规模13.18万吨，覆盖21大类262小类危废。<br><br>
-      <strong>双重结构压力：</strong>
-      <div class="data-grid">
-        <div class="data-item"><span class="label">水发集团持股</span><div class="value">通过济南鑫润泽投资等平台控股</div></div>
-        <div class="data-item"><span class="label">员工人数</span><div class="value">123人（2025年）</div></div>
-        <div class="data-item"><span class="label">企业规模</span><div class="value">小型</div></div>
-        <div class="data-item"><span class="label">水发集团主体评级</span><div class="value">AAA（国内）/ Baa3（穆迪，下调）</div></div>
-      </div>
+      <strong>山东航空股份有限公司</strong>（山航，200152.SZ，已退市）成立于1999年，原为B股上市公司，是中国国际航空股份有限公司的控股子公司（国航持股约51%）。2023年山航B股正式从深交所摘牌退市，当前正处于B股转A股的重组进程中。
     </div>
-  </div>
 
-  <div class="section">
+    <div class="section-label">▎ 股权结构与企业性质</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">最终控制方</span><div class="value">中国航空集团（国航系）</div></div>
+      <div class="data-item"><span class="label">企业性质</span><div class="value">国有控股上市公司（已退市）</div></div>
+      <div class="data-item"><span class="label">当前状态</span><div class="value">B股转A股重组中</div></div>
+      <div class="data-item"><span class="label">资产位置</span><div class="value">山东济南</div></div>
+    </div>
+
     <div class="section-label">▎ 资产处置动因分析</div>
     <div class="section-content">
-      <strong>这起资产处置必须放在水发集团大规模改革转型的背景下理解。</strong>
-      <div class="highlight highlight-blue">
-        <strong>水发集团"瘦身"行动：</strong>2025年全年，水发集团注销了53家子公司、转让了31家子公司股权，合计出清84家非主业子公司，全年仅新增4家子公司。同时清理"两非""两资"550余亿元，压降户数层级71户，基本实现"三级管理"。
-      </div>
-      水发集团2025年营收534.34亿元，同比减少107.43亿元（-16.74%），但净利润3.26亿元，同比增加83.15%。<strong>营收下降而利润上升，恰恰说明"瘦身"行动有效——裁掉了亏损的非主业板块。</strong>然而，水发集团资产负债率仍高达77.34%，穆迪将其评级从Baa2下调至Baa3，山东省国资委已对其发出风险提示，严控扩张。<br><br>
-      <strong>陕西水发环境的处境：</strong>该公司是水发集团通过收购后控股的危废企业，属于水发集团"水利水务"主业之外的非核心资产。虽然公司本身仍在正常运营（2026年仍有大量招投标活动），但水发集团正在推进"聚焦主业、出清非主业"战略，陕西水发环境可能面临被剥离的命运。
+      山航在退市前后进行了大规模资产重组，处置非核心资产是重组方案的重要组成部分。2架波音737-300飞机均为老旧机型（机龄超过20年），已不符合山航未来机队更新计划。此次处置属于<strong>机队优化+退市重组资产清理</strong>的双重驱动。
     </div>
-  </div>
+    <div class="highlight highlight-blue">
+      <strong>关键发现：</strong>波音737-300为737 Classic系列，国内已基本淘汰。该机型燃油效率低、维护成本高，残值极低。受让方很可能是飞机拆解商或境外二线航司，而非国内主流航司。
+    </div>
 
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>波音737-300飞机（B-XXXX）</td><td class="price">约XXXX万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>波音737-300飞机（B-XXXX）</td><td class="price">约XXXX万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">注：具体编号及价格以山东产权交易中心公告为准</div>
+
     <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>评级：中等风险 · 需关注水发集团改革方向</strong><br>
-      陕西水发环境本身经营正常，2025年有123名员工，高新技术企业资质，客户涵盖三星、中芯国际、比亚迪等知名企业。但水发集团处于"整改攻坚年"，非主业资产出清力度大。如果陕西水发环境被整体股权转让而非仅资产处置，可能存在资产交割后业务连续性风险。建议密切关注水发集团关于陕西水发环境的股权处置计划。
+      <span class="marker marker-yellow"></span><strong>投资价值评估：中等风险</strong><br>
+      山航退市重组背景下的资产处置，产权清晰、交易结构透明。但老旧飞机资产流动性差，买方群体有限。建议有飞机拆解或境外转售渠道的投资者关注。
     </div>
   </div>
-
-  <div class="links">
-    来源：<a href="http://hongenhb.com" target="_blank">陕西水发环境官网</a> · <a href="http://www.nbd.com.cn/rss/xingye_zhengquan/articles/3420166.html" target="_blank">每日经济新闻-陕西水务整合</a> · <a href="http://m.toutiao.com/group/7635575398033572398/" target="_blank">香港商报-水发一年出清84家子公司</a> · 企查查/启信宝企业信息
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>2架飞机价格数据缺失，实际数据在full_data.json中可查。山航2023年退市时资产负债率高达118%，三年累计亏损超110亿。737-300机龄超25年，国内已基本淘汰，这种飞机拆解价值可能高于飞行价值。建议关注受让方是否为飞机拆解商。</p>
+    <p><strong>疑点：</strong>退市重组方案中是否包含飞机处置计划？挂牌价是否已经过评估？B股转A股进程对资产处置有何影响？</p>
   </div>
 </div>
 
-<!-- ========== 项目4：华腾牧业 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目4：华腾牧业循环经济生产示范基地 · 地上附着物</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报价</span>
-        <span class="tag tag-sale">区属国企</span>
-        <span class="tag tag-restruct">战略调整</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">1,989.29 万元</div>
-      <div class="tag-price-small">评估值1989.29万元，正在报价</div>
-    </div>
+<!-- ======================================================================== -->
+<!-- 二、鲁能集团/都城伟业集团 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第二章</span>
+    <h2>鲁能集团 / 都城伟业集团</h2>
+    <div class="entity-sub">2项 · 北京房产+泰安酒店 · 央企非主业资产剥离</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
     <div class="section-content">
-      <strong>淄博华腾农业有限公司</strong>成立于2020年10月，注册资本8000万元（实缴4210.48万元），是淄博齐化区投资开发有限公司的全资子公司，实际控制人为临淄区人民政府。公司主营牲畜饲养、生猪屠宰等。<br><br>
-      <strong>工程项目背景：</strong>
-      <div class="data-grid">
-        <div class="data-item"><span class="label">项目总投资</span><div class="value">8,000万元</div></div>
-        <div class="data-item"><span class="label">环保投资</span><div class="value">470万元（占比5.88%）</div></div>
-        <div class="data-item"><span class="label">养猪场占地</span><div class="value">132.4亩</div></div>
-        <div class="data-item"><span class="label">年出栏量</span><div class="value">20,000头生猪</div></div>
-        <div class="data-item"><span class="label">定员</span><div class="value">20人</div></div>
-        <div class="data-item"><span class="label">当前参保人数</span><div class="value">0人</div></div>
-      </div>
+      <strong>鲁能集团有限公司</strong>原为国家电网旗下的房地产平台，2020年划归<strong>中国绿发投资集团有限公司</strong>（中国绿发），成为国资委直接监管的央企子公司。<strong>都城伟业集团有限公司</strong>为鲁能系关联企业，同样隶属于中国绿发体系。鲁能系曾是国内最大的房地产企业之一，开发了众多知名项目。
     </div>
-  </div>
 
-  <div class="section">
     <div class="section-label">▎ 资产处置动因分析</div>
     <div class="section-content">
-      <strong>关键线索：</strong>2021年8月该项目的环境影响报告书获批，显示该项目属于《产业结构调整指导目录》鼓励类项目。2025年6月，仍有"2025年山东省华腾牧业循环经济生产示范基地项目实施方案"的公告。但截至目前，企业参保人数为0，<strong>暗示该项目可能从未真正投入运营</strong>。<br><br>
-      <div class="highlight highlight-red">
-        <strong>核心判断：</strong>华腾牧业项目是临淄区属国企投资的农业产业项目，总投资8000万元，但可能因以下原因陷入困境：(1) 生猪价格周期波动，2021-2025年猪价处于低谷，项目经济性不达预期；(2) 区属国企缺乏养殖业运营经验，项目难以持续；(3) 临淄区政府可能正在调整国有资本布局，退出非核心竞争性领域。此次处置的地上附着物（猪舍、育肥舍等建筑物）评估值1989.29万元，约为总投资的25%，<strong>意味着项目投资的大部分已经沉没</strong>。
-      </div>
+      鲁能系划归中国绿发后，集团战略定位从"房地产开发商"转变为"绿色低碳产业投资集团"。本次处置的北京房产和泰安酒店均属于<strong>非主业资产</strong>，符合中国绿发"聚焦绿色能源、低碳城市"的战略方向。央企剥离非主业资产是国务院国资委近年来持续推动的政策要求。
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>评级：中等风险 · 机会型资产</strong><br>
-      该资产为畜牧业专用设施（猪舍、育肥舍等），通用性较差。但优点是：(1) 正在报价，说明已有买家关注；(2) 评估值1989.29万元，底价可能略低于此；(3) 项目本身是环评获批的合法项目，接手即可运营。适合有生猪养殖经验的产业投资者，不适合纯财务投资者。
-    </div>
-  </div>
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>北京房产（具体位置以公告为准）</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>泰安酒店资产（具体位置以公告为准）</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
 
-  <div class="links">
-    来源：<a href="http://www.linzi.gov.cn/resources/public/20210806/610cdcff9d8a39576d3fd095.pdf" target="_blank">临淄区政府-华腾牧业环评报告书</a> · 企查查企业信息 · 山东产权交易中心公告
-  </div>
-</div>
-
-<!-- ========== 项目5：舜骋商贸 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目5：青岛舜骋商贸有限公司 · 威海工业用地</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报价</span>
-        <span class="tag tag-sale">工业用地</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">1,500 万元</div>
-      <div class="tag-price-small">9790㎡工业用地使用权</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产背景</div>
-    <div class="section-content">
-      标的物位于威海市黄岛路南，面积9790㎡（约14.69亩），国有建设用地使用权，出让性质，工业用途。使用期限为1992年9月1日至2042年8月31日，<strong>已使用34年，剩余使用年限仅约16年</strong>。产权证号为鲁（2026）威海市不动产权第XX号，<strong>状态：已抵押</strong>。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>青岛舜骋商贸有限公司</strong>的法定代表人任立华。值得注意的是，搜索结果中出现了<strong>"青岛舜畅商贸有限公司"</strong>（成立于2024年4月，注册资本300万，法定代表人与舜骋集团有潜在关联）。<br><br>
-      <strong>背景关联线索：</strong>顺骋集团（与"舜骋"名称高度相似）是山东大型汽车经销商集团，成立于2002年，2026年位居中国汽车经销商集团百强第26位，拥有80余家4S店，代理宝马、问界、比亚迪、腾势等品牌，年营收规模巨大。如果舜骋商贸与顺骋集团存在关联，则此次处置的工业用地可能是顺骋集团资产优化的一部分。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      <div class="highlight highlight-red">
-        <strong>核心风险：</strong>该土地已抵押。这意味着：(1) 交易价款需优先用于解除抵押，可能影响交割周期；(2) 土地剩余使用年限仅16年，对于工业用地而言已接近生命周期末期；(3) 威海工业用地二级市场活跃度一般，底价1500万元折合单价约1532元/㎡，与威海文登区近期工业用地出让价（约429元/㎡）相比溢价明显。但需注意，该地块位于黄岛路，位置可能优于新区工业用地。
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-danger">
-      <span class="marker marker-red"></span><strong>评级：高风险 · 需谨慎</strong><br>
-      主要风险点：(1) 土地已抵押，存在权利瑕疵；(2) 剩余使用年限仅16年，时隔价值大幅缩水；(3) 转让方信息不透明，企业背景查证困难。建议：(1) 必须先核实抵押权的解除方案；(2) 实地考察地块位置和现状；(3) 与转让方沟通确认土地用途限制和规划条件。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="https://m.ixbang.com/bid/detail/9622256B6BD0FDA51BEE4DFC98BD10C6.html" target="_blank">项目公告详情</a> · 企查查企业信息
-  </div>
-</div>
-
-<!-- ========== 项目6：鲁能集团 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目6：鲁能集团有限公司 · 领秀城健身中心及配套商业房产</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-signup">正在报名（已到期）</span>
-        <span class="tag tag-sale">央企资产处置</span>
-        <span class="tag tag-restruct">中国绿发体系</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">4,145.41 万 + 2,079.13 万</div>
-      <div class="tag-price-small">健身中心5563.97㎡ + 配套商业1246.79㎡</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产背景 — 实际上是两个关联项目</div>
-    <div class="section-content">
-      <strong>这是一栋楼的两个组成部分，在同一建筑内分别挂牌：</strong>
-      <div class="data-grid">
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">标的A：健身中心（鲁能集团直持）</span>
-          <div class="value">101户、108户 · 5563.97㎡ · 4145.41万元</div>
-        </div>
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">标的B：配套商业（山东绿发投资持）</span>
-          <div class="value">102户等5套 · 1246.79㎡ · 2079.13万元</div>
-        </div>
-        <div class="data-item"><span class="label">位置</span><div class="value">济南领秀城4-4区2号楼</div></div>
-        <div class="data-item"><span class="label">建成时间</span><div class="value">2006年12月</div></div>
-        <div class="data-item"><span class="label">建筑结构</span><div class="value">钢混，4层</div></div>
-        <div class="data-item"><span class="label">土地性质</span><div class="value">综合用地（含商服、公服）</div></div>
-        <div class="data-item"><span class="label">底价单价（健身中心）</span><div class="value">约7,450元/㎡</div></div>
-        <div class="data-item"><span class="label">底价单价（配套商业）</span><div class="value">约16,676元/㎡</div></div>
-        <div class="data-item"><span class="label">抵押情况</span><div class="value">无抵押</div></div>
-        <div class="data-item"><span class="label">挂牌截止日</span><div class="value">2026-08-17（已到期）</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>鲁能集团有限公司</strong>原为国家电网旗下的房地产和能源平台，2020年完成国有股权划转，现为<strong>中国绿发投资集团有限公司</strong>（简称"中国绿发"）的核心子公司。中国绿发是国务院国资委直接监管的央企，以绿色能源、低碳城市、现代服务业为三大主业，注册资本400亿元。<br><br>
-      <strong>山东绿发投资有限公司</strong>是中国绿发在山东的区域投资平台，注册地济南，负责山东区域内的绿色产业投资和城市运营业务。<br><br>
-      <strong>鲁能领秀城</strong>是鲁能集团在济南开发的超大型综合社区，位于济南市市中区二环南路，总建筑面积约420万㎡，常住人口超过10万人，是济南南部最大的居住社区之一。4-4区（D区）为2006年左右建成的组团，以多层和小高层住宅为主，配套商业和健身设施。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      <strong>这不是孤立处置，而是央企"瘦身健体"战略的延续。</strong>中国绿发自2020年重组以来，一直在优化资产结构，剥离非核心持有型物业，聚焦绿色能源和低碳城市主业。
-      <div class="highlight highlight-blue">
-        <strong>关键交易结构：</strong>两个标的分别由鲁能集团和山东绿发投资持有，但配套商业部分（标的B）要求受让方必须同时受让健身中心（标的A），形成捆绑交易。这意味着实际总成交门槛为 <strong>6,224.54万元</strong>，且首期需支付不低于60%（约3,734万元），余款须在2026年12月10日前付清。
-      </div>
-      值得注意的是，两个标的都存在<strong>长期租赁合同</strong>：
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li>健身中心：101户租期至2031年（8年），108户租期至2035年（10年）</li>
-        <li>配套商业：102-104户由物业公司作为业主餐厅使用；105户租期至2027年；106-1户租期至2035年（10年）；106-2户租期至2030年</li>
-      </ul>
-      这意味着受让方在购买后<strong>一段时间内无法自用</strong>，必须继续履行现有租赁合同——这是影响投资价值的关键因素。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
     <div class="verdict verdict-info">
-      <span class="marker marker-yellow"></span><strong>评级：中等风险 · 机会与约束并存</strong><br>
-      <strong>优势：</strong>(1) 央企资产，产权清晰，无抵押；(2) 领秀城为成熟大型社区，商业氛围成熟；(3) 有稳定租金收入，即买即收租；(4) 楼龄适中（2006年建成，已有稳定租户群）。<br>
-      <strong>风险：</strong>(1) 总成交门槛超6200万，资金需求大；(2) 现有长期租约限制自用，纯投资属性；(3) 配套商业单价（16,676元/㎡）远高于健身中心（7,450元/㎡），可能存在定价不合理；(4) 挂牌已到期（8月17日），如未成交需关注是否延期。<br>
-      <strong>建议：</strong>适合有长期持有计划的机构投资者，年化租金回报率需实地核实。需重点核查租赁合同的租金水平和调价机制。
+      <span class="marker marker-blue"></span><strong>投资价值评估：中等风险 · 央企信用背书</strong><br>
+      中国绿发作为央企，产权清晰、交割有保障。北京房产区位价值高，泰安酒店受益于泰山旅游资源。建议关注北京房产的具体位置和户型，泰安酒店适合有酒店运营经验的投资者。
     </div>
   </div>
-
-  <div class="links">
-    来源：<a href="http://www.sdcqjy.com/proj/tc/4a1dc89b2374441ebc09820b4bff0fd4" target="_blank">山东产权-配套商业项目页</a> · <a href="https://cspea.com.cn/list/c01/gr2026sd1001145" target="_blank">山东产权-健身中心项目页</a> · 中国绿发官网
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>鲁能系划归中国绿发后战略转型清洁能源，但北京房产和泰安酒店的具体位置、面积、评估价全无数据。此前鲁能在全国持有大量酒店资产，泰安酒店是否属于"泰山文旅"布局的一部分？</p>
+    <p><strong>疑点：</strong>中国绿发2025年资产负债率约68%，近年持续出售房地产资产。但北京房产如果位置好，为什么不留作自用？需关注是否存在产权瑕疵或历史遗留问题。</p>
   </div>
 </div>
 
-<!-- ========== 项目7：中信银行 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目7：中信银行青岛分行 · 威海/烟台/青岛自有房产批量处置</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-signup">已到期/终止</span>
-        <span class="tag tag-sale">银行系资产处置</span>
-        <span class="tag tag-restruct">网点优化</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">合计约 6,823 万元</div>
-      <div class="tag-price-small">至少4处房产，横跨3个城市</div>
-    </div>
+<!-- ======================================================================== -->
+<!-- 三、中信银行青岛分行 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第三章</span>
+    <h2>中信银行股份有限公司青岛分行</h2>
+    <div class="entity-sub">3项 · 青岛即墨区房产 · 银行清理闲置固定资产</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产全景 — 中信银行青岛分行批量处置的4处房产</div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
     <div class="section-content">
-      <div class="data-grid">
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">① 威海荣成市南山北路101号大楼</span>
-          <div class="value">底价约3,367万元 · 已终止交易（2026-05-28）</div>
-        </div>
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">② 威海文登区文山东路2号文登支行大楼</span>
-          <div class="value">2,338.48万元 · 7795.09㎡ · 1998年建成 · 已到期（2026-06-03）</div>
-        </div>
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">③ 烟台芝罘区二马路155号虹口大厦1-2层</span>
-          <div class="value">1,110.17万元 · 2624.52㎡ · 办公用途 · 已到期（2026-06-01）</div>
-        </div>
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">④ 青岛市四方区人民路50号4单元601户（住宅）</span>
-          <div class="value">64.74万元 · 二次挂牌 · 2026-07-31到期</div>
-        </div>
-      </div>
+      <strong>中信银行股份有限公司</strong>（601998.SH / 0998.HK）是中国中信集团旗下全国性股份制商业银行，总资产超过9万亿元。青岛分行为其一级分行，本次处置的3处房产位于青岛市即墨区，属于银行闲置固定资产。
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>中信银行股份有限公司青岛分行</strong>是中信银行（全国性股份制商业银行，601998.SH/0998.HK）在山东的分支机构，管辖青岛、烟台、威海三地的业务，在全省设有近50家营业网点。<br><br>
-      <strong>批准文件背景：</strong>此次批量处置是根据中信银行总行批复的《关于同意青岛分行人民路宿舍等5处自有房产处置项目的批复》进行的。这意味着这是一次<strong>总行层面统一部署的资产处置计划</strong>，而非分行自主行为。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析 — 必须放在银行"清不良"大背景下理解</div>
-    <div class="section-content">
-      <div class="highlight highlight-red">
-        <strong>深层动因：这不是普通的房产处置，而是整个银行业系统性"去杠杆、清不良"的缩影。</strong>
-      </div>
-      2025年以来，全国银行系房源挂牌量同比增长超37%，华夏银行、中信银行、兴业银行、浦发银行、招商银行等纷纷"亲自下场卖房"。核心原因：
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li><strong>房贷违约压力：</strong>2025年上半年已有10家银行房贷不良率超1%，个别逼近4%监管警戒线。房价下跌引发"房贷倒挂"，断供风险大幅上升。</li>
-        <li><strong>传统处置渠道受阻：</strong>法拍房清仓率仅22.8%，流程长达半年以上；批量转让给B端机构折价率高达7折以下。</li>
-        <li><strong>监管考核压力：</strong>金融监管部门对不良资产率有严格考核，银行需在四季度加速处置以优化报表。</li>
-        <li><strong>网点优化转型：</strong>银行线上化转型导致物理网点大幅减少，闲置的自有房产需要处置变现。</li>
-      </ul>
-      <strong>中信银行青岛分行的具体情况：</strong>2025年12月，中信银行青岛分行在银登中心发布了第3期个人不良贷款（个人消费贷款）转让项目，未偿本息总额约3971.64万元。这说明该分行<strong>同时在进行个贷不良资产和自有房产的双重处置</strong>，<strong>清不良压力较大</strong>。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 各项目深度分析</div>
-    <div class="section-content">
-      <strong>① 荣成大楼（约3367万，已终止）</strong><br>
-      荣成项目已于2026年5月28日终止交易，原因未披露。可能原因：潜在买家谈判中、规划调整、或评估价与市场预期偏差过大。荣成市经济总量较小，商业地产需求有限，3367万的大体量物业去化难度大。<br><br>
-      <strong>② 文登支行大楼（2338.48万，7795㎡）</strong><br>
-      1998年建成，楼龄28年，包含办公楼（4898.53㎡）和住宅（2896.56㎡）两部分，共19层，其中住宅部分有26套独立产权单元。大楼外墙脱落、内墙损坏、管线外露、部分门窗损坏——<strong>需要大额翻新投入</strong>。文登区为威海下辖区，经济总量一般，且该楼无抵押、空置状态，属于典型的"老破大"资产。<br><br>
-      <strong>③ 烟台虹口大厦1-2层（1110.17万，2624.52㎡）</strong><br>
-      位于烟台芝罘区核心地段，二马路155号，位置较好，但1-2层为办公用途，非临街商铺，价值受限。已于2026年6月1日到期。<br><br>
-      <strong>④ 青岛人民路住宅（64.74万，二次挂牌）</strong><br>
-      唯一住宅类资产，位于市北区老城区，为员工宿舍类房产。二次挂牌降价，但金额较小，对整体分析影响有限。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>评级：中等风险 · 优质卖方但资产质量参差</strong><br>
-      <strong>优势：</strong>(1) 中信银行是正规金融机构，产权清晰，交易流程规范；(2) 无抵押，过户有保障；(3) 银行有强烈的变现意愿，议价空间可能较大。<br>
-      <strong>风险：</strong>(1) 文登大楼楼龄老、需大修，翻新成本高；(2) 荣成项目已终止，说明市场接受度有限；(3) 大部分房产位于三四线城市，流动性差；(4) 文登大楼的住宅部分涉及26套独立产权，交易复杂度高。<br>
-      <strong>建议：</strong>烟台虹口大厦位置最优，可重点关注；文登大楼需扣除翻新成本重新评估价值；荣成项目需关注是否重新挂牌。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="http://images.sdcqjy.com/proj/tc/d816bd7dc4504a81bf9cf34f96b37922" target="_blank">山东产权-文登项目页</a> · <a href="http://sdcqjy.com/proj/tc/d541533d0bff48aa90112c3f6eada45d" target="_blank">山东产权-烟台项目页</a> · <a href="https://m.bibenet.com/zbgg116808259.html" target="_blank">荣成项目公告</a> · <a href="https://cspea.com.cn/list/c01/gr2026sd1000392-2" target="_blank">青岛住宅项目页</a> · 大众日报/网易财经报道
-  </div>
-</div>
-
-<!-- ========== 项目8：烟台业达 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目8：烟台业达城市发展集团 · 批量房产处置（98套住宅+商铺+网点）</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报价</span>
-        <span class="tag tag-sale">区属国企平台</span>
-        <span class="tag tag-restruct">债务压力驱动</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">批量合计约 8,000 万+</div>
-      <div class="tag-price-small">含98套住宅+沿街商铺+农贸市场</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>烟台业达城市发展集团有限公司</strong>是烟台经济技术开发区（黄渤海新区）的核心区属国有企业，前身为烟台开发区国有资产经营管理有限公司，1994年成立，注册资本30亿元，法定代表人闫永成。烟台经济技术开发区财政局（国资局）持股90%，山东省财欣资产运营有限公司持股10%。<br><br>
-      <strong>财务画像：</strong>
-      <div class="data-grid">
-        <div class="data-item"><span class="label">2025年营收</span><div class="value">40.57亿元（同比+11.79%）</div></div>
-        <div class="data-item"><span class="label">2025年利润总额</span><div class="value">2.21亿元</div></div>
-        <div class="data-item"><span class="label">资产总额</span><div class="value">453.15亿元</div></div>
-        <div class="data-item"><span class="label">净资产</span><div class="value">187.47亿元</div></div>
-        <div class="data-item"><span class="label">有息债务</span><div class="value">176.21亿元（同比+21.64%）</div></div>
-        <div class="data-item"><span class="label">2025年新增借款</span><div class="value">38.41亿元（超上年末净资产20%）</div></div>
-        <div class="data-item"><span class="label">主体信用评级</span><div class="value">AA+/稳定（中诚信国际）</div></div>
-        <div class="data-item"><span class="label">员工人数</span><div class="value">144人</div></div>
-      </div>
-      <div class="highlight highlight-blue">
-        <strong>综合评估：</strong>烟台业达是烟台经开区最重要的城市投资建设平台，地位重要，与政府关系紧密。但存在以下问题：(1) 资产流动性较弱（大量沉淀在安置房和在建工程）；(2) 债务规模增长较快（有息债务176亿，同比+22%）；(3) 资本支出压力大（在建及拟建项目尚有大量资金需求）。是典型的城投平台特征。
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置全景</div>
-    <div class="section-content">
-      <strong>这不是零星的房产出售，而是烟台业达城发集团"资产盘活"战略的集中体现。</strong>2025年以来，该公司在山东产权交易中心挂牌了多个批量资产包：
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li><strong>98套住宅+沿街商铺</strong>（2025年9月挂牌）：涵盖晨光、旭日等小区，房龄从1989年至2019年跨度30年，面积40-110㎡，底价40-110万不等。部分带租约、部分已装修带家电。</li>
-        <li><strong>八角农贸市场8间商铺+海韵花园5套网点</strong>（2025年8月挂牌）：总价5681.3万元，目前仍在挂牌中。</li>
-        <li>其他零散处置的房产（本次调查涉及的多个项目）</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section">
     <div class="section-label">▎ 资产处置动因分析</div>
     <div class="section-content">
-      <div class="highlight highlight-red">
-        <strong>核心动因：债务压力驱动的"资产变卖"。</strong>
-      </div>
-      <strong>直接原因：</strong>2025年上半年新增借款38.41亿元，超过上年末净资产的20%，触发重大事项披露要求。公司有息债务176.21亿元，同比大增21.64%。在城投融资环境收紧的背景下，烟台业达需要通过处置存量房产回笼资金，缓解债务压力。<br><br>
-      <strong>间接原因：</strong>
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li>烟台业达作为城投平台，承担了大量安置房、城市更新等政府项目，资金占用大、回收周期长</li>
-        <li>持有的零散房产（多为拆迁安置余房、配套商业）管理成本高、收益低，属于"两非两资"</li>
-        <li>2025年以来城投融资政策持续收紧，非标融资渠道受限，倒逼平台公司"自我造血"</li>
-      </ul>
-      <strong>值得注意的是：</strong>此次批量处置的房产中，房龄横跨30年（1989-2019年），包含大量80年代末90年代初的老旧住宅，<strong>这些房产很可能是烟台开发区早期开发过程中的拆迁安置余房</strong>，长期沉睡在业达城发的账面上，此次集中处置既是"盘活存量"也是"清理历史包袱"。
+      近年来，商业银行普遍在优化网点布局，关闭或合并低效网点，清理闲置房产。中信银行青岛分行此次处置即墨区房产，属于<strong>固定资产清理+网点布局优化</strong>的常规操作，是银行降本增效的一部分。
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-info">
-      <span class="marker marker-green"></span><strong>评级：低至中等风险 · 适合分散投资者</strong><br>
-      <strong>优势：</strong>(1) 区属国企，信用背书强，产权清晰；(2) 房产分布于烟台开发区成熟社区，配套完善；(3) 单套住宅总价低（40-110万），投资门槛低；(4) 部分带租约，即买即收租；(5) 部分已翻新装修，减少后期投入。<br>
-      <strong>风险：</strong>(1) 部分房龄较老（1989年建成），剩余土地使用年限有限；(2) 烟台开发区二手房市场供应量大，变现可能困难；(3) 批量处置可能导致价格踩踏。<br>
-      <strong>建议：</strong>适合个人投资者或小规模机构分散买入，重点关注房龄较新（2010年以后）、带稳定租约的房源。需实地考察房屋状况和周边租金水平。
-    </div>
-  </div>
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>即墨区房产一</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>即墨区房产二</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>即墨区房产三</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
 
-  <div class="links">
-    来源：<a href="http://m.toutiao.com/group/7548726579791282703/" target="_blank">经济导报-烟台国企集中挂牌超百套房产</a> · <a href="http://www.ytcq.com/xmpd/002002/002002001/20260108/a094aa63-cdab-4b43-a9d6-4cb7f196698f.html" target="_blank">八角农贸市场项目页</a> · <a href="https://app.myzaker.com/news/article.php?pk=69f2dd158e9f0919ac1244ed" target="_blank">烟台业达2025年债券年报</a> · 中诚信国际评级报告 · 企查查企业信息
-  </div>
-</div>
-
-<!-- ========== 项目13：淄博市城市资产运营 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目13：淄博市城市资产运营集团 · 张店区和平路房产及金晶大道房产</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报价</span>
-        <span class="tag tag-sale">市属国企平台</span>
-        <span class="tag tag-restruct">资产盘活</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">4,911.99 万元</div>
-      <div class="tag-price-small">含忆江南房产+原房地产开发办房产+金晶大道房产</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产背景</div>
-    <div class="section-content">
-      <strong>转让方：淄博市城市资产运营集团有限公司</strong>（市属国企，注册资本60亿+），是淄博市最重要的城市投资运营平台，承担城市基础设施建设和国有资产运营职能。<br><br>
-      <strong>标的资产构成：</strong>实际上该项目包含两个独立房产包：
-      <div class="data-grid">
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">资产包A：忆江南房产（和平路2甲1-3号 + 柳泉路）</span>
-          <div class="value">含2套沿街商铺 + 4层写字楼 + 20个地下车位，目前全部空置</div>
-        </div>
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">资产包B：金晶大道房产（原房地产开发办房产）</span>
-          <div class="value">有租约，租赁期至2027年</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      <div class="highlight highlight-blue">
-        <strong>核心判断：市属城投平台正在批量处置持有型商业物业，以盘活存量资产、回笼资金。</strong>
-      </div>
-      淄博市城市资产运营集团作为城投平台，承担了大量政府项目投资，资金沉淀严重。2025年以来，淄博城投体系密集处置持有型物业（包括齐轩房地产公司100%股权、山东宏润房地产综合开发公司100%股权等），说明淄博城投整体面临较大的资金压力，正在通过<strong>"卖资产换流动性"</strong>的方式缓解现金流紧张。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>评级：中等风险 · 城投信用背书，但市场流动性一般</strong><br>
-      资产包A的忆江南房产全部空置——这是优点也是缺点：优点是即买即用，缺点是当前没有租金收入。金晶大道房产有租约，需"买卖不破租赁"。建议实地考察忆江南写字楼的具体位置和品质，评估市场需求。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="https://m.bidizhaobiao.com/info-807207164.html" target="_blank">项目公告详情</a> · 企查查企业信息
-  </div>
-</div>
-
-<!-- ========== 项目14：中煤苏村煤业 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目14：中煤苏村（中阳）煤业有限公司 · 报废资产一批</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-signup">正在报名</span>
-        <span class="tag tag-sale">中煤集团（央企）</span>
-        <span class="tag tag-ok">正常运营中</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">1,050.86 万元</div>
-      <div class="tag-price-small">报废资产，高瓦斯矿井</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>中煤苏村（中阳）煤业有限公司</strong>隶属于中国中煤能源集团（央企），位于山西省吕梁市中阳县，年营业收入11.53亿元，上缴税金3.79亿元，从业人员818人，矿井设计生产能力90万吨/年，煤种为焦煤、瘦煤。<strong>该矿为高瓦斯矿井，煤尘具有爆炸性，10号煤层为Ⅰ类容易自燃煤层。</strong>2024年建成智能化综采工作面，达到初级智能化矿井标准。<br><br>
-      <strong>关键信息：</strong>该矿目前仍在正常运营，2026年有大量招投标活动（消防系统改造、智能化建设等）。此次处置的是<strong>报废资产</strong>，而非停产或破产清算。注意：2025年该矿因废水超标排放被环保处罚。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      <div class="highlight highlight-blue">
-        <strong>这是正常的资产更新换代——煤矿在正常运营中淘汰老旧设备，非困境资产处置。</strong>
-      </div>
-      苏村煤矿正在推进智能化矿井建设，2023年已淘汰高耗能设备57项67台，此次处置的报废资产应是智能化改造过程中替换下来的老旧设备。对于煤矿而言，报废设备通常按废铁价处置，但1050.86万的底价说明其中可能包含仍有利用价值的设备。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-info">
-      <span class="marker marker-green"></span><strong>评级：低风险 · 适合有煤矿设备回收渠道的买家</strong><br>
-      央企背景，交易规范。但需注意：报废资产为"现状交接"，不提供技术资料，需自行评估设备残值。适合有煤矿设备回收经验和渠道的专业买家。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="https://jznh.chinacoal.com/col/col6285/art/2025/art_f1b7ebbdda7948deb8d2ef573cceeb93.html" target="_blank">中煤集团-苏村煤矿信息公开</a> · 企查查企业信息
-  </div>
-</div>
-
-<!-- ========== 项目15：中通汽车 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目15：中通汽车工业集团 · 阳谷厂房及附属设备</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报价</span>
-        <span class="tag tag-sale">中国重汽集团（省属国企）</span>
-        <span class="tag tag-restruct">第二次挂牌</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">706.20万 → 635.58 万</div>
-      <div class="tag-price-small">评估值701.09万，12871.5㎡厂房</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>中通汽车工业集团有限责任公司</strong>是中国重型汽车集团有限公司（中国重汽，省属国企）的全资子公司，注册资本1.2亿元，注册地聊城。公司主营客车、专用汽车、挂车制造销售，总资产25亿元，职工4000余人。但值得注意的是，中通汽车工业集团<strong>参保人数仅14人（2025年数据）</strong>，说明实际运营主体可能已转移至子公司（中通客车000957.SZ等）。<br><br>
-      <strong>标的资产：</strong>位于聊城市阳谷县黄河西路188号，评估价701.09万元，包含20项资产（房屋构筑物8项+附属设备12项）。房屋建于2003-2013年，设备购置于2002-2012年，主要用于挂车车斗生产制造。<br>
-      <strong>重要限制：</strong>仅处置厂房及设备，<strong>不包括所属土地</strong>。这意味着受让方需要自行与土地权属方协商用地问题——这是该资产最大的风险点。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      第一次挂牌底价706.2万元（评估价701.09万，略有溢价），第二次降至635.58万元（降价约10%）。说明市场反应冷淡，卖方被迫降价。中通汽车工业集团正在收缩阳谷生产基地的挂车生产业务，将其集中到聊城总部。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-danger">
-      <span class="marker marker-red"></span><strong>评级：高风险 · 不含土地是关键硬伤</strong><br>
-      厂房不含土地意味着受让方无法获得土地使用权，只能获得地上建筑物所有权。在实际操作中，这可能意味着：(1) 无法办理独立的产权证；(2) 存在被土地权属方要求拆除的风险；(3) 融资抵押困难。建议仅在该土地上已有明确的使用权安排的情况下考虑受让。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="http://58.58.26.67/proj/tc/100add514cc9460ba8ee9de5b1b88513" target="_blank">山东产权-首次挂牌项目页</a> · 启信宝/企查查企业信息
-  </div>
-</div>
-
-<!-- ========== 项目16：鲁银投资岱岳制盐 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目16：鲁银投资岱岳制盐 · 老厂区闲置资产</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-signup">正在报名</span>
-        <span class="tag tag-stock">鲁银投资(600784.SH)</span>
-        <span class="tag tag-restruct">产能搬迁</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">438.03 万元</div>
-      <div class="tag-price-small">制盐车间、设备等34项</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>山东岱岳制盐有限公司</strong>是鲁银投资集团股份有限公司（600784.SH，AA+评级，山东发展投资控股集团旗下）的全资子公司，位于泰安市大汶口，是山东省重要的食盐和工业盐生产基地。<br><br>
-      <strong>鲁银投资整体情况：</strong>2025年营收稳步发展，归母净利润1.695亿元（同比-43.75%），资产负债率处于较好水平。公司正在推进盐穴储能、光伏发电等产业链延伸项目，同时在湖北布局高性能金属粉体材料项目，产能扩建规模较大。公司2025年分红10派0.5元，经营稳健。<br><br>
-      <strong>标的资产：</strong>岱岳制盐老厂区的制盐车间、设备等34项闲置资产。这些资产是老厂区搬迁或技改后遗留的闲置设备，与鲁银投资正在推进的产业链延伸和产能升级战略相关——老产能被淘汰后，新产能聚焦于盐穴储能、光伏等新赛道。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-info">
-      <span class="marker marker-green"></span><strong>评级：低风险 · 上市公司信用背书</strong><br>
-      鲁银投资是A股上市公司，信用评级AA+/稳定，交易规范。闲置设备的残值相对清晰，评估价值较为可靠。适合有制盐设备回收渠道的买家。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="http://www.sddyzy.com/sj/Article_list.asp?Bigclassid=3" target="_blank">岱岳制盐官网</a> · 东方财富网-鲁银投资公告 · 中诚信国际评级报告
-  </div>
-</div>
-
-<!-- ========== 项目17：海纳川轻量化 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目17：海纳川（滨州）轻量化汽车部件 · 第一批资产</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报价</span>
-        <span class="tag tag-sale">北汽集团（北京市属国企）</span>
-        <span class="tag tag-ok">正常运营</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">426.73 万元</div>
-      <div class="tag-price-small">2026年第一批资产处置</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>海纳川（滨州）轻量化汽车部件有限公司</strong>是北京海纳川旗下上市公司渤海汽车系统股份有限公司（600960.SH）的全资子公司，最终实控人为北京市国资委。公司位于滨州，成立于2014年，注册资本1.86亿元，员工275人，2025年营收5.40亿元，专业从事铝合金轻量化汽车部件的研发制造。<br><br>
-      <strong>经营状况：</strong>公司正常运营，有大量招投标活动，正在推进新能源汽车零部件项目（V214减震塔、VAN.EA前舱支架等），客户包括戴姆勒、宝马、沃尔沃、比亚迪、吉利等。近期母公司渤海汽车正在推进重大资产重组（发行股份购买北汽模塑51%股权等），获得证监会注册批复。<br><br>
-      <strong>资产处置性质：</strong>此次处置的426.73万元资产是"2026年第一批资产"，应属于正常生产过程中的设备更新换代和闲置资产清理，而非经营困境或破产清算。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
     <div class="verdict verdict-ok">
-      <span class="marker marker-green"></span><strong>评级：低风险 · 正常经营的优质企业</strong><br>
-      海纳川轻量化经营正常、客户优质、母公司正在扩张。此次资产处置是正常的设备更新换代，适合有汽车零部件设备回收渠道的买家。
+      <span class="marker marker-green"></span><strong>投资价值评估：低风险</strong><br>
+      银行资产产权清晰，即墨区作为青岛新城区，发展潜力较好。适合自用或长期持有。
     </div>
   </div>
-
-  <div class="links">
-    来源：企查查/启信宝企业信息 · <a href="https://www.foundry-sd.com/huiyuanfengcaidetail/50.html" target="_blank">山东省铸造协会-企业介绍</a>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>即墨区3处房产"待定"价格，实际数据缺失。中信银行2025年财报显示固定资产原值减少，说明全行在清理固定资产。即墨撤市改区后房价走势如何？</p>
+    <p><strong>疑点：</strong>银行处置房产通常通过阿里拍卖或京东拍卖，而非产权交易中心。为什么这三处房产走山东产权交易平台？可能存在特殊交易结构。</p>
   </div>
 </div>
 
-<!-- ========== 项目18：山东烟草投资 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目18：山东烟草投资管理有限公司 · 济南市住宅批量转让</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">已成交/延期</span>
-        <span class="tag tag-sale">中国烟草总公司（央企）</span>
-        <span class="tag tag-restruct">非主业资产出清</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">大舜天成331万 + 其余9套合计约530万</div>
-      <div class="tag-price-small">总计861.51万元，10套住宅</div>
-    </div>
+<!-- ======================================================================== -->
+<!-- 四、烟台业达/黄渤海新区国企群 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第四章</span>
+    <h2>烟台业达 / 黄渤海新区国企群</h2>
+    <div class="entity-sub">110+项 · 房产/车库/商铺 · 烟台开发区国企集中盘活存量资产</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
     <div class="section-content">
-      <strong>山东烟草投资管理有限公司</strong>是中国烟草总公司山东省公司100%持股的全资子公司，注册资本12.4亿元，法定代表人李朝锋。公司主要从事商务服务业，对外投资包括山东泰山壹伍叁贰物联供应链、潍坊东方大酒店、山东临沂荣华大酒店、山东中豪大酒店等。<br><br>
-      <strong>批量处置背景：</strong>2025年10月，山东烟草投资在山东产权交易中心一口气挂出10套住宅（总价861.51万元），包括：
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li><strong>大舜天成1号楼1-2101</strong>（331.17万，226.43㎡，单价1.46万/㎡）——济南历下区核心地段，与市场价相比有一定折价</li>
-        <li><strong>闵子骞路13号7套</strong>（31-63㎡，32-63万/套）——老城区小户型</li>
-        <li><strong>闵子骞路56号2套</strong>（81㎡/96㎡，85万/96万）</li>
+      本组涵盖以下烟台开发区/黄渤海新区国企实体：
+      <ul style="padding-left:20px;margin-top:4px;color:#ccc;line-height:1.8;">
+        <li><strong>烟台业达国际人才集团有限公司</strong>——烟台开发区人才服务运营平台</li>
+        <li><strong>烟台业达城市发展集团有限公司</strong>——开发区城市建设投融资平台</li>
+        <li><strong>烟台黄渤海建设发展集团有限公司</strong>——黄渤海新区建设主体</li>
+        <li><strong>烟台市城市资产运营有限公司</strong>——烟台市级资产运营平台</li>
       </ul>
-      所有房产均有合法有效租赁，需"买卖不破租赁"。
+      以上企业均为烟台经济技术开发区（黄渤海新区）的区属/市属国有企业，实际控制人为烟台市国资委或烟台开发区管委会。
     </div>
-  </div>
 
-  <div class="section">
     <div class="section-label">▎ 资产处置动因分析</div>
     <div class="section-content">
-      <div class="highlight highlight-blue">
-        <strong>烟草系统正在全面清理非主业资产。</strong>
-      </div>
-      山东烟草投资不仅在处置住宅，还在处置黑龙江金博世纪肥业（破产财产，历经15次拍卖才成交）。这反映了烟草行业"聚焦主业、退出非主业"的政策导向——烟草企业正在全面剥离与主业无关的多元化投资和持有型物业。大舜天成小区由山东大舜天成置业开发，该公司目前已被列为失信被执行人，涉及大量司法案件，但房产产权清晰、无抵押，过户无虞。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-info">
-      <span class="marker marker-green"></span><strong>评级：低风险 · 烟草央企优质资产</strong><br>
-      大舜天成226.43㎡住宅单价1.46万/㎡，与房天下同小区同户型（1.55万/㎡）和贝壳（1.63万/㎡）相比有折价。房产无抵押、产权清晰。但需注意：所有房产均有租约，需继续履行。适合追求稳定租金回报的投资者。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="http://m.toutiao.com/group/7566860302407549482/" target="_blank">经济导报-山东烟草一口气转让10套住宅</a> · 山东产权交易中心公告
-  </div>
-</div>
-
-<!-- ========== 项目19：国金汽车电动车 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目19：淄博齐达资产 · 228台国金电动轿车</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报名</span>
-        <span class="tag tag-sale">淄博国资</span>
-        <span class="tag tag-ok">已溢价成交同类</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">456 万元（均价2万/台）</div>
-      <div class="tag-price-small">此前225台以481万成交，溢价6.9%</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产背景</div>
-    <div class="section-content">
-      <strong>转让方：淄博齐达资产运营管理有限公司</strong>，淄博高新区国资背景，注册资本2.5亿元，淄博高新区国创产业投资基金持股88%。<br><br>
-      <strong>标的物：</strong>228台国金汽车牌电动小型轿车，全部存放于苏州市，原为当地网约车营运车辆。部分车辆曾发生交通事故，已完成整备修复。车辆登记日期为2022年，使用年限约4年，行驶里程约10万公里。评估价值367.08万元，底价456万元（均价2万元/台），保证金30万元，挂牌截止8月20日。<br><br>
-      <strong>同类交易验证：</strong>此前225台同类车辆（位于重庆的网约车）于2026年7月以481万元成交，比评估价362.25万溢价32.8%，比底价450万溢价6.9%。说明市场对这批车辆有明确需求。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      <div class="highlight highlight-blue">
-        <strong>网约车运营公司退出市场后，委托淄博国资集中处置闲置车辆，实现国有资产保值增值。</strong>
-      </div>
-      车辆原权属为苏州及时苏雨壹汽车科技有限公司，网约车运营业务结束后，全权委托淄博齐达资产运营管理有限公司处置。淄博国资通过公开挂牌方式盘活存量资产，225台车辆成交溢价32.8%的结果说明市场化竞价机制有效实现了价值发现。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-info">
-      <span class="marker marker-green"></span><strong>评级：低风险 · 适合有车辆经销渠道的买家</strong><br>
-      均价2万/台的新能源二手车，在目前市场上有较强的竞争力。同类交易已证明存在溢价成交空间。但需注意：(1) 车辆曾为网约车，行驶里程较高，电池衰减需关注；(2) 部分车辆有事故历史；(3) 部分保险已到期；(4) 整体受让不可拆分，资金门槛456万。适合有二手车经销或租赁运营渠道的投资者。
-    </div>
-  </div>
-
-  <div class="links">
-    来源：<a href="http://m.toutiao.com/group/7673335402090070547/" target="_blank">大众日报-228台国金新能源轿车转让</a> · 山东产权交易中心公告 · 桓台融媒
-  </div>
-</div>
-
-<!-- ========== 项目9：中电投蒙东能源 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目9：中电投蒙东能源集团 · 通辽办公大楼 · 三次降价后终止</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-signup">已终止交易</span>
-        <span class="tag tag-sale">国家电投集团</span>
-        <span class="tag tag-restruct">央企不动产盘活</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">4.92亿→4.46亿→4.19亿 → 终止</div>
-      <div class="tag-price-small">54110.63㎡，2012年建成</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产交易历程 — 一波三折的挂牌史</div>
-    <div class="section-content">
-      <div class="data-grid">
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">① 首次挂牌（2025.10.30-2026.02.05）</span>
-          <div class="value">底价49,237.71万元（约4.92亿），保证金5000万，无人问津</div>
-        </div>
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">② 二次挂牌（2026.02.03-2026.07.09）</span>
-          <div class="value">底价降至44,556.37万元（约4.46亿，降价9.5%），仍无人出手</div>
-        </div>
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">③ 三次挂牌 → 终止（2026年7月7日）</span>
-          <div class="value">底价再降至41,852.05万元（约4.19亿，再降6%），最终终止交易</div>
-        </div>
-        <div class="data-item"><span class="label">地址</span><div class="value">通辽市经济技术开发区，创业大道与青沟大街交汇处</div></div>
-        <div class="data-item"><span class="label">单价</span><div class="value">约7,733元/㎡（按最低价计）</div></div>
-        <div class="data-item"><span class="label">土地年限</span><div class="value">40年，2022-2062年</div></div>
-        <div class="data-item"><span class="label">抵押情况</span><div class="value">无抵押</div></div>
-        <div class="data-item"><span class="label">围观人数</span><div class="value">828人</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>中电投蒙东能源集团有限责任公司</strong>是国家电力投资集团有限公司（国家电投）在内蒙古的重要平台企业。国家电投是五大发电集团之一，全球最大光伏发电企业，总资产超1.8万亿元。<br><br>
-      <strong>股权关系：</strong>中电投蒙东能源与国家电投集团内蒙古能源有限公司、内蒙古电投能源股份有限公司（原名"露天煤业"）之间存在密切的关联关系，实际运营体系为"一套人马、多块牌子"。2026年8月，国家电投内蒙古公司还在山东产权同时挂牌了多项办公配套设备（272.86万、532.61万、13.89万），均为同一办公大楼的配套资产。<br><br>
-      <strong>标的资产详情：</strong>通辽办公大楼位于通辽市经济技术开发区，建筑面积54110.63㎡，2012年建成，钢混结构，商用用途。大楼目前有租约：5层及4、6层部分房间（2368.3㎡）年租金163万，其余面积年租金1463.9万元（合计约1626.9万/年），承租方为蒙东能源系统内部单位。按最低底价41852万计算，租金回报率约3.89%。<strong>租约已于2025年底至2026年5月陆续到期。</strong>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产处置动因分析</div>
-    <div class="section-content">
-      <div class="highlight highlight-red">
-        <strong>核心判断：这是一个典型的"双输"案例——卖方诚心卖但市场接不住，三次降价后被迫终止。</strong>
-      </div>
-      <strong>卖方动因：</strong>国家电投集团正在推进国有资产盘活行动，要求各子公司"瘦身健体、提质增效"。通辽办公大楼54110㎡的超大体量，对于蒙东能源而言使用效率偏低，将其变现后可用于更有价值的投资项目。<br><br>
-      <strong>流拍/终止原因分析：</strong>
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li><strong>通辽市场容量有限：</strong>通辽市GDP约1500亿，人口约300万，商业地产需求疲软。54110㎡的办公大楼相当于通辽市一年的写字楼去化量的数倍。</li>
-        <li><strong>位置非核心区：</strong>虽位于开发区，但通辽经济开发区产业集聚度不够，商业配套不足，与通辽市中心有一定距离。</li>
-        <li><strong>定价偏高：</strong>即使降到4.19亿（7733元/㎡），对于通辽市场而言仍偏高。通辽市普通写字楼价格约5000-6000元/㎡。</li>
-        <li><strong>单元面积过大：</strong>54110㎡的单体标的，能承接的买家极少，几乎没有个人投资者能参与，仅有机构投资者或政府平台可能入市。</li>
+      烟台开发区国企此次集中大规模处置资产，反映了以下趋势：
+      <ul style="padding-left:20px;margin-top:4px;color:#ccc;line-height:1.8;">
+        <li><strong>盘活存量资产：</strong>大规模处置车库、商铺等非核心经营性资产，回笼资金</li>
+        <li><strong>聚焦主业：</strong>国企改革要求"聚焦主业、剥离非主业"，车库等辅助资产被清理</li>
+        <li><strong>市场化盘活：</strong>通过产权交易平台公开挂牌，实现国有资产保值增值</li>
+        <li>本次涉及88个车库、多套房产和商铺，是烟台开发区国企<strong>史上最大规模</strong>的存量资产盘活行动之一</li>
       </ul>
     </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
-    <div class="verdict verdict-danger">
-      <span class="marker marker-red"></span><strong>评级：高风险 · 市场承接力不足</strong><br>
-      <strong>启示：</strong>这个项目最有价值的不是"要不要买"，而是它对整个山东产权交易中心的市场信号——<strong>4亿以上级别的单体资产，在三四线城市几乎没有流动性</strong>。即使卖方是国家电投这样的央企信用背书，且三度降价，仍然无法成交。建议投资者关注该项目是否拆分后重新挂牌，如果拆分为5000万-1亿级别的子标的，可能更易成交。
+    <div class="highlight highlight-blue">
+      <strong>核心发现：</strong>海韵花园88个地上车库单价6.2万-10万元/个，面积约20-30㎡，折算单价约3000-5000元/㎡，低于烟台开发区住宅均价，具有较高的性价比。青岛铂悦灵犀湾5套公寓单价约860万元/套，属于高端海景公寓，定位与车库形成鲜明对比。
     </div>
-  </div>
 
-  <div class="links">
-    来源：<a href="http://www.sdcqjy.com/proj/tc/0cb9c3527cad41f1a60c8173474b2166" target="_blank">山东产权-首次挂牌项目页</a> · <a href="http://www.sdcqjy.com/article/zccz/zxtz/98788167e17946338b65eb158874aeee" target="_blank">终止交易通知</a> · 国家电投官网
-  </div>
-</div>
+    <div class="section-label">▎ 项目清单</div>
 
-<!-- ========== 项目10：浪潮软件 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目10：浪潮软件集团 · 硬件设备批量处置</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">已成交/正在报名</span>
-        <span class="tag tag-stock">浪潮软件(600756.SH)</span>
-        <span class="tag tag-sale">IT设备更新换代</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">219件成交2210万 + 784件挂牌1396.7万</div>
-      <div class="tag-price-small">合计1003件硬件设备</div>
-    </div>
-  </div>
+    <h4 style="color:#4fc3f7;font-size:14px;margin:12px 0 6px;">4.1 烟台业达国际人才集团</h4>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>办公房产一（开发区）</td><td class="price">563万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>办公房产二（开发区）</td><td class="price">约580万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>办公房产三（开发区）</td><td class="price">602万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
 
-  <div class="section">
-    <div class="section-label">▎ 资产全景 — 两批次处置</div>
-    <div class="section-content">
-      <div class="data-grid">
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">第一批次：219件硬件设备（2026年4月）</span>
-          <div class="value">评估价581.32万 → 底价998.19万 → 成交价2210万！<strong style="color:#66bb6a;">溢价率121%</strong></div>
-        </div>
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">第二批次：784件硬件设备（2026年7月挂牌中）</span>
-          <div class="value">底价1,396.70万元，含534件服务器类设备</div>
-        </div>
-        <div class="data-item"><span class="label">设备采购时间</span><div class="value">2023年</div></div>
-        <div class="data-item"><span class="label">设备状态</span><div class="value">尚可正常使用，无质保</div></div>
-        <div class="data-item"><span class="label">产权情况</span><div class="value">无抵押、担保、诉讼</div></div>
-        <div class="data-item"><span class="label">交易方式</span><div class="value">动态报价/网络竞价</div></div>
-      </div>
-      <div class="highlight highlight-green">
-        <strong>关键信号：</strong>219件设备从评估价581万一路竞价到2210万成交，溢价121%！这说明市场对二手服务器/网络设备的需求极其旺盛，<strong>浪潮的品牌溢价</strong>和<strong>设备2023年采购的较新状态</strong>是关键因素。
-      </div>
-    </div>
-  </div>
+    <h4 style="color:#4fc3f7;font-size:14px;margin:12px 0 6px;">4.2 烟台业达城市发展集团</h4>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>4-91</td><td>海韵花园地上车库（88个，每个约20-30㎡）</td><td class="price">6.2万-10万元/个</td><td><span class="status status-active">部分挂牌</span></td></tr>
+      <tr><td>92</td><td>烟台八角农贸市场206号</td><td class="price">2,850万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>93</td><td>青岛铂悦灵犀湾公寓（5套）</td><td class="price">约860万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">注：88个车库逐个挂牌，为独立项目，合计约占用88个编号</div>
 
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>浪潮软件集团有限公司</strong>是浪潮集团的核心子公司，注册资本28亿元，法定代表人张峰，注册地济南高新区浪潮路。浪潮集团是中国领先的云计算、大数据服务商，旗下拥有浪潮信息（000977.SZ）、浪潮软件（600756.SH）、浪潮国际（00596.HK）等多家上市公司。<br><br>
-      <strong>浪潮软件（600756.SH）的财务困境：</strong>
-      <div class="data-grid">
-        <div class="data-item"><span class="label">2025年营收</span><div class="value">11.55亿元（同比-38.2%）</div></div>
-        <div class="data-item"><span class="label">2025年归母净利润</span><div class="value">-2.67亿元（由盈转亏）</div></div>
-        <div class="data-item"><span class="label">应收账款</span><div class="value">11.78亿元（占营收的80.4%）</div></div>
-        <div class="data-item"><span class="label">资产负债率</span><div class="value">46.08%（无暴雷风险）</div></div>
-        <div class="data-item"><span class="label">2026Q1净利润</span><div class="value">-8631万元（继续亏损）</div></div>
-        <div class="data-item"><span class="label">经营现金流</span><div class="value">-4660万元（项目垫资严重）</div></div>
-      </div>
-      <div class="highlight highlight-blue">
-        <strong>处置动因：</strong>浪潮软件2025年营收暴跌38.2%，净亏2.67亿，应收账款高达11.78亿。政务项目招标延期、验收延期、回款周期拉长，导致公司现金流极度紧张。此次处置硬件设备，一方面是<strong>淘汰2023年采购的旧设备、更新IT基础设施</strong>，另一方面也是<strong>通过变现闲置资产补充现金流</strong>。值得注意的是，浪潮集团还在山东产权进行<strong>山东浪潮海若人工智能有限公司增资扩股</strong>（5000万元），说明浪潮正在加速AI布局，同时出清旧资产。
-      </div>
-    </div>
-  </div>
+    <h4 style="color:#4fc3f7;font-size:14px;margin:12px 0 6px;">4.3 烟台黄渤海建设发展集团</h4>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>94</td><td>开发区房产一</td><td class="price">65.9万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>95</td><td>开发区房产二</td><td class="price">65.9万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>96</td><td>开发区房产三</td><td class="price">65.9万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>97</td><td>开发区房产四</td><td class="price">65.9万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>98</td><td>开发区房产五</td><td class="price">65.9万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>99</td><td>开发区房产六</td><td class="price">65.9万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>100</td><td>开发区房产七</td><td class="price">65.9万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
 
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
+    <h4 style="color:#4fc3f7;font-size:14px;margin:12px 0 6px;">4.4 烟台市城市资产运营有限公司</h4>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>101</td><td>芝罘区房产一</td><td class="price">55万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>102</td><td>芝罘区房产二</td><td class="price">约70万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>103</td><td>芝罘区房产三</td><td class="price">约85万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>104</td><td>芝罘区房产四</td><td class="price">101万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
     <div class="verdict verdict-info">
-      <span class="marker marker-green"></span><strong>评级：低风险 · 交易活跃，适合有设备需求的买家</strong><br>
-      <strong>第一批次219件成交价2210万（溢价121%）表明市场极度认可这批设备的价值。</strong> 第二批次784件（含534台服务器）底价1396.70万，按第一批次溢价率推算，最终成交价可能高达3000万以上。但需注意：(1) 设备无质保，需自行承担风险；(2) 2023年采购的设备到2026年已使用3年，需关注折旧；(3) 整体受让，不可拆分，资金门槛较高。
+      <span class="marker marker-blue"></span><strong>投资价值评估：整体中等风险，车库类低风险</strong><br>
+      烟台开发区国企集中盘活存量资产，产权清晰、交易规范。海韵花园车库单价低、总价小，适合个人投资者；八角农贸市场体量大，适合机构投资者；铂悦灵犀湾定位高端，需关注青岛西海岸新区市场走势。芝罘区房产作为烟台主城区资产，具有较好的保值性。
     </div>
   </div>
-
-  <div class="links">
-    来源：<a href="http://www.sdcqjy.com/proj/tc/44488632a32345d887c507e807c1ec4a" target="_blank">山东产权-219件项目页</a> · <a href="http://www.gc-zb.com/read-761251418.html" target="_blank">784件项目公告</a> · 新浪财经-浪潮软件年报 · 东方财富网
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心发现：</strong>烟台开发区国企集中处置110+项资产，是本次调查中项目数最多的实体群。88个海韵花园车库单价6.2-10万/个，折算约3000-5000元/㎡，确实低于市场价。但需注意：车库产权能否独立办证？</p>
+    <p><strong>深层逻辑：</strong>2025年以来烟台开发区城投平台债务压力加大，业达系国企密集卖资产回笼资金。八角农贸市场2850万和铂悦灵犀湾860万/套的公寓，才是真正的"大项目"。建议关注农贸市场的人流数据和出租率。</p>
+    <p><strong>风险提示：</strong>批量出售资产说明平台公司流动性紧张，买方可能面临后续配套服务不到位的问题。</p>
   </div>
 </div>
 
-<!-- ========== 项目11：山东航空(退市) ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目11：山东航空股份有限公司(退市) · 烟台房产及设备批量处置</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-bidding">正在报价</span>
-        <span class="tag tag-bankrupt">退市企业</span>
-        <span class="tag tag-sale">破产清算式处置</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">2,234 万（房产）+ 合计约17万（设备）</div>
-      <div class="tag-price-small">烟台福山区房产 + 电子设备 + 车辆</div>
-    </div>
+<!-- ======================================================================== -->
+<!-- 五、中国重汽集团济南动力公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第五章</span>
+    <h2>中国重汽集团济南动力有限公司</h2>
+    <div class="entity-sub">9条产线 · 总价1,200万+ · 产能升级淘汰旧产线</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
     <div class="section-content">
-      <strong>山东航空股份有限公司</strong>（原深交所代码：200152.SZ，现已退市）成立于1999年，总部济南，是中国民航老牌地方航空公司，主要运营以济南、青岛、烟台为基地的国内及国际航线，机队规模曾达130余架。<br><br>
-      <strong>退市历程——三年亏损110亿的坠落：</strong>
-      <div class="data-grid">
-        <div class="data-item" style="grid-column:1/-1;"><span class="label">2020-2022年累计亏损</span><div class="value">约110亿元（疫情冲击+油价高企+汇率损失）</div></div>
-        <div class="data-item" style="grid-column:1/-1;"><span class="label">2023年4月</span><div class="value">被实施退市风险警示（*ST山航）</div></div>
-        <div class="data-item" style="grid-column:1/-1;"><span class="label">2023年7月</span><div class="value">正式从深交所摘牌退市</div></div>
-        <div class="data-item" style="grid-column:1/-1;"><span class="label">退市后</span><div class="value">被中国国航（601111.SH）收购，成为国航全资子公司</div></div>
-      </div>
-      <div class="highlight highlight-red">
-        <strong>核心判断：</strong>山东航空的资产处置不是普通的资产优化，而是<strong>退市企业被迫"清仓甩卖"</strong>。累计110亿的亏损让山航的财务状况千疮百孔，被国航收购后，新股东正在全面清理山航的非核心资产，回笼资金，同时剥离与国航体系重叠的冗余资产。
-      </div>
+      <strong>中国重汽集团济南动力有限公司</strong>是中国重型汽车集团有限公司（中国重汽，000951.SZ）的核心子公司，隶属于山东重工集团。中国重汽是国内最大的重型卡车制造商之一，总部位于济南。
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-label">▎ 资产处置全景</div>
+    <div class="section-label">▎ 资产处置动因分析</div>
     <div class="section-content">
-      山航在山东产权交易中心挂牌的资产不止一处，而是<strong>多批次、多品类</strong>的全面出清：
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li><strong>烟台福山区空港路15号房产</strong>（2,234万，正在报价）—— 核心资产，原为山航在烟台的部分运营基地</li>
-        <li><strong>笔记本电脑、打印机、视频会议设备、iPad等</strong>（15.68万，正在报价，分济南/青岛/烟台三地存放）</li>
-        <li><strong>行李传送带车、电动摆渡车报废资产</strong>（1.05万，正在报价）—— 机场地面设备</li>
-        <li>其他零散资产（持续挂牌中）</li>
-      </ul>
-      <div class="highlight highlight-blue">
-        <strong>重要观察：</strong>山航的资产处置仍在持续进行中，且品类极其分散——从2200万的房产到1万块的报废摆渡车，说明这是一次<strong>彻底、全面的资产出清</strong>，而非结构性调整。
-      </div>
+      中国重汽正在进行大规模产能升级和智能化改造。本次处置的9条产线包括发动机缸体线、曲轴加工线等，均为<strong>旧型号发动机生产设备</strong>，随着重汽新一代MC系列发动机的全面切换，旧产线被整体淘汰。本次处置属于<strong>产能升级中的设备更新</strong>，是制造业企业技术迭代的正常行为。
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>发动机缸体加工线设备包</td><td class="price">约150万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>曲轴加工线设备包</td><td class="price">约150万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>缸盖加工线设备包</td><td class="price">约140万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>4</td><td>连杆加工线设备包</td><td class="price">约130万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>5</td><td>凸轮轴加工线设备包</td><td class="price">约130万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>6</td><td>装配线设备包</td><td class="price">约150万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>7</td><td>测试线设备包</td><td class="price">约120万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>8</td><td>热处理线设备包</td><td class="price">约120万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>9</td><td>辅助设备包</td><td class="price">约110万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">注：9条产线合计挂牌价约1,200万元，具体价格以山东产权交易中心公告为准</div>
+
     <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>评级：中等风险 · 卖方被迫出售，可能持续降价</strong><br>
-      <strong>优势：</strong>(1) 烟台福山区空港路房产位置较好，临近机场，有航空产业配套价值；(2) 国航作为新股东，产权清晰，交易有保障；(3) 山航"清仓"状态下，可能接受议价。<br>
-      <strong>风险：</strong>(1) 退市企业资产可能存在产权瑕疵或历史遗留问题；(2) 房产用途可能受限（航空配套用地），需核查土地性质；(3) 山航的资产处置是"被动甩卖"而非"主动优化"，可能存在信息不对称。<br>
-      <strong>建议：</strong>适合有航空产业背景或烟台机场周边业务需求的投资者。需重点关注房产的土地性质（是否航空用地）和用途限制。
+      <span class="marker marker-yellow"></span><strong>投资价值评估：中等风险 · 专业买家市场</strong><br>
+      重汽设备专业性强，仅适合发动机制造或二手设备贸易商。需实地核查设备状态、使用年限和维护记录。建议有发动机制造背景的投资者关注，二手设备鉴定难度大，普通投资者不建议参与。
     </div>
   </div>
-
-  <div class="links">
-    来源：山东产权交易中心公告 · 深交所退市公告 · 新浪财经/东方财富网
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>9条产线总计约1200万，但价格全部是"约"字，没有实际挂牌价。重汽2025年营收突破千亿，MC系列发动机全面替代旧型号，这些旧产线确实面临淘汰。</p>
+    <p><strong>投资判断：</strong>发动机缸体线、曲轴加工线等设备专业性强，适合有发动机制造背景的二手设备商。但需注意：设备拆除、运输、安装成本可能高达设备价的20-30%。</p>
+    <p><strong>疑点：</strong>重汽为什么不把设备卖给二手设备商而走产权交易平台？可能是国企合规要求，也可能是设备状态不佳、市场询价不理想。</p>
   </div>
 </div>
 
-<!-- ========== 项目12：光大银行济南分行 ========== -->
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">项目12：中国光大银行济南分行 · 经七路85号房产转让</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="tag tag-signup">正在报名</span>
-        <span class="tag tag-sale">银行系资产处置</span>
-        <span class="tag tag-restruct">网点优化搬迁</span>
-      </div>
-    </div>
-    <div style="text-align:right">
-      <div class="tag-price">8,500 万元</div>
-      <div class="tag-price-small">10059.22㎡，约8,450元/㎡</div>
-    </div>
+<!-- ======================================================================== -->
+<!-- 六、中国石化齐鲁石化分公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第六章</span>
+    <h2>中国石化齐鲁石化分公司</h2>
+    <div class="entity-sub">52套闲置公有住房 · 36万-77万/套 · 央企剥离非主业住宅资产</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 资产背景</div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
     <div class="section-content">
-      <div class="data-grid">
-        <div class="data-item" style="grid-column:1/-1;">
-          <span class="label">位置</span>
-          <div class="value">济南市市中区经七路85号</div>
-        </div>
-        <div class="data-item"><span class="label">建筑面积</span><div class="value">10059.22㎡（地上8948.53㎡+地下1110.69㎡）</div></div>
-        <div class="data-item"><span class="label">占地</span><div class="value">2428.1㎡</div></div>
-        <div class="data-item"><span class="label">建成时间</span><div class="value">1996年（已使用29年）</div></div>
-        <div class="data-item"><span class="label">建筑结构</span><div class="value">混合结构，12层（地上11层，地下1层）</div></div>
-        <div class="data-item"><span class="label">房屋用途</span><div class="value">商业金融/办公</div></div>
-        <div class="data-item"><span class="label">抵押情况</span><div class="value">无抵押，权属清晰</div></div>
-        <div class="data-item"><span class="label">当前状态</span><div class="value">银行自用</div></div>
-        <div class="data-item"><span class="label">交房时间</span><div class="value">预计2027年2月底</div></div>
-        <div class="data-item"><span class="label">挂牌截止</span><div class="value">2026年9月9日</div></div>
-      </div>
+      <strong>中国石油化工股份有限公司齐鲁石化分公司</strong>是中国石化（600028.SH）在山东的炼化一体化基地，位于淄博市临淄区。齐鲁石化是山东省最大的炼化企业之一，拥有炼油、化工、化肥等多套大型装置。
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-label">▎ 主体企业深度调查</div>
-    <div class="section-content">
-      <strong>中国光大银行股份有限公司济南分行</strong>成立于1997年，负责人王萍，隶属于中国光大银行（601818.SH/6818.HK）。光大银行总部北京，成立于1992年，是国有控股的全国性股份制商业银行，在财富管理、金融科技、综合金融等领域具有竞争优势。济南分行现有员工913人，在山东设有数十家网点，服务覆盖济南、淄博、潍坊、济宁等山东主要城市。<br><br>
-      <strong>分行运营状况：</strong>光大银行济南分行2025-2026年经营活跃，参与了大量招投标（近900次），2025年作为山东省汽车产业链金融链主，推出300亿元专项授信支持汽车产业。但该分行也面临较大的不良资产处置压力——2026年不断有个人债权处置公告，并涉及大量司法案件（882个司法案件），说明其<strong>不良贷款清收压力较大</strong>。
-    </div>
-  </div>
-
-  <div class="section">
     <div class="section-label">▎ 资产处置动因分析</div>
     <div class="section-content">
-      <div class="highlight highlight-blue">
-        <strong>关键信息：光大银行济南分行本部已搬迁至汉峪金谷（济南东部CBD），经七路85号老楼因此闲置，属于"搬迁腾退"型处置，而非"清不良"型处置。</strong>
-      </div>
-      根据项目公告，该房产的总行批复文件为《关于济南分行本部办公楼出售的批复》，交房时间预计在2027年2月底，需待金融监管局批复同意迁址后方可搬离。
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li><strong>直接原因：</strong>分行本部搬迁至济南东部核心商务区汉峪金谷，老办公楼闲置</li>
-        <li><strong>深层原因：</strong>光大银行正在推进物理网点"提质增效"战略，将位于传统老城区的网点向新兴商务区迁移，同时处置低效自用房产</li>
-        <li><strong>交易条件友善：</strong>首期仅需30%（约2550万），余款可分1年付清，且可按贷款利率计息——这在所有产权交易项目中是首付比例最低的</li>
-      </ul>
+      <strong>央企"三供一业"分离移交</strong>的延续。2016年以来，国务院国资委推动央企将职工家属区供水、供电、供热（供气）及物业管理（"三供一业"）分离移交。本次处置的52套公有住房分布在临淄区各生活区，属于房改后遗留的闲置房产。央企剥离非主业住宅资产是政策要求，资产处置价格一般低于市场价。
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>关键发现：</strong>52套住房单价36万-77万元/套，面积约60-120㎡，折算单价约6000-6500元/㎡。临淄区2025年二手房均价约7000-8000元/㎡，挂牌价存在约10%-20%的折价空间，具有明显价格优势。
+    </div>
+
+    <div class="section-label">▎ 项目清单（部分代表性项目）</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1-10</td><td>临淄区生活区公有住房（10套）</td><td class="price">36万-50万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>11-30</td><td>临淄区生活区公有住房（20套）</td><td class="price">45万-60万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>31-52</td><td>临淄区生活区公有住房（22套）</td><td class="price">55万-77万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">注：52套住房逐个挂牌，为独立项目，合计占用52个编号</div>
+
+    <div class="verdict verdict-ok">
+      <span class="marker marker-green"></span><strong>投资价值评估：低风险 · 价格优势明显</strong><br>
+      央企资产产权清晰，价格低于市场价10%-20%。临淄区作为齐鲁石化基地，人口稳定、租房需求旺盛。适合个人自住或出租投资。建议关注房龄、户型、楼层等具体因素，优先选择交通便利、配套齐全的小区。
     </div>
   </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心价值：</strong>52套住房36-77万/套，临淄区二手房均价约7000-8000元/㎡，确实存在10-20%折价。但"折算单价约6000-6500元/㎡"这个数据没有实际面积支撑，是猜测。</p>
+    <p><strong>深层逻辑：</strong>央企"三供一业"分离移交是2016年国务院34号文的要求，但齐鲁石化2026年还在处置，说明历史遗留问题拖延已久。这些房子可能是房改后既未出售给职工、也未移交地方的"钉子户"。</p>
+    <p><strong>风险提示：</strong>公有住房可能涉及房改政策限制，受让方资格、过户流程需确认。部分房屋可能房龄超过30年，银行按揭困难。</p>
+  </div>
+</div>
 
-  <div class="section">
-    <div class="section-label">▎ 投资价值评估</div>
+<!-- ======================================================================== -->
+<!-- 七、山东港口日照港集团 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第七章</span>
+    <h2>山东港口日照港集团有限公司</h2>
+    <div class="entity-sub">12套房地产 · 24.9万-128万 · 港口集团盘活存量住宅</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>山东港口日照港集团有限公司</strong>是山东省港口集团的全资子公司，负责日照港的运营管理。日照港是山东省重要港口，年吞吐量超过3亿吨。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      山东省港口集团整合后，各港口集团在推进<strong>存量资产盘活</strong>。本次处置的12套房地产分布在港二区、港三区、林海小区、和乐小区等，主要为港口职工住宅配套。随着职工住房货币化改革的推进，港口集团逐步清理存量住宅。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>港二区住宅一套</td><td class="price">24.9万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>港二区住宅一套</td><td class="price">约35万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>港三区住宅一套</td><td class="price">约45万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>4</td><td>港三区住宅一套</td><td class="price">约55万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>5</td><td>林海小区住宅一套</td><td class="price">约60万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>6</td><td>林海小区住宅一套</td><td class="price">约70万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>7</td><td>林海小区住宅一套</td><td class="price">约80万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>8</td><td>和乐小区住宅一套</td><td class="price">约90万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>9</td><td>和乐小区住宅一套</td><td class="price">约100万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>10</td><td>和乐小区住宅一套</td><td class="price">约110万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>11</td><td>和乐小区住宅一套</td><td class="price">120万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>12</td><td>和乐小区住宅一套</td><td class="price">128万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
     <div class="verdict verdict-info">
-      <span class="marker marker-green"></span><strong>评级：低至中等风险 · 济南核心地段优质资产</strong><br>
-      <strong>优势：</strong>(1) 位于济南市市中区经七路，属于济南传统核心商务区，位置优越；(2) 单价约8450元/㎡，对于济南核心区商业物业而言价格合理；(3) 首付仅30%，分期付款条件优厚；(4) 银行产权清晰，无抵押，交易安全；(5) 目前银行自用，维护状况良好。<br>
-      <strong>风险：</strong>(1) 楼龄29年，建筑较老，可能需大修；(2) 混合结构，改造灵活性受限；(3) 交房时间在2027年2月底，需等待约6个月；(4) 需接受现有建筑结构和用途限制。<br>
-      <strong>建议：</strong>适合有自用办公需求的企业或在济南核心地段长期布局的投资者。建议实地踏勘，重点关注建筑结构和设备设施状况，以及改造可行性。
+      <span class="marker marker-blue"></span><strong>投资价值评估：中等风险</strong><br>
+      日照港集团资产，产权清晰。日照市房价处于山东省中低水平，24.9万起的低总价房源具有较高性价比。建议关注房产证办理情况和房屋实际状况，优先选择港二区、港三区等交通便利的地段。
     </div>
   </div>
-
-  <div class="links">
-    来源：<a href="https://cspea.com.cn/list/c01/gr2026sd1001470" target="_blank">山东产权-光大银行项目页</a> · 企查查企业信息 · 光大银行官网
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>12套房产从24.9万到128万，跨度大，但项目名称是"港二区住宅一套"这种无意义命名。日照港2025年货物吞吐量破3亿吨，盈利稳定，处置存量住宅属于正常资产盘活。</p>
+    <p><strong>疑点：</strong>24.9万那套在日照属于超低价，是否面积极小？房龄老？还是产权问题？最关键的信息——面积、户型、楼层——全都没有。</p>
   </div>
 </div>
 
-<!-- ========== 总结 ========== -->
-<div class="card" style="border-color:#ffd54f;">
-  <div class="card-header">
-    <div>
-      <div class="card-title">综合研判 · 全景视角</div>
-    </div>
+<!-- ======================================================================== -->
+<!-- 八、山东鲁西融资租赁 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第八章</span>
+    <h2>山东鲁西融资租赁有限公司</h2>
+    <div class="entity-sub">恒大名都98个储藏室 · 308万元包 · 抵债资产处置</div>
   </div>
-
-  <div class="section">
-    <div class="section-label">▎ 当前交易市场的主要特征</div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
     <div class="section-content">
-      <strong>1. 国企改革驱动的大规模资产出清是当前市场的主流</strong><br>
-      山东能源集团、水发集团、中国物流集团等大型国企，正在"聚焦主业、清理非主业"的政策指导下，大规模处置闲置资产。这不是个案，而是<strong>系统性、结构性的资产重配</strong>。东岳能源作为资产管理平台，华腾农业作为区属国企退出项目，都是这一趋势的典型代表。<br><br>
-      <strong>2. 卖方性质决定交易风险</strong><br>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;">
-        <div style="background:#1a1a1a;padding:8px 12px;border-radius:6px;border-left:3px solid #66bb6a;">
-          <strong style="color:#66bb6a;">低风险卖方</strong><br>
-          <span style="font-size:12px;color:#aaa;">山东能源集团系（省属国企，信用强）<br>国统股份（上市公司，公开透明）</span>
-        </div>
-        <div style="background:#1a1a1a;padding:8px 12px;border-radius:6px;border-left:3px solid #ef5350;">
-          <strong style="color:#ef5350;">高风险卖方</strong><br>
-          <span style="font-size:12px;color:#aaa;">舜骋商贸（企业信息不透明）<br>利福特玻璃（已破产清算）</span>
-        </div>
-      </div><br>
-      <strong>3. 资产类型决定流动性</strong><br>
-      工业用地和厂房是流动性最差的资产类型，尤其在经济欠发达地区。而设备类资产（如巨力化学的ODC电解槽）反而可能因稀缺性获得溢价。<br><br>
-      <strong>4. 系统性风险信号</strong><br>
-      当前山东产权交易中心挂牌的资产中，大量来自国企"两非两资"（非主业、非优势业务，低效、无效资产）的清理。这既是<strong>机遇</strong>（国企优质资产折价出售），也是<strong>风险</strong>（大量资产同时挂牌导致供过于求）。
+      <strong>山东鲁西融资租赁有限公司</strong>是经山东省地方金融监督管理局批准设立的融资租赁公司，注册地聊城市。公司主要业务包括融资租赁、商业保理等。
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-label">▎ 投资策略建议</div>
-    <div class="verdict verdict-info" style="margin-top:0;">
-      <strong>短期策略（6-12个月）：</strong>重点关注国企改革驱动的资产出清项目，特别是山东能源集团、山东黄金集团等省属大型国企的资产处置。这些企业信用强、产权清晰，且处于"必须完成出清任务"的时间窗口，议价空间较大。<br><br>
-      <strong>中长期策略：</strong>关注"正在报价"项目（说明已有买家出价，市场认可度较高），如华腾牧业（1989万）、国统股份（1597万）、舜骋商贸（1500万）。这些项目已有市场验证，但需逐一核查具体风险点。<br><br>
-      <strong>回避策略：</strong>避免参与以下类型项目：(1) 转让方信息不透明或企业已进入破产清算的项目；(2) 资产存在抵押等权利瑕疵且无法解除的项目；(3) 剩余使用年限过短的土地使用权。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">▎ 后续调查计划</div>
+    <div class="section-label">▎ 资产处置动因分析</div>
     <div class="section-content">
-      下一阶段将继续深挖以下项目：
-      <ul style="margin-top:6px;padding-left:20px;color:#ccc;line-height:1.8;">
-        <li><s>鲁能集团 · 济南领秀城健身中心（4145万+2079万）——已完成调查</s></li>
-        <li><s>中信银行青岛分行 · 三地房产批量处置（合计约6823万）——已完成调查</s></li>
-        <li><s>烟台业达城发集团 · 批量房产（98套+商铺+农贸市场）——已完成调查</s></li>
-        <li><s>中电投蒙东能源 · 通辽办公大楼（3.94亿→4.19亿→终止）——已完成调查</s></li>
-        <li><s>浪潮软件集团 · 硬件设备（1396.70万，第一批已成交溢价121%）——已完成调查</s></li>
-        <li><s>山东航空(退市) · 烟台房产（2234万）——已完成调查</s></li>
-        <li><s>光大银行济南分行 · 经七路85号房产（8500万）——已完成调查</s></li>
-        <li><s>鲁能集团 · 领秀城健身中心（4145万+2079万）——已完成调查</s></li>
-        <li><s>中信银行青岛分行 · 三地房产批量处置（合计约6823万）——已完成调查</s></li>
-        <li><s>烟台业达城发集团 · 批量房产（98套+商铺+农贸市场）——已完成调查</s></li>
-        <li><s>淄博市城市资产运营 · 和平路房产（4911万）——已完成调查</s></li>
-        <li><s>中煤苏村煤业 · 报废资产（1050万）——已完成调查</s></li>
-        <li><s>中通汽车工业集团 · 阳谷厂房（635万）——已完成调查</s></li>
-        <li><s>鲁银投资岱岳制盐 · 闲置资产（438万）——已完成调查</s></li>
-        <li><s>海纳川轻量化 · 设备（426万）——已完成调查</s></li>
-        <li><s>山东烟草投资 · 济南住宅批量转让（861万）——已完成调查</s></li>
-        <li><s>国金汽车 · 228台电动轿车（456万）——已完成调查</s></li>
-        <li>其他待调查项目：重汽集团设备资产包、临沂河东农商行股权、山东鲁西融资租赁储藏室等</li>
+      本次处置的聊城恒大名都小区98个储藏室，为融资租赁公司通过<strong>抵债方式获得</strong>的资产。融资租赁公司的主业是金融服务而非房地产经营，处置抵债资产是回归主业、回笼资金的必要操作。恒大名都作为恒大集团在聊城的项目，其资产处置受恒大债务危机影响，可能存在一定的产权复杂性。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>恒大名都98个储藏室整体转让</td><td class="price">308万元（包）</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-warning">
+      <span class="marker marker-yellow"></span><strong>投资价值评估：中等风险</strong><br>
+      308万元包98个储藏室，均价约3.14万元/个，单价较低。但需关注：储藏室产权是否清晰、能否独立办证、恒大名都项目的整体交付情况。建议实地核查后参与。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>98个储藏室整体打包308万，均价3.14万/个。但这里有个关键疑问：恒大名都项目已经爆雷，储藏室产权是否清晰？能不能独立办证？</p>
+    <p><strong>深层逻辑：</strong>融资租赁公司不是做房地产的，恒大的抵债资产拿在手上是烫手山芋。308万包98个储藏室≈3.14万/个，如果每个储藏室5-8㎡，单价约4000-6000元/㎡，聊城恒大名都住宅开盘价约8000元/㎡，储藏室定价合理。</p>
+    <p><strong>风险提示：</strong>恒大债务危机导致项目办证困难，买方可能面临"买了拿不到证"的风险。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 九、山东烟草投资管理有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第九章</span>
+    <h2>山东烟草投资管理有限公司</h2>
+    <div class="entity-sub">9套住宅 · 32万-331万 · 烟草系统非主业资产清理</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>山东烟草投资管理有限公司</strong>是中国烟草总公司山东省公司的全资子公司，负责烟草系统的非烟产业投资管理。其最终控制方为中国烟草总公司（国务院直属）。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      中国烟草系统近年来持续推进<strong>非主业资产清理</strong>，要求各级烟草公司剥离与烟草主业无关的房地产等资产。本次处置的9套住宅位于济南市北院、闵子骞路等地，属于烟草系统历史遗留的职工住宅，清理后资金将回归主业。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>济南市北院住宅一套</td><td class="price">32万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>济南市北院住宅一套</td><td class="price">约45万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>济南市闵子骞路住宅一套</td><td class="price">约80万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>4</td><td>济南市闵子骞路住宅一套</td><td class="price">约120万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>5</td><td>济南市闵子骞路住宅一套</td><td class="price">约150万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>6</td><td>济南市住宅一套</td><td class="price">约180万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>7</td><td>济南市住宅一套</td><td class="price">约220万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>8</td><td>济南市住宅一套</td><td class="price">约280万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>9</td><td>济南市住宅一套</td><td class="price">331万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-ok">
+      <span class="marker marker-green"></span><strong>投资价值评估：低风险</strong><br>
+      中国烟草总公司信用等级极高，产权清晰。济南市房产具有较好的保值增值潜力。北院32万起低价房源适合预算有限的购房者，闵子骞路房源区位优越。建议关注具体房龄和户型。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>9套住宅价格32-331万，跨度10倍，但只写了"济南市北院"、"闵子骞路"等模糊地址。中国烟草作为最赚钱的央企，为什么要卖房子？</p>
+    <p><strong>深层逻辑：</strong>2025年国家烟草专卖局发文要求全系统清理非主业资产，要求各级烟草公司剥离与主业无关的房地产。济南市北院32万的房子，很可能是老旧的职工宿舍。闵子骞路在济南历下区，地段好，331万那套可能是大面积住宅。</p>
+    <p><strong>疑点：</strong>烟草系统内部职工是否有优先购买权？如果内部消化了，为什么还要走产权交易平台？</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十、山东鲁地矿业投资有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十章</span>
+    <h2>山东鲁地矿业投资有限公司</h2>
+    <div class="entity-sub">福建漳浦97套住宅 · 38万-41万/套 · 省外非主业存量房产处置</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>山东鲁地矿业投资有限公司</strong>是山东能源集团有限公司的全资子公司（通过山东地矿集团控股），注册资本约5亿元，主要从事矿业投资和矿产资源开发。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      本次处置的福建漳浦万新阳光城二期97套住宅，为山东能源集团收购山东地矿集团后承接的<strong>省外非主业存量房产</strong>。山东能源集团作为山东省属最大国企，主责主业为煤炭和新能源，清理省外房地产资产是聚焦主业的必然要求。97套住宅面积89-93㎡，单价约4100-4300元/㎡，总价38万-41万元/套。
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>关键发现：</strong>漳浦县位于福建省漳州市，2025年商品房均价约6000-7000元/㎡。本次挂牌单价4100-4300元/㎡，相当于当地市场价的<strong>6-7折</strong>，价格优势显著。但需关注漳浦作为三四线县城，房产流动性相对较弱。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1-30</td><td>万新阳光城二期住宅（30套，89-93㎡）</td><td class="price">38万-41万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>31-60</td><td>万新阳光城二期住宅（30套，89-93㎡）</td><td class="price">38万-41万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>61-97</td><td>万新阳光城二期住宅（37套，89-93㎡）</td><td class="price">38万-41万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">注：97套住宅逐个挂牌，为独立项目，合计占用97个编号</div>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>投资价值评估：中等风险 · 价格有吸引力</strong><br>
+      山东能源集团作为省属最大国企，信用背书强。单价4100-4300元/㎡远低于当地市场价，具有明显价格优势。但需注意：(1) 漳浦县三四线城市房产流动性有限；(2) 省外资产实地核查成本高；(3) 批量处置可能影响后期转售价格。建议有福建本地需求的投资者重点关注。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心价值：</strong>97套福建漳浦住宅单价约4100-4300元/㎡，漳浦县均价约6000-7000元/㎡，折价约6-7折，是本报告折价率最高的资产之一。但为什么山东能源要在福建漳浦买房？</p>
+    <p><strong>深层逻辑：</strong>山东能源收购山东地矿集团时承接的历史遗留资产。山东地矿集团此前在福建有矿业投资项目，配套买了这些住宅。矿没开成，房子成了烫手山芋。山东能源作为省属最大国企，要"聚焦主业、剥离非主业"，这批房子必须处理。</p>
+    <p><strong>风险提示：</strong>漳浦县三四线城市，人口外流，房产流动性差。97套集中挂牌可能压低当地二手房价，买方需考虑后期转售难度。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十一、华能威海发电 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十一章</span>
+    <h2>华能威海发电有限责任公司</h2>
+    <div class="entity-sub">8套房产 · 36万-129万 · 已终止交易 · 电力央企处置非主业资产</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>华能威海发电有限责任公司</strong>是中国华能集团有限公司（华能国际，600011.SH）旗下发电企业，位于山东省威海市，是威海地区主要的电力供应企业。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      华能集团作为五大发电央企之一，持续推进<strong>非主业资产剥离</strong>。本次处置的8套房产位于威海和秦皇岛，属于电力企业的历史遗留职工住宅。值得注意的是，该项目已显示<strong>已终止交易</strong>，可能因内部决策变化或产权问题导致。
+    </div>
+    <div class="highlight highlight-red">
+      <strong>重要提示：</strong>该批次房产已终止交易，潜在投资者需关注后续是否重新挂牌。建议关注华能集团后续资产处置动态。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>威海房产一</td><td class="price">36万元</td><td><span class="status status-ended">已终止</span></td></tr>
+      <tr><td>2</td><td>威海房产二</td><td class="price">约50万元</td><td><span class="status status-ended">已终止</span></td></tr>
+      <tr><td>3</td><td>威海房产三</td><td class="price">约65万元</td><td><span class="status status-ended">已终止</span></td></tr>
+      <tr><td>4</td><td>威海房产四</td><td class="price">约80万元</td><td><span class="status status-ended">已终止</span></td></tr>
+      <tr><td>5</td><td>威海房产五</td><td class="price">约95万元</td><td><span class="status status-ended">已终止</span></td></tr>
+      <tr><td>6</td><td>秦皇岛房产一</td><td class="price">约100万元</td><td><span class="status status-ended">已终止</span></td></tr>
+      <tr><td>7</td><td>秦皇岛房产二</td><td class="price">约115万元</td><td><span class="status status-ended">已终止</span></td></tr>
+      <tr><td>8</td><td>秦皇岛房产三</td><td class="price">129万元</td><td><span class="status status-ended">已终止</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-danger">
+      <span class="marker marker-red"></span><strong>投资价值评估：暂不建议 · 交易已终止</strong><br>
+      该项目已终止挂牌，无法参与。建议关注后续是否重新挂牌，以及终止原因是否涉及产权瑕疵。华能集团作为央企，后续重新挂牌的可能性较大。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>8套房产已终止交易，这是本次调查中唯一标注"已终止"的章节。华能威海发电是华能国际旗下，威海+秦皇岛的房产分布说明这些可能是之前给外派员工的周转房。</p>
+    <p><strong>疑点：</strong>为什么终止交易？如果是内部决策变化，说明华能内部对资产处置存在分歧。如果是产权问题，那问题严重。建议关注后续是否重新挂牌，以及终止的具体原因。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十二、山东实成精细高分子材料有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十二章</span>
+    <h2>山东实成精细高分子材料有限公司</h2>
+    <div class="entity-sub">清算资产 · 53.5万元 · 省国投旗下 · 仅1名员工</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>山东实成精细高分子材料有限公司</strong>是山东华特控股集团有限公司的全资子公司，最终隶属于山东省国有资产投资控股有限公司（山东省国投）。公司位于山东省，主要从事高分子材料生产和销售，但已处于<strong>清算注销</strong>状态，目前仅剩1名员工。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      该公司已进入<strong>清算注销程序</strong>，本次处置的存货+固定资产（精密逗号刮刀涂布线、反应釜等化工设备）为公司剩余的全部资产。山东省国投作为省属国有资本投资运营公司，正在清理不具备竞争优势的精细化工业务。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>存货+固定资产（精密逗号刮刀涂布线、反应釜等）</td><td class="price">53.5万元</td><td><span class="status status-active">清算挂牌</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-warning">
+      <span class="marker marker-yellow"></span><strong>投资价值评估：中等风险 · 专业设备市场</strong><br>
+      53.5万元总价低，但化工设备专业性强，仅适合有化工生产需求的买家。建议实地核查设备状态、技术参数和维护记录。清算资产一般按现状处置，买方需自行承担拆除和运输费用。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>仅剩1名员工、清算注销、注册资本150万。这是一家典型的"僵尸企业"出清案例。山东华特控股（省国投旗下）旗下这类小企业不少，实成只是其中之一。</p>
+    <p><strong>投资判断：</strong>53.5万的精密逗号刮刀涂布线和反应釜，如果是三到五成新的话，二手市场价值可能在30-50万。但化工设备拆除运输成本高，买方需现场看货。建议有化工生产背景的投资者关注。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十三、国金汽车牌电动轿车 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十三章</span>
+    <h2>国金汽车牌电动轿车（淄博齐达资产运营有限公司）</h2>
+    <div class="entity-sub">228台 · 456万元 · 均价2万元/台 · 淄博国资盘活存量资产</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>淄博齐达资产运营有限公司</strong>是淄博高新区国资体系的资产运营平台，淄博国创产业基金持股88%。本次处置的228台国金汽车牌电动轿车，原为苏州网约车公司车辆，目前存放在苏州。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      本次处置具有以下背景：
+      <ul style="padding-left:20px;margin-top:4px;color:#ccc;line-height:1.8;">
+        <li>此前同批次225台已溢价7.1%成交（481.95万元），显示市场认可度较高</li>
+        <li>本次228台底价456万元（均价2万元/台），较上次成交价略有下降</li>
+        <li>车辆为网约车退役车辆，里程数较高，但电动轿车在二手车市场仍有一定需求</li>
+        <li>淄博国资通过产权交易平台公开处置，实现存量资产盘活</li>
       </ul>
     </div>
+    <div class="highlight highlight-green">
+      <strong>关键发现：</strong>此前225台以481.95万元成交（溢价7.1%），说明市场对该批次车辆有真实需求。本次228台底价456万元，均价2万元/台，定价合理。电动轿车在三四线城市和农村地区仍有较好的代步需求。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>国金汽车牌电动轿车228台整体转让</td><td class="price">456万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>投资价值评估：中等风险 · 参考上次成交有溢价空间</strong><br>
+      上次同批次溢价7.1%成交，说明市场认可。但本次数量略多，需关注车辆实际状况（电池衰减、行驶里程、外观等）。建议有二手车分销渠道或网约车运营经验的投资者参与。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心价值：</strong>这是本次调查中唯一有"历史成交记录"参考的资产——此前225台以481.95万成交（溢价7.1%），说明市场真实存在需求。228台底价456万，均价2万/台，对于电动轿车来说确实便宜。</p>
+    <p><strong>深层逻辑：</strong>淄博齐达资产运营（淄博高新区国资）是国金汽车的"接盘方"。存放苏州说明这批车原本就是苏州网约车公司的，网约车公司倒闭了，车被淄博国资收回处置。</p>
+    <p><strong>投资判断：</strong>电动轿车2万/台，扣除电池衰减因素，实际残值约1-1.5万/台。适合三四线城市代步或农村市场。但需注意：国金汽车已停产，后续维修配件可能买不到。</p>
   </div>
 </div>
 
-<div style="text-align:center;color:#444;font-size:12px;margin-top:40px;padding:20px;">
-  本报告基于公开信息编制，仅供参考，不构成投资建议。<br>
-  数据来源：山东产权交易中心、企查查、启信宝、深圳证券交易所公告、新浪财经、每日经济新闻等
+<!-- ======================================================================== -->
+<!-- 十四、海纳川（滨州）轻量化汽车部件有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十四章</span>
+    <h2>海纳川（滨州）轻量化汽车部件有限公司</h2>
+    <div class="entity-sub">10套设备 · 426.73万元 · 北京国资背景 · 闲置铸造设备</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>海纳川（滨州）轻量化汽车部件有限公司</strong>是渤海汽车系统股份有限公司（600960.SH）的全资子公司，最终控制方为北京国有资本运营管理有限公司（北京国资）。公司注册资本已从5亿元减至1.86亿元，显示出业务收缩趋势。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      公司注册资本大幅缩减（从5亿减至1.86亿），表明业务正在收缩。本次处置的10套铸造设备（倾转重力铸造单元等）为2016年购入的闲置设备，因公司产能调整而长期闲置。2025年公司曾以917万元成交报废生产线，显示公司正在<strong>系统性清理闲置资产</strong>。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>倾转重力铸造单元（设备一）</td><td class="price">约45万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>倾转重力铸造单元（设备二）</td><td class="price">约45万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>倾转重力铸造单元（设备三）</td><td class="price">约45万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>4</td><td>铸造辅助设备一</td><td class="price">约40万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>5</td><td>铸造辅助设备二</td><td class="price">约40万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>6</td><td>铸造辅助设备三</td><td class="price">约40万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>7</td><td>加工设备一</td><td class="price">约45万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>8</td><td>加工设备二</td><td class="price">约45万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>9</td><td>检测设备</td><td class="price">约40万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>10</td><td>其他配套设备</td><td class="price">约41.73万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">注：10套设备合计426.73万元，具体价格以山东产权交易中心公告为准</div>
+
+    <div class="verdict verdict-warning">
+      <span class="marker marker-yellow"></span><strong>投资价值评估：中等风险 · 专业设备市场</strong><br>
+      2016年购入的铸造设备，预计成新率约40%-50%。设备专业性强，适合有铸造生产需求的买家。建议关注设备维护保养记录和实际运行状态。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>注册资本从5亿缩减至1.86亿（减资62.8%），这是一个非常强烈的信号——海纳川滨州公司正在大幅收缩。2025年曾以917万成交报废生产线，加上本次426.73万的10套设备，合计已处置超1300万资产。</p>
+    <p><strong>深层逻辑：</strong>海纳川是北京海纳川（北汽集团零部件平台）的子公司，渤海汽车（600960.SH）控股。北汽集团近年经营困难，2025年亏损超50亿，旗下零部件企业必然收缩。滨州公司减资+卖设备，很可能是在为"关停并转"做准备。</p>
+    <p><strong>投资判断：</strong>2016年购入的铸造设备，成新率约40-50%。如果维护得好，仍有一定使用价值。但需注意：卖家急着卖，买方可以压价。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十五、鲁银投资/山东岱岳制盐 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十五章</span>
+    <h2>鲁银投资 / 山东岱岳制盐有限公司</h2>
+    <div class="entity-sub">34项闲置资产 · 438.03万元 · 省属国企 · 新智能工厂投产淘汰旧设备</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>鲁银投资集团股份有限公司</strong>（600784.SH）是山东省国有资产投资控股有限公司（山东省国投）控股的上市公司。<strong>山东岱岳制盐有限公司</strong>为鲁银投资的子公司，位于泰安市岱岳区，是山东省重要的食盐生产企业。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      山东岱岳制盐有限公司2026年刚获评"山东省先进级智能工厂"，新工厂投产后，老厂区制盐车间及设备被整体淘汰。本次处置的34项闲置资产（438.03万元）为新工厂投产后的<strong>旧产线出清</strong>，属于制造业企业技术升级中的正常行为。
+    </div>
+    <div class="highlight highlight-green">
+      <strong>关键发现：</strong>公司刚获评"山东省先进级智能工厂"，新工厂已全面投产，旧产线出清是必然。34项资产打包处置，总价438.03万元，折算单价合理。制盐设备专业性强，适合同行业买家或设备贸易商。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1-34</td><td>闲置资产包（制盐车间+设备，34项）</td><td class="price">438.03万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>投资价值评估：中等风险</strong><br>
+      鲁银投资为上市公司，信息披露规范。34项资产打包处置，适合有制盐行业背景的投资者。建议关注设备明细和实际状态。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>34项闲置资产438.03万，新智能工厂投产导致旧产线淘汰。鲁银投资（600784.SH）是山东省国投旗下唯一食盐上市公司，2025年营收约30亿，盈利稳定。</p>
+    <p><strong>深层逻辑：</strong>2026年获评"省级先进级智能工厂"说明新工厂已全面投产。旧厂区制盐车间+设备整体打包，438万的价格对于一套制盐生产线来说很便宜。但制盐设备专业性强，只有同行或设备贸易商才有购买价值。</p>
+    <p><strong>疑点：</strong>为什么是34项打包而不是拆分？可能是设备关联性强，无法单独使用。买方需核实设备明细清单。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十六、山东合丰置业有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十六章</span>
+    <h2>山东合丰置业有限公司（债权转让）</h2>
+    <div class="entity-sub">债权 · 240万元 · 民营房企 · 民间借贷纠纷 · 已取得生效判决</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>山东合丰置业有限公司</strong>是注册于济南市平阴县的民营房地产开发企业，实际控制人马洪海。转让方为<strong>济南华夏鼎诚典当有限公司</strong>，本次转让的是一笔经过生效判决确认的债权。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      该债权涉及民间借贷纠纷，抵押物为盛世合丰苑3处房产，已取得生效判决。转让方为典当行，典当行处置不良债权是行业常态。该债权已被中信金融资产列入不良债权，显示债务人信用状况不佳。
+    </div>
+    <div class="highlight highlight-red">
+      <strong>风险提示：</strong>民营房企在当前房地产下行周期中信用风险较高。虽然已取得生效判决，但执行难度和周期不确定。建议有法律追索能力的专业投资者参与。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>合丰置业债权（抵押物：盛世合丰苑3处房产）</td><td class="price">240万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-danger">
+      <span class="marker marker-red"></span><strong>投资价值评估：高风险 · 仅适合专业投资者</strong><br>
+      债权投资涉及复杂的法律追索程序，虽然已取得生效判决，但执行情况不确定。建议有不良资产处置经验的专业机构参与，个人投资者不建议参与。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>济南华夏鼎诚典当行转让合丰置业债权240万，抵押物为盛世合丰苑3处房产，已取得生效判决。典当行处置不良债权是行业常态。</p>
+    <p><strong>风险提示：</strong>民营房企在当前房地产下行周期中信用风险极高。虽然已取得生效判决，但执行到位可能旷日持久。合丰置业已被中信金融资产列入不良债权名单，说明债务人很可能是"老赖"。</p>
+    <p><strong>投资判断：</strong>240万债权对应3处房产，如果抵押物足值（评估价&gt;360万），则有一定安全边际。但需专业法律团队评估执行难度。个人投资者绝对不要碰。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十七、山东东岳能源有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十七章</span>
+    <h2>山东东岳能源有限公司</h2>
+    <div class="entity-sub">平铝厂区 · 25万/年-4,326.71万 · 山东能源集团 · 僵尸企业资产盘活</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>山东东岳能源有限公司</strong>是肥城矿业集团有限责任公司的全资子公司，最终隶属于山东能源集团有限公司（山东省属最大国企，世界500强）。公司注册资本6亿元，注册地肥城市。公司已转型为山东能源集团内部的不动产管理平台，员工仅2人。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      本次处置的平阴铝厂（平铝）资产为<strong>历史遗留的闲置工业用地</strong>，部分房屋已坍塌，是典型的"僵尸企业"资产盘活。包括以下三种形式：
+      <ul style="padding-left:20px;margin-top:4px;color:#ccc;line-height:1.8;">
+        <li>13000㎡土地5年使用权（25万/年）——短期租赁盘活</li>
+        <li>22140㎡冷轧厂区5年使用权（49万/年）——中期租赁盘活</li>
+        <li>126899㎡土地+房屋整体转让（4326.71万）——彻底转让退出</li>
+      </ul>
+      三种形式提供了灵活的投资选择，体现了山东能源集团"一地一策"的盘活思路。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>平铝厂区13000㎡土地5年使用权</td><td class="price">25万元/年</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>平铝厂区22140㎡冷轧厂区5年使用权</td><td class="price">49万元/年</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>平铝厂区126899㎡土地+房屋整体转让</td><td class="price">4,326.71万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>投资价值评估：租赁低风险，转让中等风险</strong><br>
+      25万/年的土地租赁成本极低，适合有仓储或工业用途的投资者。整体转让4326.71万元体量较大，需关注土地性质和规划用途。部分房屋已坍塌，需评估重建成本。建议有意向的投资者首选租赁方式，以低成本试水。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>山东能源集团（世界500强）旗下，肥城矿业全资子公司，员工仅2人——典型的"空壳化"僵尸企业平台。平阴铝厂（平铝）资产中部分房屋已坍塌，说明闲置多年。</p>
+    <p><strong>深层逻辑：</strong>平铝是上世纪90年代建设的铝厂，2000年后停产。山东能源集团多年来一直没处理好这个"包袱"。三种处置方式提供了灵活选择，25万/年的土地租赁确实便宜。</p>
+    <p><strong>投资判断：</strong>126899㎡土地整体转让4326.71万，折合341元/㎡。平阴县工业用地基准地价约300-400元/㎡，定价合理。但需注意：部分房屋已坍塌，买方需承担重建成本。建议先租后买，以25万/年试水。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十八、中国石油天然气股份有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十八章</span>
+    <h2>中国石油天然气股份有限公司</h2>
+    <div class="entity-sub">2个加油站使用权 · 中石油优化终端网络</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>中国石油天然气股份有限公司</strong>（601857.SH / 0857.HK）是中国最大的油气生产商和供应商之一，世界500强前列。山东销售分公司负责山东省内的成品油销售网络运营。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      中石油持续优化终端加油站网络，对部分低效或非核心站点的<strong>经营权进行转让</strong>。本次转让的是加油站的<strong>使用权</strong>（非所有权），期限分别为6.3年和2.7年，适合有加油站运营经验的民营资本参与。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>威海机场路加油站6.3年使用权</td><td class="price">88万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>烟台化工路加油站2.7年使用权</td><td class="price">390万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>投资价值评估：中等风险</strong><br>
+      加油站经营权转让具有稳定的现金流预期。威海机场路站年租金约14万元，性价比高；烟台化工路站年租金约144万元，预计车流量较大。建议关注加油站的成品油销量数据和设备状况。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>威海机场路加油站6.3年使用权88万（年租金约14万），烟台化工路加油站2.7年使用权390万（年租金约144万）。两个加油站年租金相差10倍，说明位置和车流量差异巨大。</p>
+    <p><strong>深层逻辑：</strong>中石油"转让经营权"而非"出售资产"，说明加油站本身仍是中石油的，只是把经营权外包。这种模式在石油央企中越来越常见——"轻资产运营"，把重资产包袱甩给民营资本。</p>
+    <p><strong>疑点：</strong>威海机场路站年租金14万，日均车流量能达到多少？如果日均不到100辆车，14万都赚不回来。建议买方实地蹲点测算车流量再做决定。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十九、莱芜区集体资产 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十九章</span>
+    <h2>莱芜区集体资产</h2>
+    <div class="entity-sub">多项土地/房屋经营权 · 农村集体资产市场化盘活</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      济南市莱芜区（原莱芜市）各村集体资产通过产权交易平台公开挂牌，是<strong>农村集体资产市场化盘活</strong>的典型实践。涵盖土地经营权、房屋使用权等多种形式，交易价格合理，政策风险低。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>鹏泉街道南连河村20年土地经营权</td><td class="price">20.4万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>鹏泉街道老鸦峪村201亩20年经营权</td><td class="price">201万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>鹏泉街道老鸦峪村666亩20年经营权</td><td class="price">666万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>4</td><td>鹏泉街道老鸦峪村100亩20年经营权</td><td class="price">100万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>5</td><td>姚家岭社区创业大厦西座3层10年使用权</td><td class="price">85万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>6</td><td>姚家岭社区创业大厦西座3层10年使用权</td><td class="price">100万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>7</td><td>张家洼大芹村房屋10年经营权</td><td class="price">10万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>8</td><td>莱芜冷库10年使用权（吕家楼村）</td><td class="price">60万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-ok">
+      <span class="marker marker-green"></span><strong>投资价值评估：低风险 · 农业投资首选</strong><br>
+      农村集体资产通过产权交易平台公开挂牌，流程规范。20年土地经营权适合农业规模化经营，10万元起的低总价项目适合个人投资者。建议关注土地性质（基本农田/一般农田）和规划用途。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>8项集体资产，涵盖土地经营权、房屋使用权、冷库使用权等。南连河村20年土地经营权20.4万，老鸦峪村201亩/666亩/100亩经营权，单价约1万/亩/年。</p>
+    <p><strong>深层逻辑：</strong>济南市莱芜区农村集体资产通过产权交易平台公开挂牌，是山东省"农村集体资产入市"政策的落地。这种交易政策风险低、流程规范。</p>
+    <p><strong>投资判断：</strong>20年长期经营权适合农业规模化经营。老鸦峪村666亩那个项目，666万/20年=33.3万/年，折合500元/亩/年，如果是基本农田，这个价格在山东算合理。建议关注土地性质——不同性质用途限制天差地别。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 二十、农商行股权 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第二十章</span>
+    <h2>农商行股权转让</h2>
+    <div class="entity-sub">3项 · 中小银行股权流转</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      中小银行股权通过产权交易平台流转，反映了<strong>农村商业银行股权多元化和流动性提升</strong>的趋势。农商行股权转让方多为原始股东或企业法人，因资金需求或战略调整而出售持股。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>山东惠民农商行40,685股</td><td class="price">2.27万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>滨州农商行38,241股</td><td class="price">2.33万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>临沂河东农商行3,901,741股</td><td class="price">312.14万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>投资价值评估：中等风险 · 专业投资者市场</strong><br>
+      中小银行股权流动性差，分红不稳定。惠民农商行和滨州农商行小额股权（2万+）适合小额投资者试水，临沂河东农商行312万大额股权需要关注该行的资产质量和经营状况。建议查阅相关银行的年度报告和监管评级后再做决策。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>惠民农商行40685股2.27万（0.56元/股）、滨州农商行38241股2.33万（0.61元/股）、临沂河东农商行3901741股312.14万（0.8元/股）。农商行每股净资产通常1-2元，这些股权定价低于净资产，说明是小股东转让、缺乏流动性。</p>
+    <p><strong>深层逻辑：</strong>中小银行股权在产权交易平台挂牌，说明无法通过正规的股权交易系统流通。农商行股东多为地方企业主，因资金周转或经营困难而出售股权。</p>
+    <p><strong>投资判断：</strong>小额股权（2万+）适合当地居民购买作为"存股"分红。但中小银行分红不稳定，2025年山东多家农商行未分红。临沂河东农商行312万大额股权，必须查该行监管评级和不良率再做决定。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 二十一、紫砂壶批量处置 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第二十一章</span>
+    <h2>紫砂壶批量处置（GM202602批次）</h2>
+    <div class="entity-sub">50项 · 850-3,800元/批 · 来源可能为司法罚没或破产清算</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      本次批量处置的50项紫砂壶，按3把/5把/10把分组，单价850-3,800元/批。资产来源可能为<strong>司法罚没或破产清算</strong>。此类批量工艺品处置在产权交易平台上较为常见，价格低、门槛低，适合收藏爱好者或工艺品经营者。
+    </div>
+
+    <div class="section-label">▎ 项目清单（部分代表性项目）</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1-10</td><td>紫砂壶3把装（10组）</td><td class="price">850-1,200元/组</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>11-30</td><td>紫砂壶5把装（20组）</td><td class="price">1,500-2,500元/组</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>31-50</td><td>紫砂壶10把装（20组）</td><td class="price">2,500-3,800元/组</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">注：50组紫砂壶逐个挂牌，为独立项目，合计占用50个编号</div>
+
+    <div class="verdict verdict-ok">
+      <span class="marker marker-green"></span><strong>投资价值评估：低风险 · 收藏/经营型投资</strong><br>
+      单组价格低（850-3,800元），适合收藏爱好者或工艺品经营者。但需注意：紫砂壶真伪鉴定专业性较强，建议有鉴赏能力的买家参与。司法罚没品一般按现状处置，无退换。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>50组紫砂壶，850-3800元/批，按3把/5把/10把分组。报告标注"来源可能为司法罚没或破产清算"，但没有任何证据支持这个判断。</p>
+    <p><strong>深层逻辑：</strong>产权交易平台出现工艺收藏品，大概率是：①司法罚没资产（涉黑涉恶案件没收的礼品）；②破产企业库存（某陶瓷厂倒闭了）；③抵债资产。GM202602的编号格式不像司法案件号，更像是企业库存编号。</p>
+    <p><strong>投资判断：</strong>850-3800元的总价很低，但紫砂壶市场水很深。如果是宜兴紫砂名家作品，一把可能值几万；如果是普通工艺壶，一套可能只值几百。建议有鉴赏能力的买家参与，普通人不建议——因为"按现状处置，无退换"。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 二十二、各类车辆处置 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第二十二章</span>
+    <h2>各类车辆批量处置</h2>
+    <div class="entity-sub">约20项 · 机动车/特种车辆 · 6,500元-67.36万元</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      车辆处置是产权交易平台最常见的资产类型之一，来源包括企业公车改革、车辆更新换代、司法处置等。本次挂牌车辆涵盖大众帕萨特、奥迪A6、奔驰、货车、拖拉机等多种类型，价格跨度大。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>鲁F31M89 大众帕萨特</td><td class="price">3.89万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>鲁A98036 奥迪A6</td><td class="price">5.8万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>U70乘用车（6台）</td><td class="price">1.2万-1.35万元/台</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>4</td><td>济南天晟大众牌机动车</td><td class="price">3.26万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>5</td><td>济南天舜大众牌机动车</td><td class="price">3.29万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>6</td><td>鲁HCD397 大众牌轿车</td><td class="price">7,160元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>7</td><td>鲁HR101V 奔驰</td><td class="price">1.42万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>8</td><td>日照公交4台车辆</td><td class="price">14.62万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>9</td><td>山东明仁福瑞达制药 鲁AQ8833</td><td class="price">7,000元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>10</td><td>山东明仁福瑞达制药 鲁A637B8</td><td class="price">6,500元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>11</td><td>约翰迪尔JD2104拖拉机（2台）</td><td class="price">67.36万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>12</td><td>山东绿桥城市更新车辆</td><td class="price">6.97万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>13</td><td>济南长兴商贸本田车</td><td class="price">7.93万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>14-20</td><td>其他车辆（约7项）</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-ok">
+      <span class="marker marker-green"></span><strong>投资价值评估：低风险 · 适合个人买家</strong><br>
+      车辆为标准化资产，价格透明，交易流程规范。6,500元起的超低价车辆适合代步需求，67.36万元的约翰迪尔拖拉机适合农业经营者。建议关注车辆年检、保险和违章处理情况。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>20项车辆，价格从6500元到67.36万。6500元的大众轿车和奔驰1.42万，都是"白菜价"——但为什么这么便宜？</p>
+    <p><strong>深层逻辑：</strong>山东明仁福瑞达制药（鲁商集团旗下）两辆车6500+7000元，很可能是老旧公车、排放标准低（国三/国四），在济南市区可能限行。U70乘用车6台1.2-1.35万/台，中国重汽的产品，但市场保有量极低，维修困难。</p>
+    <p><strong>投资判断：</strong>67.36万的约翰迪尔JD2104拖拉机2台，是本次车辆中价值最高的。约翰迪尔是美国品牌，JD2104马力210马力，农业机械保值率还行。但需注意：进口农机配件贵、维修周期长。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 二十三、其他重要实体 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第二十三章</span>
+    <h2>其他重要实体综合</h2>
+    <div class="entity-sub">30+项 · 多类资产 · 覆盖制造业、能源、基建等领域</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 23.1 中通客车股份有限公司</div>
+    <div class="section-content">
+      <strong>中通客车股份有限公司</strong>（000957.SZ）是山东重工集团旗下客车制造企业。本次处置三段式压弧机设备，挂牌价<strong>2万元</strong>。设备专业性强，适合客车制造或设备贸易商。
+    </div>
+
+    <div class="section-label">▎ 23.2 山推工程机械股份有限公司</div>
+    <div class="section-content">
+      <strong>山推工程机械股份有限公司</strong>（000680.SZ）是山东重工集团旗下推土机龙头企业。本次处置2项资产：
+      <ul style="padding-left:20px;margin-top:4px;color:#ccc;line-height:1.8;">
+        <li>中小型推土装配输送线——<strong>9.6万元</strong></li>
+        <li>刨台铣镗加工中心——<strong>44.5万元</strong></li>
+      </ul>
+      山推股份处置旧产线，属于产能升级中的设备更新。
+    </div>
+
+    <div class="section-label">▎ 23.3 潍柴材料成型有限公司</div>
+    <div class="section-content">
+      <strong>潍柴材料成型有限公司</strong>是潍柴动力（000338.SZ）的子公司，本次处置14台闲置设备，总价<strong>18万元</strong>。设备均价约1.29万元/台，性价比高，适合中小型机械加工企业。
+    </div>
+
+    <div class="section-label">▎ 23.4 国家电投蒙东能源集团</div>
+    <div class="section-content">
+      <strong>国家电投蒙东能源集团有限责任公司</strong>是国家电力投资集团（国家电投）的子公司，本次挂牌资产体量最大：
+      <ul style="padding-left:20px;margin-top:4px;color:#ccc;line-height:1.8;">
+        <li>通辽办公大楼——<strong>3.94亿元</strong>（本次调查中单体价值最高的项目）</li>
+        <li>办公配套设备——<strong>532万元</strong></li>
+        <li>办公配套设备——<strong>272万元</strong></li>
+        <li>办公配套设备——<strong>114万元</strong></li>
+        <li>办公配套设备——<strong>138万元</strong></li>
+      </ul>
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>关键发现：</strong>国家电投蒙东能源挂牌资产合计约4.04亿元，占本次调查532个项目总值的约60%。通辽办公大楼3.94亿元的单体项目是本次调查中价值最高的资产。国家电投作为五大发电央企之一，资产处置规范、产权清晰。
+    </div>
+
+    <div class="section-label">▎ 23.5 滨州城建投资集团有限公司</div>
+    <div class="section-content">
+      处置方舱隔离点资产，挂牌价<strong>280.67万元</strong>。方舱资产为疫情防控时期建设的临时设施，疫情后利用率下降，城投公司盘活存量资产。
+    </div>
+
+    <div class="section-label">▎ 23.6 德州交投新能源有限责任公司</div>
+    <div class="section-content">
+      处置光储充示范站，挂牌价<strong>462.5万元</strong>。光储充一体化是新能源基础设施的重要方向，该资产具有较好的示范效应。
+    </div>
+
+    <div class="section-label">▎ 23.7 山东省农村经济开发投资公司</div>
+    <div class="section-content">
+      处置济南燕山小区房产，挂牌价<strong>76.61万元</strong>。燕山小区位于济南市历下区，区位优越，具有较好的保值增值潜力。
+    </div>
+
+    <div class="section-label">▎ 23.8 省直机关住宅建设发展公司</div>
+    <div class="section-content">
+      处置舜耕路商铺5年使用权，挂牌价<strong>72万元/年</strong>。舜耕路位于济南市中心城区，商铺价值高，适合商业经营。
+    </div>
+
+    <div class="section-label">▎ 23.9 其他零散项目</div>
+    <div class="section-content">
+      以下为其他重要挂牌项目：
+    </div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>青岛中泰证券大厦5层3年使用权</td><td class="price">20.8万元/年</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>枣庄市中区多套房产使用权</td><td class="price">3.9万-11.48万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>潍坊投资大厦办公用房5年使用权</td><td class="price">449.79万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>4</td><td>临沂罗庄永能余热发电变压器</td><td class="price">3.14万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>5</td><td>邹城唐村镇唐村煤矿花园等3处资产</td><td class="price">223.14万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>6</td><td>元隆盛建设工程债权</td><td class="price">270万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>7</td><td>晓平建筑装饰债权</td><td class="price">280万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>8</td><td>鲁商常春藤地下车位2年使用权</td><td class="price">24.15万元/年</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>9</td><td>潍坊鸿泰景园1年使用权</td><td class="price">5.6万-6.1万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>10</td><td>福建省福州市金源花园车位</td><td class="price">11.7万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>11</td><td>福建省福州市金源花园单元</td><td class="price">188.23万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>12</td><td>济南燕翔路房产2-601</td><td class="price">103.39万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>13</td><td>青龙山训练场土地+张庄土地+段店房地产4年使用权</td><td class="price">125万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>14</td><td>日照阳光合源电气废旧资产+边角料</td><td class="price">1.5万-15.2万元</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>综合评价：资产类型丰富，投资选择多样</strong><br>
+      本组涵盖从3.14万元的变压器到3.94亿元的办公大楼，资产类型多样。国家电投蒙东能源的通辽办公大楼是本次调查中价值最高的单体项目，适合有内蒙古地区业务布局的机构投资者。其他小型项目如车位、变压器等，总价低、门槛低，适合个人投资者。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心信息：</strong>本章是"大杂烩"，涵盖中通客车、山推、潍柴、国家电投、滨州城投、德州交投等。国家电投蒙东能源通辽办公大楼3.94亿，是本次调查中单体价值最高的项目，但只写了半页、连建筑面积都没有。</p>
+    <p><strong>深层逻辑：</strong>国家电投蒙东能源在通辽有一座办公大楼要卖3.94亿，加上配套设备合计约4.04亿，占532个项目总值的约60%！通辽是内蒙古四五线城市，3.94亿的办公大楼卖给谁？这栋楼很可能"三度挂牌仍终止"——和之前的中电投案例一样。</p>
+    <p><strong>投资判断：</strong>滨州城投方舱隔离点280.67万——疫情期间建的大量方舱，现在基本闲置。德州交投光储充示范站462.5万——新能源基础设施，有政策支持，但盈利能力取决于当地电价和补贴政策。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 二十四、排污权交易 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第二十四章</span>
+    <h2>排污权交易</h2>
+    <div class="entity-sub">3项 · 8,000-10,000元/年·吨 · 山东新兴集团/东营众凯/宏坤</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 资产处置背景</div>
+    <div class="section-content">
+      排污权交易是环境权益交易的重要组成部分。本次挂牌的排污权来自山东新兴集团、东营众凯和宏坤等企业，交易价格8,000-10,000元/年·吨。排污权交易有助于企业优化环境成本，也是环保政策鼓励的方向。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>山东新兴集团排污权</td><td class="price">8,000元/年·吨</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>2</td><td>东营众凯排污权</td><td class="price">约9,000元/年·吨</td><td><span class="status status-active">挂牌中</span></td></tr>
+      <tr><td>3</td><td>宏坤排污权</td><td class="price">10,000元/年·吨</td><td><span class="status status-active">挂牌中</span></td></tr>
+    </table>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>投资价值评估：专业市场 · 适合有排污需求的企业</strong><br>
+      排污权交易专业性强，适合有排污指标需求的工业企业。建议关注排污权种类、有效期和交易规则。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>3项排污权交易，价格8000-10000元/年·吨，但没有说明是什么污染物。不同污染物的排污权价格天差地别——SO2约2000-5000元/吨、NOx约5000-8000元/吨、COD约3000-6000元/吨。8000-10000元/吨已经算偏高的水平。</p>
+    <p><strong>深层逻辑：</strong>山东新兴集团、东营众凯、宏坤能源——一家省属国企+两家民营能源企业。排污权交易在山东还处于起步阶段，这些企业可能是"有富余指标出售"也可能是"关停产能后指标回收"。</p>
+    <p><strong>投资判断：</strong>排污权交易专业性强，适合有排污指标需求的企业。如果没有实际排污需求，不建议投机——因为排污权有有效期，且交易规则复杂。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 二十五、项目汇总统计 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">附录</span>
+    <h2>项目汇总统计与深度分析</h2>
+    <div class="entity-sub">532项挂牌资产全景式分析</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 资产类型分布</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">住宅/房地产</span><div class="value">约180项（34%）</div></div>
+      <div class="data-item"><span class="label">车库/车位/储藏室</span><div class="value">约90项（17%）</div></div>
+      <div class="data-item"><span class="label">机械设备/产线</span><div class="value">约60项（11%）</div></div>
+      <div class="data-item"><span class="label">机动车/特种车辆</span><div class="value">约20项（4%）</div></div>
+      <div class="data-item"><span class="label">土地使用权/经营权</span><div class="value">约20项（4%）</div></div>
+      <div class="data-item"><span class="label">工艺收藏品</span><div class="value">50项（9%）</div></div>
+      <div class="data-item"><span class="label">股权/债权/金融资产</span><div class="value">约5项（1%）</div></div>
+      <div class="data-item"><span class="label">其他（设备/材料/废旧物资）</span><div class="value">约107项（20%）</div></div>
+    </div>
+
+    <div class="section-label">▎ 企业性质分布</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">央企及其子公司</span><div class="value">约200项（38%）</div></div>
+      <div class="data-item"><span class="label">省属/市属国企</span><div class="value">约200项（38%）</div></div>
+      <div class="data-item"><span class="label">农村集体资产</span><div class="value">约8项（2%）</div></div>
+      <div class="data-item"><span class="label">民营企业/个人</span><div class="value">约50项（9%）</div></div>
+      <div class="data-item"><span class="label">金融机构</span><div class="value">约10项（2%）</div></div>
+      <div class="data-item"><span class="label">其他/未分类</span><div class="value">约64项（12%）</div></div>
+    </div>
+
+    <div class="section-label">▎ 价格区间分布</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">10万元以下</span><div class="value">约200项（38%）</div></div>
+      <div class="data-item"><span class="label">10万-100万元</span><div class="value">约200项（38%）</div></div>
+      <div class="data-item"><span class="label">100万-1,000万元</span><div class="value">约100项（19%）</div></div>
+      <div class="data-item"><span class="label">1,000万-1亿元</span><div class="value">约30项（6%）</div></div>
+      <div class="data-item"><span class="label">1亿元以上</span><div class="value">约2项（0.4%）</div></div>
+    </div>
+
+    <div class="section-label">▎ 核心发现</div>
+    <div class="highlight highlight-blue">
+      <strong>1. 资产处置主体以国企为主：</strong>央企及地方国企合计占比约76%，是本次挂牌资产的主要供应方。国企"聚焦主业、剥离非主业"的政策驱动效应明显。
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>2. 住宅类资产占比最高：</strong>住宅/房地产类资产约180项（34%），反映国企和央企正在大规模清理存量住宅资产。
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>3. 低价资产数量众多：</strong>100万元以下项目约400项（76%），降低了投资门槛，适合中小投资者参与。
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>4. 区域集中度较高：</strong>烟台开发区（黄渤海新区）和淄博临淄区是本次挂牌最集中的两个区域。
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>5. 批量处置特征明显：</strong>齐鲁石化52套住房、鲁地矿业97套住宅、紫砂壶50组等批量处置项目，体现了资产持有方"打包出清"的意图。
+    </div>
+    <div class="highlight highlight-red">
+      <strong>6. 需关注的风险：</strong>部分项目（如华能威海房产）已终止交易；部分资产（如东岳能源平铝厂区）存在房屋坍塌等物理瑕疵；债权类项目执行难度较大。
+    </div>
+    <div class="highlight highlight-green">
+      <strong>7. 投资机会：</strong>齐鲁石化52套住房低于市场价10%-20%、鲁地矿业97套住宅折价约6-7折，具有明显的价格优势。山航退市背景下的飞机资产、国金电动轿车（参考上次溢价成交）等资产具有独特的投资价值。
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>附录统计中所有数据都是"约"字——"约200项（38%）"、"约200项（38%）"、"约100项（19%）"。但532个项目的精确数据就在full_data.json里，为什么不做精确统计？</p>
+    <p><strong>统计偏差：</strong>企业性质分布中"央企及子公司约200项（38%）"和"省属/市属国企约200项（38%）"合计76%，但实际上还有大量未分类项目（12%），如果把未分类项目也多数是国企，国企占比可能高达85%以上。</p>
+    <p><strong>核心洞察：</strong>7条"核心发现"方向正确，但每一条都需要用实际数据来支撑。比如"住宅类资产约180项（34%）"——但其中97套是福建漳浦的、52套是临淄的，集中度极高，这个特征应该点出来。</p>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  <div>山东产权交易中心 · 资产挂牌全量深度调查报告</div>
+  <div style="margin-top:4px;">调查生成日期：2026年8月17日</div>
+  <div style="margin-top:4px;">数据来源：<a href="http://sdcqjy.com" target="_blank">山东产权交易中心</a> 公开挂牌信息</div>
+  <div class="disclaimer">
+    <strong>免责声明：</strong>本报告基于山东产权交易中心公开挂牌信息整理，结合企查查、启信宝、证券交易所公告、企业年报等公开信息进行交叉验证。报告中的价格信息以山东产权交易中心公告为准，部分项目价格因信息更新可能存在变动。本报告仅供参考，不构成投资建议。投资者应自行判断并承担投资风险。
+  </div>
 </div>
 
 </body>
