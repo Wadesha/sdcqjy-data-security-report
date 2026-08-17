@@ -1,8 +1,10 @@
 **在线访问（推荐）：** https://wadesha.github.io/sdcqjy-data-security-report/index.html
 
+**全国合并报告（推荐）：** https://wadesha.github.io/sdcqjy-data-security-report/national-report.html
+
 **山东报告：** https://wadesha.github.io/sdcqjy-data-security-report/asset-investigation.html
 
-**全国报告：** https://wadesha.github.io/sdcqjy-data-security-report/national-investigation.html
+**全国报告（海南）：** https://wadesha.github.io/sdcqjy-data-security-report/national-investigation.html
 
 **数据视图：** https://wadesha.github.io/sdcqjy-data-security-report/d.html
 
