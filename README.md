@@ -1,6 +1,8 @@
-**在线访问（推荐）：** https://wadesha.github.io/sdcqjy-data-security-report/asset-investigation.html
+**在线访问（推荐）：** https://wadesha.github.io/sdcqjy-data-security-report/index.html
 
-**入口页：** https://wadesha.github.io/sdcqjy-data-security-report/index.html
+**山东报告：** https://wadesha.github.io/sdcqjy-data-security-report/asset-investigation.html
+
+**全国报告：** https://wadesha.github.io/sdcqjy-data-security-report/national-investigation.html
 
 **数据视图：** https://wadesha.github.io/sdcqjy-data-security-report/d.html
 
@@ -28,6 +30,36 @@
 | 六 | 中国石化齐鲁石化分公司 | 52 | 约X万 | 央企剥离非主业住宅资产 |
 | 七 | 山东港口日照港集团 | 12 | 约X万 | 港口集团盘活存量住宅 |
 | 八 | 山东鲁西融资租赁 | 1(98个) | 308万 | 融资租赁公司处置抵债资产 |
+
+---
+
+### 全国调查报告（national-investigation.html）
+
+**在线地址：** https://wadesha.github.io/sdcqjy-data-security-report/national-investigation.html
+
+海南产权交易所 **79项挂牌资产** 的深度调查，按14个实体分组章节呈现，含跨省关联分析和央企资产处置洞察：
+
+| 章节 | 实体 | 项目数 | 核心发现 |
+|------|------|--------|---------|
+| 一 | 洋浦开发建设控股有限公司 | 1 | 307亩工业用地1.1亿，捆绑固投11.57亿+76亿产值 |
+| 二 | 中国银行三亚分行 | 1 | Cu/Du级危房，2212万，已多次流拍 |
+| 三 | 桂林洋房地产开发总公司 | 1 | 161套住宅7516元/㎡，海口最低价 |
+| 四 | 海南华森印务/中国印钞造币集团 | 13 | 央行系企业全面退出，40-68万/套 |
+| 五 | 天津外运/中国外运（跨省资产） | 6 | 天津/贵阳房产在海南挂牌，央企跨区域处置 |
+| 六 | 海汽运输集团三亚分公司 | 1 | 步行街5387㎡招租，已摘牌 |
+| 七 | 海口市城市建设投资集团 | 48 | 国企批量盘活商铺 |
+| 八 | 海口桂林洋投资发展控股 | 13 | 金融中心办公楼招租 |
+| 九 | 商报掌政通传媒集团 | 1 | 51%股权转让，21.6万 |
+| 十 | 三沙天能电力 | 1 | 101项报废资产 |
+| 十一 | 中国铁塔海南分公司 | 4 | 废旧物资报废 |
+| 十二 | 航程旅游发展 | 2 | 客船+办公设备 |
+| 十三 | 车辆/物资处置 | 20+ | 机动车/废旧物资 |
+| 十四 | 全国视角综合分析 | - | 跨省关联分析+海南vs山东对比 |
+
+### 山东报告目录（24章，532项）
+
+| 章节 | 实体 | 项目数 | 资产总值 | 核心发现 |
+|------|------|--------|---------|---------|
 | 九 | 山东烟草投资管理 | 9 | 约X万 | 烟草央企清理非主业资产 |
 | 十 | 山东鲁地矿业投资 | 97 | 约X万 | 山东能源剥离省外存量房产 |
 | 十一 | 华能威海发电 | 8 | 约X万 | 电力央企处置非主业资产（已终止） |

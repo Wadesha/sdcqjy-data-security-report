@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全国产权交易市场 · 资产挂牌深度调查报告</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card-hover: #222632;
+    --border: #2a2e3a;
+    --text: #e0e0e0;
+    --text-dim: #888;
+    --accent: #4fc3f7;
+    --green: #66bb6a;
+    --red: #ef5350;
+    --orange: #ffa726;
+    --purple: #ab47bc;
+    --yellow: #ffd54f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .header {
+    background: linear-gradient(135deg, #0d2137 0%, #1a1d27 100%);
+    border-bottom: 2px solid #1e3a5f;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .header h1 { font-size: 28px; color: #fff; margin-bottom: 10px; letter-spacing: 2px; }
+  .header .subtitle { color: #999; font-size: 14px; max-width: 700px; margin: 0 auto; line-height: 1.8; }
+  .header .badge {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #4fc3f7;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin: 14px 4px 0;
+  }
+  .header .badge-green { background: #1e3a2e; color: #66bb6a; }
+  .header .badge-orange { background: #3a2e1e; color: #ffa726; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: -32px auto 32px;
+    max-width: 1000px;
+    padding: 0 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .stat-card .num { font-size: 30px; font-weight: 700; color: #4fc3f7; }
+  .stat-card .num.green { color: #66bb6a; }
+  .stat-card .num.orange { color: #ffa726; }
+  .stat-card .num.purple { color: #ab47bc; }
+  .stat-card .lbl { font-size: 12px; color: #888; margin-top: 4px; }
+  @media (max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Entity section */
+  .entity-section { margin-bottom: 28px; }
+  .entity-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .entity-card:hover { border-color: #3a3e4a; }
+  .entity-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #2a2e3a;
+  }
+  .entity-header .entity-num {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #4fc3f7;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .entity-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .entity-header .entity-sub {
+    font-size: 13px;
+    color: #888;
+  }
+  .entity-body { padding: 16px 24px 20px; }
+  .entity-body .section-label {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  .entity-body .section-label:first-child { margin-top: 0; }
+  .entity-body .section-content { font-size: 14px; line-height: 1.8; color: #ccc; }
+  .entity-body .section-content strong { color: #fff; }
+
+  /* Table */
+  .project-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  .project-table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #22263a;
+    color: #999;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #2a2e3a;
+  }
+  .project-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #252936;
+    color: #ccc;
+  }
+  .project-table tr:hover td { background: #222632; }
+  .project-table .price { color: #ffd54f; font-weight: 600; white-space: nowrap; }
+  .project-table .status { font-size: 11px; }
+  .project-table .status-active { color: #66bb6a; }
+  .project-table .status-ended { color: #ef5350; }
+  .project-table .status-pending { color: #ffa726; }
+
+  /* Highlight boxes */
+  .highlight {
+    background: #1a1e2e;
+    border-left: 3px solid #ffd54f;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #bbb;
+  }
+  .highlight-red { border-left-color: #ef5350; }
+  .highlight-green { border-left-color: #66bb6a; }
+  .highlight-blue { border-left-color: #42a5f5; }
+  .highlight strong { color: #fff; }
+
+  /* Verdict */
+  .verdict {
+    margin-top: 12px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .verdict-danger { background: #1a0f0f; border: 1px solid #5c1a1a; color: #ef9a9a; }
+  .verdict-warning { background: #1a160f; border: 1px solid #5c4a1a; color: #ffe082; }
+  .verdict-info { background: #0f1a2e; border: 1px solid #1a3a5c; color: #90caf9; }
+  .verdict-ok { background: #0f1a0f; border: 1px solid #1a4a1a; color: #a5d6a7; }
+  .verdict .marker { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .marker-red { background: #ef5350; }
+  .marker-yellow { background: #ffd54f; }
+  .marker-green { background: #66bb6a; }
+  .marker-blue { background: #42a5f5; }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 2px 3px;
+  }
+  .tag-signup { background: #1e3a5f; color: #4fc3f7; }
+  .tag-bidding { background: #2e3a1e; color: #66bb6a; }
+  .tag-sale { background: #3a2e1e; color: #ffa726; }
+  .tag-restruct { background: #3a1e2e; color: #ef5350; }
+  .tag-ok { background: #1e2e3a; color: #81d4fa; }
+  .tag-bankrupt { background: #3a1e1e; color: #ef5350; }
+  .tag-state { background: #1e3a2e; color: #66bb6a; }
+  .tag-private { background: #3a2e1e; color: #ffa726; }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .data-item {
+    background: #22263a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .data-item .label { color: #888; font-size: 11px; }
+  .data-item .value { color: #fff; font-weight: 600; }
+  @media (max-width: 768px) {
+    .data-grid { grid-template-columns: 1fr; }
+    .project-table { font-size: 12px; }
+    .project-table th, .project-table td { padding: 6px 8px; }
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid #2a2e3a;
+    margin-top: 40px;
+    color: #666;
+    font-size: 12px;
+  }
+  .footer .disclaimer {
+    max-width: 600px;
+    margin: 12px auto 0;
+    font-size: 11px;
+    color: #555;
+    line-height: 1.6;
+  }
+  .footer a { color: #4fc3f7; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* Summary table at top */
+  .summary-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .summary-table h3 { font-size: 15px; color: #4fc3f7; margin-bottom: 12px; }
+  .summary-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .summary-table td { padding: 6px 12px; border-bottom: 1px solid #252936; color: #ccc; }
+  .summary-table td:first-child { color: #999; width: 180px; }
+  .summary-table tr:last-child td { border-bottom: none; }
+
+  /* Commentary */
+  .commentary {
+    margin: 8px 16px 16px;
+    background: #0d1a1f;
+    border: 1px solid #1a3a44;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .commentary-header {
+    background: #0f2028;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #4dd0e1;
+    border-bottom: 1px solid #1a3a44;
+  }
+  .commentary-body {
+    padding: 12px 16px 14px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #b0bec5;
+  }
+  .commentary-body p { margin-bottom: 8px; }
+  .commentary-body p:last-child { margin-bottom: 0; }
+  .commentary-body strong { color: #e0f7fa; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>全国产权交易市场 · 资产挂牌深度调查报告</h1>
+  <div class="subtitle">79项海南产权交易所挂牌资产穿透式调查 | 以资产管理人视角逐项分析</div>
+  <div>
+    <span class="badge">海南产权交易所</span>
+    <span class="badge badge-green">79个项目</span>
+    <span class="badge badge-orange">15+企业/机构</span>
+    <span class="badge">跨省关联分析</span>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="num">79</div>
+    <div class="lbl">挂牌项目总数</div>
+  </div>
+  <div class="stat-card">
+    <div class="num green">15+</div>
+    <div class="lbl">覆盖企业/机构</div>
+  </div>
+  <div class="stat-card">
+    <div class="num orange">≈7亿</div>
+    <div class="lbl">资产总值（估算）</div>
+  </div>
+  <div class="stat-card">
+    <div class="num purple">5大</div>
+    <div class="lbl">资产类别</div>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="summary-table">
+  <h3>📋 调查报告目录</h3>
+  <table>
+    <tr><td>一、海南省洋浦开发建设控股有限公司</td><td>1项 · 307亩工业用地 · 1.1亿</td></tr>
+    <tr><td>二、中国银行三亚分行</td><td>1项 · 危房营业用房 · 2212万</td></tr>
+    <tr><td>三、海南省桂林洋房地产开发总公司</td><td>1项 · 161套住宅整体出售</td></tr>
+    <tr><td>四、海南华森印务/中国印钞造币集团</td><td>13项 · 房产+设备全面处置</td></tr>
+    <tr><td>五、天津外运/中国外运（跨省资产）</td><td>6项 · 天津/贵阳/济南房产</td></tr>
+    <tr><td>六、海南海汽运输集团三亚分公司</td><td>1项 · 步行街5387㎡招租</td></tr>
+    <tr><td>七、海口市城市建设投资集团</td><td>48项 · 商铺招租</td></tr>
+    <tr><td>八、海口桂林洋投资发展控股</td><td>13项 · 金融中心办公楼招租</td></tr>
+    <tr><td>九、海南商报掌政通传媒集团（股权转让）</td><td>1项 · 51%股权 · 21.6万</td></tr>
+    <tr><td>十、三沙天能电力有限公司</td><td>1项 · 101项报废资产</td></tr>
+    <tr><td>十一、中国铁塔海南分公司</td><td>4项 · 废旧物资报废</td></tr>
+    <tr><td>十二、海南航程旅游发展股份有限公司</td><td>2项 · 客船+办公设备</td></tr>
+    <tr><td>十三、其他车辆/物资处置</td><td>20+项 · 车辆/废旧物资</td></tr>
+    <tr><td>十四、海南产权交易所全国视角分析</td><td>综述 · 跨省关联 · 对比分析</td></tr>
+  </table>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 一、海南省洋浦开发建设控股有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第一章</span>
+    <h2>海南省洋浦开发建设控股有限公司</h2>
+    <div class="entity-sub">1项 · 洋浦经济开发区307亩工业用地 · 1.1亿元 · 区属国企</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>海南省洋浦开发建设控股有限公司</strong>（洋浦控股）是洋浦经济开发区管委会100%持股的国有独资企业，成立于2004年，主体信用评级AA+（评级展望稳定）。公司总资产超130亿元，资产负债率约55%，是洋浦经济开发区唯一的综合性开发建设主体，承担洋浦自贸港先行区的土地开发、基础设施建设、园区运营管理等核心职能。
+    </div>
+
+    <div class="section-label">▎ 股权结构与企业性质</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">实际控制人</span><div class="value">洋浦经济开发区管委会</div></div>
+      <div class="data-item"><span class="label">企业性质</span><div class="value">国有独资企业</div></div>
+      <div class="data-item"><span class="label">信用评级</span><div class="value">AA+（评级展望稳定）</div></div>
+      <div class="data-item"><span class="label">资产规模</span><div class="value">超130亿元</div></div>
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      洋浦控股的核心职能是土地开发和基础设施建设，而非长期持有工业用地。2025年12月海南全岛封关后，洋浦作为自贸港先行区，基础设施建设投资需求巨大。2025年洋浦实际利用外资同比增长超80%，外贸进出口总值同比增长超20%，亟需大量资金投入。本次土地转让属于<strong>核心主业聚焦+资金回笼</strong>的双重驱动。
+    </div>
+    <div class="highlight highlight-red">
+      <strong>关键约束：</strong>该地块捆绑了严格的产业招商要求——年产1.3万吨以上槟榔深加工、固投11.57亿元、5年产值大于76亿元、5年纳税大于4.62亿元。这本质上是一个定向产业招商项目，而非单纯的土地转让。
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>风险提示：</strong>槟榔已被列为一级致癌物，消费端政策持续收紧，槟榔深加工产业面临健康政策风险。地块上尚有30亩土地由海南洋砼新材料有限公司承租至2026年8月31日，且存在村民祠堂和种菜地块。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>洋浦经济开发区南片区E-02-04地块307.95亩工业用地</td><td class="price">11,080万元</td><td><span class="status status-pending">待竞价</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">折合约36万/亩 · 土地年限至2062年12月</div>
+
+    <div class="verdict verdict-warning">
+      <span class="marker marker-yellow"></span><strong>投资价值评估：中等风险 · 适合有槟榔深加工产业背景的实体企业</strong><br>
+      地价36万/亩在洋浦有竞争力，但产业门槛极高——固投11.57亿+5年产值76亿，排除了绝大多数投资者。建议拟受让方先与洋浦管委会沟通产业政策，确认自身是否符合产业准入条件。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>1.1亿地价看起来便宜，但背后是11.57亿固投和76亿产值的"隐形税"。洋浦不是缺钱卖地，而是"以地选商"。作为对比，2025年洋浦核心区工业用地地价已翻倍，说明36万/亩确实有吸引力。</p>
+    <p><strong>深层逻辑：</strong>洋浦正在从"卖地"向"选商"转型。海南全省槟榔加工产值超500亿，但主要集中在万宁、琼海。洋浦此举是借助自贸港零关税政策，吸引槟榔进口加工产业链。但健康政策风险不可忽视——海南省已明确禁止槟榔广告宣传，消费端政策持续收紧。</p>
+    <p><strong>疑点：</strong>该地块此前是否经历过流拍或降价？槟榔加工企业能否接受洋浦（非槟榔主产区）的区位？地块上现有的村民祠堂如何处理？</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 二、中国银行三亚分行 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第二章</span>
+    <h2>中国银行股份有限公司三亚分行</h2>
+    <div class="entity-sub">1项 · 原新华支行营业用房 · 2212万元 · 四大国有银行</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>中国银行股份有限公司三亚分行</strong>是中国银行（601988.SH/3988.HK，四大国有商业银行之一）的三亚分支机构。中国银行海南省分行正在推进全面的资产优化——2026年有大量招标、拍卖和转让活动。原新华支行已搬迁至三亚市天涯区胜利路217号丹海豪庭一楼铺面，原址解放路228号房产因此空置。
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      该房产经检测鉴定为<strong>部分Cu级、部分Du级危房</strong>——根据《危险房屋鉴定标准》（JGJ125-2016），Cu级意味着"部分承重结构承载力不能满足正常使用要求"；Du级意味着"房屋整体出现险情，构成整幢危房"。中国银行在2025年将新华支行搬离后，这栋空置的危房就成了需要处置的"不良资产"。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>三亚市解放路原中国银行新华支行营业用房（725.77㎡）</td><td class="price">2,212.58万元</td><td><span class="status status-ended">已到期（2026-06-08）</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">单价约3.05万/㎡ · 土地面积143.49㎡ · 土地年限至2054年6月</div>
+
+    <div class="verdict verdict-danger">
+      <span class="marker marker-red"></span><strong>投资价值评估：高风险 · 危房改造难度大</strong><br>
+      Cu+Du级危房意味着重建成本极高（预计3000-5000元/㎡）。单价3.05万/㎡看似在三亚核心区有竞争力，但加上拆除重建费用，实际成本远超市场价。土地面积仅143.49㎡，容积率受限，重建后建筑面积可能无法达到725.77㎡。建议仅在获得政府危房改造专项规划许可的前提下考虑。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>Cu/Du级危房意味着这栋楼实际上已经不适合人员居住和办公。中国银行2025年搬离后才挂牌处置，说明银行内部决策流程完整（三亚分行请示→海南省分行授信管理部批复）。但该房产此前已多次挂牌未成交，说明市场对危房接受度低。</p>
+    <p><strong>深层逻辑：</strong>解放路商圈正在经历衰退——三亚市政府2026年6月已出台空置商铺专项补贴政策（30元/月/㎡、连补6个月）。步行街5387㎡整体招租虽然已摘牌，但摘牌方为物业管理公司而非商业运营商，说明市场信心不足。</p>
+    <p><strong>疑点：</strong>如果该房产拆除重建，143.49㎡土地能建多少面积？容积率限制多少？是否有城市更新专项规划支持？</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 三、海南省桂林洋房地产开发总公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第三章</span>
+    <h2>海南省桂林洋房地产开发总公司</h2>
+    <div class="entity-sub">1项 · 青春东岸161套住宅整体出售 · 7516元/㎡ · 市属国企</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>海南省桂林洋房地产开发总公司</strong>成立于1992年，注册资本2000万元，由海口桂林洋投资发展控股有限公司100%持股，最终实际控制人为海口市国资委。企业属于海口产业发展投资集团体系（成员企业61家），持有房地产开发二级资质，员工28人，2025年税务信用A级。
+    </div>
+
+    <div class="section-label">▎ 股权结构与企业性质</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">实际控制人</span><div class="value">海口市国有资产监督管理委员会</div></div>
+      <div class="data-item"><span class="label">企业性质</span><div class="value">全民所有制（国有企业）</div></div>
+      <div class="data-item"><span class="label">资质等级</span><div class="value">房地产开发二级</div></div>
+      <div class="data-item"><span class="label">员工人数</span><div class="value">28人（2024年）</div></div>
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      青春东岸（桂林洋教师村）项目2015年建成，共11栋楼2045户。本次整体出售161套住宅，单价7516元/㎡，低于该项目二手房均价9157元/㎡约18%，低于备案均价15999元/㎡约53%。<br><br>
+      处置动因：<strong>区属国企回笼资金+批量去化库存</strong>。2025年青春东岸曾推出8800元/㎡的特价房，此次7516元/㎡是在此基础上再下调约15%，说明企业回笼资金需求迫切。
+    </div>
+    <div class="highlight highlight-green">
+      <strong>关键发现：</strong>7516元/㎡——这是海口市场化住宅产品中，万平米规模以上的最低价，比安居房还便宜约300元/㎡！海口江东新区注册企业超2.5万家，其中世界500强50家，区域发展潜力大。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>青春东岸（桂林洋教师村）161套住宅整体出售</td><td class="price">7,516元/㎡</td><td><span class="status status-ended">已到期（2026-06-03）</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">总建面约10184㎡ · 户型49-122㎡ · 保证金2800万</div>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-green"></span><strong>投资价值评估：低风险 · 适合有批量运营能力的机构投资者</strong><br>
+      海口最低价，折价约18%有安全垫；位于大学城有稳定租赁需求；现房即买即用。但整体出售门槛高（总价约7656万），楼龄超10年。年化租金回报率约4-5%。适合长租公寓或度假社区运营商。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>7516元/㎡虽然在海口是最低价，但项目已到期（2026-06-03），说明161套整体打包可能没有找到合适的买家。保证金2800万的门槛较高，排除了大量个人投资者。</p>
+    <p><strong>深层逻辑：</strong>桂林洋位于海口江东新区，该区2025年封关后注册企业超2.5万家，但写字楼空置率仍较高。青春东岸作为住宅项目，受益于大学城教师和学生的租赁需求，出租率有保障。但整体出售后，买家需要面对大量零散租户的管理问题。</p>
+    <p><strong>疑点：</strong>如果161套整体出售失败，桂林洋房地产公司是否会拆零出售？此前8800元/㎡的特价房销售情况如何？</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 四、海南华森印务/中国印钞造币集团 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第四章</span>
+    <h2>海南华森印务有限公司（中国印钞造币集团旗下）</h2>
+    <div class="entity-sub">13项房产+设备全面处置 · 全面退出 · 央行系央企</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>海南华森印务有限公司</strong>成立于1994年，注册资本3000万元，由中钞华森实业有限公司持股80%（中国印钞造币集团旗下），澳华资产管理有限公司持股20%。疑似实际控制人：中国人民银行。企业参保人数仅6人，已处于实质性的清算退出过程中。
+    </div>
+
+    <div class="section-label">▎ 股权结构与企业性质</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">实际控制人</span><div class="value">中国人民银行（通过中国印钞造币集团）</div></div>
+      <div class="data-item"><span class="label">企业性质</span><div class="value">央属国企 · 清算退出中</div></div>
+      <div class="data-item"><span class="label">大股东</span><div class="value">中钞华森实业有限公司（80%）</div></div>
+      <div class="data-item"><span class="label">参保人数</span><div class="value">6人（2024年）</div></div>
+    </div>
+
+    <div class="section-label">▎ 资产处置动因分析</div>
+    <div class="section-content">
+      海南华森印务正在全面退出传统印刷业务，这是中国印钞造币集团战略调整的一部分。2026年密集处置了：(1) 13套万银花园住宅（40-68万/套）；(2) 23台印刷设备（13.86万元）；(3) 6台车辆（已成交）；(4) 121台机器设备（已成交）。<br><br>
+      <strong>行业背景：</strong>票据电子化不可逆转——增值税专用发票电子化覆盖率已达99.4%，2025年增值税专用发票印刷量同比下降3.1%，全国票据印刷企业从2025年的1247家减少65家。传统印刷行业正在经历结构性衰退。
+    </div>
+    <div class="highlight highlight-red">
+      <strong>核心判断：这是中国印钞造币集团在海南的实体业务全面退出，而非单纯的资产处置。</strong>设备已全部处置完毕，13套房产是最后一批待处置资产。部分房产目前仍由职工宿舍使用，成交后需清退。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>万银花园A幢204房（65.55㎡）</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>2</td><td>万银花园A幢304房（65.55㎡）</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>3</td><td>万银花园A幢404房（65.55㎡）</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>4</td><td>万银花园A幢504房（65.55㎡）</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>5</td><td>万银花园A幢604房（65.55㎡）</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>6</td><td>万银花园A幢703房（65.55㎡）</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>7</td><td>万银花园A幢704房（98.91㎡）</td><td class="price">约68万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>8</td><td>万银花园A幢803房（65.55㎡）</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>9</td><td>万银花园A幢804房（98.91㎡）</td><td class="price">约68万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>10</td><td>万银花园A幢903房</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>11</td><td>万银花园A幢904房</td><td class="price">约68万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>12</td><td>万银花园B幢204房</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+      <tr><td>13</td><td>万银花园B幢702房</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">单价约6200-7300元/㎡ · 无电梯 · 部分有租约</div>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-green"></span><strong>投资价值评估：低风险 · 适合个人投资者</strong><br>
+      单套40-68万，投资门槛低；位于海口成熟居住区。但无电梯老楼、部分有租约需清退。建议重点关注空置房（如A304房）。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>华森印务的全面退出，是票据电子化时代传统印刷行业的一个缩影。中国印钞造币集团——这个负责印制人民币的"神秘"央企——也在面临数字货币和电子支付的冲击。13套房产原本是职工宿舍，随着企业从高峰期收缩到仅6人，这些房产从"职工福利"变成了"闲置资产"。</p>
+    <p><strong>深层逻辑：</strong>从投资角度看，中国印钞造币集团的信用背书确保了产权清晰、交易规范。但需要注意的是，部分房产目前由职工宿舍使用，清退可能需要时间。A幢404房（已出租合同至2027年3月）和A幢604房（已出租合同至2026年8月）需"买卖不破租赁"。</p>
+    <p><strong>疑点：</strong>为什么延期挂牌？是价格问题还是市场接受度？中国印钞造币集团在海南的其他资产是否也会跟进处置？</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 五、天津外运/中国外运（跨省资产） -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第五章</span>
+    <h2>天津外运有限公司 / 中国外运体系（跨省资产）</h2>
+    <div class="entity-sub">6项 · 天津/贵阳房产在海南挂牌 · 央企跨区域资产处置</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>天津外运有限公司</strong>是中国外运股份有限公司（招商局集团旗下）的子公司。中国外运体系选择海南产权交易所作为资产处置平台，利用海南自贸港政策优势进行跨区域资产处置。这是海南产权交易所"央企业务"资质的重要体现——央企资产可以跨区域选择产权交易机构，不一定局限于资产所在地。
+    </div>
+
+    <div class="section-label">▎ 跨省资产处置动因分析</div>
+    <div class="section-content">
+      中国外运体系将天津、贵阳等多地资产统一委托海南产权交易所进行处置，体现了<strong>央企资产集约化处置</strong>的新趋势。海南产权交易所可能提供了更优惠的服务费率或更高效的交易服务。海南自贸港封关后，可能出台了针对央企资产交易的优惠政策。
+    </div>
+
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>天津市河东区萦东温泉花园8-底商3房产</td><td class="price">约294.5万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
+      <tr><td>2</td><td>天津市河东区萦东温泉花园（另一套）</td><td class="price">约230万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
+      <tr><td>3</td><td>天津市塘沽区新港六米房产和土地</td><td class="price">261.75万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
+      <tr><td>4</td><td>贵州省贵阳市智诚大厦A栋9层1号房产</td><td class="price">约290万元</td><td><span class="status status-pending">已挂牌</span></td></tr>
+      <tr><td>5</td><td>贵州省贵阳市智诚大厦A栋10层1号房产</td><td class="price">约290万元</td><td><span class="status status-pending">已挂牌</span></td></tr>
+      <tr><td>6</td><td>贵州省贵阳市智诚大厦A栋11层1号房产</td><td class="price">约316万元</td><td><span class="status status-pending">已挂牌</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">转让方：天津外运有限公司/中国外运贵州有限公司</div>
+
+    <div class="highlight highlight-blue">
+      <strong>关键发现：</strong>天津和贵阳的房产在海南产权交易所挂牌，说明海南产权交易所具备跨区域央企资产交易资质。这对投资者意味着——可以在海南产权交易所"一站式"买到全国各地的央企资产。
+    </div>
+
+    <div class="verdict verdict-warning">
+      <span class="marker marker-yellow"></span><strong>投资价值评估：中等风险</strong><br>
+      天津河东区房产位于成熟市区，萦东温泉花园为知名小区。贵阳房产位于老城区核心地段。但均为再次挂牌，说明此前可能未成交。需实地考察房屋状况和当地市场行情。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>天津的房产在海南挂牌——这个"反常"现象恰恰揭示了海南产权交易所的独特价值。作为省级产权交易机构，海南产交所拥有"央企业务"资质，可以跨区域处置央企资产。这意味着投资者可以通过海南产权交易所"淘"到全国各地的央企资产。</p>
+    <p><strong>深层逻辑：</strong>中国外运体系之所以选择海南产交所，可能因为：(1) 海南自贸港封关后出台的央企资产交易优惠政策；(2) 海南产交所的服务费率更有竞争力；(3) 集团内部统一指定。但天津房产已经"再次挂牌"，说明此前未成交，可能需要关注价格是否合理。</p>
+    <p><strong>疑点：</strong>海南产交所在央企资产处置领域的市场份额如何？与北京产权交易所、上海联合产权交易所相比，海南产交所的核心竞争力是什么？</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 六、海南海汽运输集团三亚分公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第六章</span>
+    <h2>海南海汽运输集团有限公司三亚分公司</h2>
+    <div class="entity-sub">1项 · 解放路步行街5387.46㎡整体招租 · 已摘牌</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>海南海汽运输集团有限公司</strong>（海汽集团，603069.SH）是海南省属国有控股的道路运输企业，主营道路客运、旅游客运、汽车服务等业务。2024年营收约8.6亿元，总资产超30亿元。
+    </div>
+
+    <div class="section-label">▎ 资产详情</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">位置</span><div class="value">三亚市解放路步行街E2座、C2座</div></div>
+      <div class="data-item"><span class="label">面积</span><div class="value">5387.46㎡（共6层）</div></div>
+      <div class="data-item"><span class="label">租金</span><div class="value">约45万元/月</div></div>
+      <div class="data-item"><span class="label">租期</span><div class="value">5年（每三年递增3%）</div></div>
+      <div class="data-item"><span class="label">产权</span><div class="value">无房产证，有土地证</div></div>
+      <div class="data-item"><span class="label">结果</span><div class="value">已摘牌（某诚德物业管理有限公司）</div></div>
+    </div>
+
+    <div class="highlight highlight-orange" style="border-left-color:#ffa726;background:#1a160f;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13px;color:#bbb;">
+      <strong>产权瑕疵：</strong>该资产无房产证、有土地证，存在一定的法律风险。但已成功摘牌，说明摘牌方接受了这一瑕疵。
+    </div>
+
+    <div class="verdict verdict-info">
+      <span class="marker marker-blue"></span><strong>投资价值评估：已有摘牌方，关注后续运营</strong><br>
+      解放路步行街核心位置，但面临商圈老化、无房产证等风险。摘牌方为物业管理公司，可能计划通过业态调整和精细化管理实现资产增值。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>无房产证是最大的硬伤。虽然有土地证，但在融资、转让等方面都会受到限制。摘牌方为物业管理公司而非商业运营商，说明其策略可能是通过分租获取差价，而非自主经营。</p>
+    <p><strong>深层逻辑：</strong>三亚解放路商圈正在经历"政府补贴托底"的阶段——2026年6月天涯区政府出台30元/月/㎡的专项租赁补贴。但补贴只能缓解短期困境，商圈的长期活力需要消费力和业态支撑。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 七、海口市城市建设投资集团 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第七章</span>
+    <h2>海口市城市建设投资集团有限公司</h2>
+    <div class="entity-sub">48间商铺分别招租 · 五源河公寓/永秀花园等6个小区</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>海口市城市建设投资集团有限公司</strong>（海口城投）是海口市属国有独资企业，承担海口市城市基础设施建设和城市运营职能。本次大规模释放48间商铺招租，反映了海口市属国企加速存量资产盘活的趋势。
+    </div>
+
+    <div class="section-label">▎ 资产详情</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">位置</span><div class="value">五源河公寓、永秀花园、凤翔花园、滨江花园、蓝城印象、上东城</div></div>
+      <div class="data-item"><span class="label">数量</span><div class="value">48间商铺</div></div>
+      <div class="data-item"><span class="label">租期</span><div class="value">3-5年</div></div>
+      <div class="data-item"><span class="label">状态</span><div class="value">毛坯/闲置，正在挂牌</div></div>
+    </div>
+    <div class="highlight highlight-blue">
+      <strong>后续进展：</strong>2026年7-8月，五源河公寓三期H区商业楼27间商铺再次挂牌招租，并已摘牌成交（8月14日摘牌结果公告），说明市场对此类资产有需求。
+    </div>
+
+    <div class="verdict verdict-ok">
+      <span class="marker marker-green"></span><strong>评级：低风险 · 适合社区商业运营商</strong> 五源河公寓位于海口西海岸，周边配套日趋完善，商铺需求有望增长。但48间商铺分布在6个不同小区，管理成本较高。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>关联性：</strong>海口城投的商铺招租与青春东岸161套住宅整体出售形成对比——城投选择"拆零招租"而非"整体出售"，说明两种策略各有优劣。城投的商铺属于经营性资产，出租可产生持续现金流；而桂林洋房地产的住宅属于库存商品，出售可快速回笼资金。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 八、海口桂林洋投资发展控股 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第八章</span>
+    <h2>海口桂林洋投资发展控股有限公司</h2>
+    <div class="entity-sub">13间金融中心办公楼招租 · 江东新区核心区</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 资产详情</div>
+    <div class="data-grid">
+      <div class="data-item"><span class="label">位置</span><div class="value">海口市江东新区 · 金融中心B1#楼</div></div>
+      <div class="data-item"><span class="label">面积</span><div class="value">13间办公房间（501-1002等）</div></div>
+      <div class="data-item"><span class="label">租期</span><div class="value">3-5年</div></div>
+      <div class="data-item"><span class="label">租金递增</span><div class="value">每2年递增3%</div></div>
+      <div class="data-item"><span class="label">状态</span><div class="value">毛坯/简单装修，正在挂牌（再次招租）</div></div>
+    </div>
+    <div class="highlight highlight-orange" style="border-left-color:#ffa726;background:#1a160f;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13px;color:#bbb;">
+      <strong>再次挂牌：</strong>海口金融中心办公楼此前已挂牌但未成交，此次为再次招租。说明江东新区写字楼市场短期内供过于求。
+    </div>
+
+    <div class="verdict verdict-warning">
+      <span class="marker marker-yellow"></span><strong>评级：中等风险</strong> 江东新区发展中长期向好，但短期内写字楼市场供过于求。金融中心建筑标准为甲级，适合有长期布局需求的金融机构或企业总部。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>关联性：</strong>海口金融中心（桂林洋投资发展控股）与青春东岸161套住宅（桂林洋房地产总公司）同属桂林洋经济开发区体系，实际控制人均为海口市国资委。两个项目同时挂牌，反映了桂林洋片区国企的整体资金需求。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 九、海南商报掌政通传媒集团 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第九章</span>
+    <h2>海南商报掌政通传媒集团有限公司</h2>
+    <div class="entity-sub">51%股权转让 · 21.6万元 · 持续亏损</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 企业背景</div>
+    <div class="section-content">
+      <strong>海南商报掌政通传媒集团有限公司</strong>成立于2022年1月，注册资本1000万元，主营新媒体运营、党政机关公众号运营、信息技术服务。2024年营收340.5万元，净利润-16.9万元；2026年3月营收仅12.4万元，亏损持续。转让方为海南国际旅游岛商报有限公司（海南省社科联批准）。
+    </div>
+
+    <div class="section-label">▎ 项目信息</div>
+    <table class="project-table">
+      <tr><th>项目</th><th>明细</th></tr>
+      <tr><td>转让底价</td><td class="price">21.6万元</td></tr>
+      <tr><td>资产总额</td><td>89.2万元</td></tr>
+      <tr><td>负债总额</td><td>61.9万元</td></tr>
+      <tr><td>所有者权益</td><td>27.4万元</td></tr>
+      <tr><td>信息披露期</td><td>2026年5月27日-9月9日（105个工作日）</td></tr>
+    </table>
+
+    <div class="verdict verdict-danger">
+      <span class="marker marker-red"></span><strong>评级：高风险</strong> 持续亏损，资产质量一般，核心价值在于政务新媒体运营资质。转让底价21.6万元低于净资产27.4万元，说明转让方急于脱手。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>21.6万买一家持续亏损的公司51%股权，听起来便宜，但实际价值要看其政务新媒体运营资质和客户关系网络。转让条件要求"受让方须消除国有字号影响，不得以国有出资企业子企业名义经营"，这意味着收购后不能借用"国资"品牌。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十、三沙天能电力有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十章</span>
+    <h2>三沙天能电力有限公司</h2>
+    <div class="entity-sub">101项报废资产组合 · 三沙市基础设施更新</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 资产详情</div>
+    <div class="section-content">
+      <strong>三沙天能电力有限公司</strong>持有的三沙电站101项报废资产组合整体打包转让（项目编号：QY202211HN0292）。三沙市电力基础设施正在经历更新换代，老旧设备报废处置是正常资产更新流程。<br><br>
+      此类资产属于低价值资产处置，市场关注度较低。但反映了三沙市作为国家战略区域，基础设施投资持续加大的趋势。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>关联性：</strong>三沙天能电力的报废资产处置与山东产权交易中心的"三沙电站报废资产"可能存在关联——山东东岳能源的平铝厂区同样涉及电力设施的报废处置。两个项目反映了电力行业资产更新的趋势。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十一、中国铁塔海南分公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十一章</span>
+    <h2>中国铁塔股份有限公司海南省分公司</h2>
+    <div class="entity-sub">4项废旧物资报废 · 儋州/文昌/澄迈/陵水</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>儋州市分公司2026年第一批废旧物资整体打包转让</td><td class="price">3.46万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>2</td><td>文昌市分公司电池、钢材、摄像头、柜体等报废资产</td><td class="price">4.18万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>3</td><td>澄迈县分公司锂电池、空调、抱杆等报废物资</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>4</td><td>陵水县废旧物资一批</td><td class="price">见正文</td><td><span class="status status-pending">挂牌截止</span></td></tr>
+    </table>
+    <div class="highlight highlight-green">
+      <strong>特点：</strong>中国铁塔作为通信基础设施运营商，废旧物资处置属于常规业务。5G基站建设加速后，老旧设备更新换代，产生大量锂电池、空调、钢材等报废物资。此类资产适合有回收资质的企业。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>关联性：</strong>中国铁塔在海南多地的废旧物资处置，与山东产权交易中心的中国铁塔资产处置形成对比——铁塔系在全国范围内同步进行资产更新，是一个全国性趋势。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十二、海南航程旅游发展股份有限公司 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十二章</span>
+    <h2>海南航程旅游发展股份有限公司</h2>
+    <div class="entity-sub">2项 · 客船+办公设备 · 旅游企业资产优化</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 项目清单</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>"临春河01""临春河02""临春河03"普通客船分别再次转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>2</td><td>办公家具、电器等其他设备整体再次转让</td><td class="price">10.66万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+    </table>
+    <div class="highlight highlight-orange" style="border-left-color:#ffa726;background:#1a160f;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13px;color:#bbb;">
+      <strong>"再次转让"：</strong>两个项目均为"再次转让"，说明此前已挂牌但未成交。客船转让价格"见正文"需向交易所咨询，可能存在价格偏高或市场需求不足的问题。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>深层逻辑：</strong>海南航程旅游作为旅游企业，同时处置客船和办公设备，可能是在进行业务调整或资产优化。2025年海南旅游市场持续恢复，但水上旅游项目的竞争也在加剧。客船"再次转让"未成交，可能因为船龄较大或维护成本高。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十三、其他车辆/物资处置 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十三章</span>
+    <h2>海南产权交易所 · 车辆及废旧物资批量处置</h2>
+    <div class="entity-sub">20+项 · 机动车/特种车辆/废旧物资</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 车辆处置项目</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>琼D36616中通牌大型普通客车再次转让</td><td class="price">3.20万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>2</td><td>琼C75868、琼C75929宇通牌大型普通客车分别转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>3</td><td>琼A82891东风牌等6辆车整体打包转让</td><td class="price">8.12万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>4</td><td>琼A2BC06别克牌等10辆小型普通客车分别转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>5</td><td>琼A60L16别克牌小型轿车转让</td><td class="price">0.49万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>6</td><td>琼AA1V32吉利牌小型普通客车转让</td><td class="price">3.51万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>7</td><td>琼A0620J、琼A6037A等两辆车公开挂牌转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>8</td><td>琼A82891东风牌等6辆车整体打包转让</td><td class="price">8.12万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+    </table>
+    <div style="color:#666;font-size:12px;margin-top:4px;">车辆类资产单价低（0.49-8.12万元），适合个人投资者或二手车商</div>
+
+    <div class="section-label">▎ 废旧物资处置项目</div>
+    <table class="project-table">
+      <tr><th>序号</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
+      <tr><td>1</td><td>一批废旧教学办公设备及家具等资产整体转让</td><td class="price">11.95万元</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>2</td><td>一批家具电器资产分为两个标的分别转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>3</td><td>万宁加油站撬装式加油设备等资产整体打包转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>4</td><td>三亚崖州区国资公司一批可移动销售亭分为5个标的分别转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>5</td><td>海南开放大学一批报废资产整体挂牌转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+      <tr><td>6</td><td>通用公司5台门座式起重机分别转让</td><td class="price">见正文</td><td><span class="status status-active">正在挂牌</span></td></tr>
+    </table>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>整体特征：</strong>海南产权交易所的车辆和废旧物资处置项目，与山东产权交易中心类似——单价低、数量多、受众广。但海南项目数量远少于山东（山东有20+车辆项目和50+零散项目），说明海南产交所的整体规模较小。</p>
+    <p><strong>关联性：</strong>海南开放大学的报废资产处置，与山东产权交易中心的高校资产处置形成对比。高校资产处置在全国范围内都是常规业务，但海南的资产种类和规模相对有限。</p>
+  </div>
+</div>
+
+<!-- ======================================================================== -->
+<!-- 十四、全国视角分析 -->
+<!-- ======================================================================== -->
+<div class="entity-section">
+<div class="entity-card">
+  <div class="entity-header">
+    <span class="entity-num">第十四章</span>
+    <h2>海南产权交易所 · 全国视角综合分析</h2>
+    <div class="entity-sub">跨省关联 · 央企资产处置 · 与山东对比</div>
+  </div>
+  <div class="entity-body">
+    <div class="section-label">▎ 跨省资产处置的核心发现</div>
+    <div class="section-content">
+      <strong>海南产权交易所不仅是海南省的产权交易平台，也是央企跨区域资产处置的重要渠道。</strong><br><br>
+      本次调查发现：天津外运有限公司（中国外运/招商局集团旗下）将天津、贵阳等多地房产委托海南产交所进行处置。这一现象说明：
+      <ul style="margin-top:8px;padding-left:18px;color:#ccc;line-height:1.8;">
+        <li>海南产交所具备"央企业务"资质，可以跨区域处置央企资产</li>
+        <li>央企正在利用海南自贸港封关后的政策优势进行集约化资产处置</li>
+        <li>投资者可以通过海南产交所"一站式"接触到全国各地的央企资产</li>
+      </ul>
+    </div>
+
+    <div class="section-label">▎ 海南 vs 山东产权交易中心对比</div>
+    <table class="project-table">
+      <tr><th>对比维度</th><th>海南产权交易所</th><th>山东产权交易集团</th></tr>
+      <tr><td>年成交规模</td><td>未公开披露</td><td>超2,260亿元</td></tr>
+      <tr><td>在架项目数</td><td>约79项（本次调查）</td><td>47,119宗/年</td></tr>
+      <tr><td>交易品种</td><td>房产/股权/租赁/车辆/废旧物资</td><td>16大板块/36个品种</td></tr>
+      <tr><td>资质等级</td><td>未公开</td><td>AAA级（全国五家"全牌照"之一）</td></tr>
+      <tr><td>跨省业务</td><td>有央企跨区域资产处置</td><td>与京津冀/长三角/粤港澳互联互通</td></tr>
+      <tr><td>区域特色</td><td>自贸港政策驱动 · 央企资产处置</td><td>煤炭/数据/农村产权特色交易</td></tr>
+    </table>
+
+    <div class="section-label">▎ 综合投资价值对比</div>
+    <table class="project-table">
+      <tr><th>项目</th><th>挂牌价</th><th>折价率</th><th>现金流</th><th>退出难度</th><th>综合评级</th></tr>
+      <tr><td>洋浦307亩工业用地</td><td>1.1亿</td><td>中等</td><td>负（需持续投入）</td><td>高</td><td style="color:#ffa726;">★★☆☆☆</td></tr>
+      <tr><td>中行新华支行危房</td><td>2,212万</td><td>中等</td><td>正（可出租）</td><td>中</td><td style="color:#ffa726;">★★★☆☆</td></tr>
+      <tr><td>青春东岸161套住宅</td><td>7,516元/㎡</td><td>约18%</td><td>正（出售或出租）</td><td>低</td><td style="color:#66bb6a;">★★★★☆</td></tr>
+      <tr><td>华森印务万银花园</td><td>40-68万/套</td><td>中等</td><td>正（出租或出售）</td><td>低</td><td style="color:#66bb6a;">★★★☆☆</td></tr>
+      <tr><td>商报掌政通51%股权</td><td>21.6万</td><td>-</td><td>负（持续亏损）</td><td>高</td><td style="color:#ef5350;">★★☆☆☆</td></tr>
+      <tr><td>三亚步行街招租</td><td>45万/月</td><td>-</td><td>正（需运营）</td><td>中</td><td style="color:#ffa726;">★★★☆☆</td></tr>
+    </table>
+
+    <div class="section-label">▎ 跨项目关联性分析</div>
+    <div class="section-content">
+      <ol style="padding-left:18px;color:#ccc;line-height:1.8;">
+        <li><strong>江东新区协同效应：</strong>青春东岸（桂林洋）与海口金融中心（同属江东新区）存在区域协同效应，可关注江东新区整体价值提升对两个项目的联动影响。</li>
+        <li><strong>央企资产处置链：</strong>华森印务（中国印钞造币集团）与天津外运（中国外运）在海南产交所的资产处置，反映了央企集团利用海南产交所平台进行集约化资产处置的趋势。</li>
+        <li><strong>银行资产处置主题：</strong>中国银行海南省分行连续的资产处置，与其他金融机构的资产处置构成"金融机构存量资产盘活"的投资主题。</li>
+        <li><strong>自贸港政策红利：</strong>洋浦工业用地、江东新区青春东岸、海口金融中心等项目均受益于海南自贸港封关运作的政策红利。</li>
+      </ol>
+    </div>
+
+    <div class="verdict verdict-warning">
+      <span class="marker marker-yellow"></span><strong>总体评价：</strong><br>
+      海南产权交易所是中国产权交易市场的重要一环，虽然规模远小于山东产权交易集团，但具有独特的自贸港政策优势和央企跨区域资产处置能力。本次调查的79个项目中，青春东岸161套住宅（7516元/㎡）和华森印务万银花园房产（40-68万/套）投资价值最高，适合有批量运营能力的机构投资者和个人投资者。
+    </div>
+  </div>
+</div>
+</div>
+<div class="commentary">
+  <div class="commentary-header">📌 点评</div>
+  <div class="commentary-body">
+    <p><strong>核心问题：</strong>海南产权交易所的规模远小于山东，但本次调查最大的发现是——天津、贵阳的房产在海南挂牌。这个"反常"现象揭示了海南产交所的独特价值：作为省级产权交易机构，它拥有"央企业务"资质，可以跨区域处置央企资产。</p>
+    <p><strong>深层逻辑：</strong>海南自贸港封关后，可能出台了针对央企资产交易的优惠政策。中国外运体系选择海南产交所，而不是北京产权交易所或上海联合产权交易所，说明海南产交所可能在服务费率或交易效率上有优势。但整体来看，海南产交所的交易品种（主要是房产、租赁、车辆、废旧物资）远不如山东丰富（16大板块、36个品种），在煤炭、数据、农村产权等特色领域更是空白。</p>
+    <p><strong>投资建议：</strong>青春东岸161套住宅（★★★★☆）是本次调查中评级最高的项目——7516元/㎡的海口最低价，折价约18%，有足够的安全垫。但161套整体打包出售的高门槛（总价约7656万）限制了参与群体。如果该项目拆零出售，可能会吸引更多投资者。</p>
+  </div>
+</div>
+
+<div class="footer">
+  本报告基于公开可获取的信息进行技术分析和深度调查，旨在帮助投资者更好地理解产权交易市场的资产动态。报告内容不构成任何投资建议或法律意见。<br>
+  数据来源：海南产权交易所（hncq.cn）· 企查查 · 天眼查 · 安居客 · 58同城 · 海口江东新区管理局 · 山东产权交易集团<br>
+  报告生成日期：2026年8月17日 · 数据截至2026年8月17日
+  <div class="disclaimer">
+    免责声明：本报告中的部分数据来源于公开渠道，可能存在信息不完整或滞后的情况。投资者在做出投资决策前，应进行独立的尽职调查并咨询专业顾问。
+  </div>
+</div>
+
+</div>
+</body>
+</html>
