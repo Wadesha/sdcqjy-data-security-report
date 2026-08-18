@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>全国产权交易市场 · 资产深度调查报告（山东+海南合并）</title>
+<title>全国产权交易资产挂牌深度调查</title>
 <style>
   :root {
     --bg: #0f1117;
@@ -18,6 +18,9 @@
     --orange: #ffa726;
     --purple: #ab47bc;
     --yellow: #ffd54f;
+    --teal: #4dd0e1;
+    --comment-bg: #0d1a1f;
+    --comment-border: #1a3a44;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -27,34 +30,66 @@
     line-height: 1.7;
     padding: 0;
   }
+
+  /* Header */
   .header {
-    background: linear-gradient(135deg, #0d2137 0%, #1a1d27 100%);
+    background: linear-gradient(135deg, #0a1628 0%, #0d2137 50%, #1a1d27 100%);
     border-bottom: 2px solid #1e3a5f;
-    padding: 48px 24px 40px;
+    padding: 56px 24px 48px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
-  .header h1 { font-size: 28px; color: #fff; margin-bottom: 10px; letter-spacing: 2px; }
-  .header .subtitle { color: #999; font-size: 14px; max-width: 700px; margin: 0 auto; line-height: 1.8; }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(79,195,247,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(79,195,247,0.03) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .header h1 {
+    font-size: 32px;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: 3px;
+    position: relative;
+  }
+  .header .subtitle {
+    color: #999;
+    font-size: 15px;
+    max-width: 750px;
+    margin: 0 auto;
+    line-height: 1.8;
+    position: relative;
+  }
+  .header .badge-group {
+    margin-top: 18px;
+    position: relative;
+  }
   .header .badge {
     display: inline-block;
     background: #1e3a5f;
     color: #4fc3f7;
     font-size: 11px;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 4px;
-    margin: 14px 4px 0;
+    margin: 4px;
   }
   .header .badge-green { background: #1e3a2e; color: #66bb6a; }
   .header .badge-orange { background: #3a2e1e; color: #ffa726; }
-  .container { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
+  .header .badge-purple { background: #2e1e3a; color: #ce93d8; }
+  .header .badge-teal { background: #0d2e3a; color: #4dd0e1; }
 
-  /* Stats */
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+  /* Stats Grid */
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
     margin: -32px auto 32px;
-    max-width: 1000px;
+    max-width: 1100px;
     padding: 0 16px;
     position: relative;
     z-index: 2;
@@ -63,26 +98,93 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 24px 16px;
+    padding: 22px 12px;
     text-align: center;
+    transition: border-color 0.2s;
   }
-  .stat-card .num { font-size: 30px; font-weight: 700; color: #4fc3f7; }
+  .stat-card:hover { border-color: #3a3e4a; }
+  .stat-card .num { font-size: 28px; font-weight: 700; color: #4fc3f7; }
   .stat-card .num.green { color: #66bb6a; }
   .stat-card .num.orange { color: #ffa726; }
-  .stat-card .num.purple { color: #ab47bc; }
+  .stat-card .num.purple { color: #ce93d8; }
+  .stat-card .num.teal { color: #4dd0e1; }
+  .stat-card .num.yellow { color: #ffd54f; }
   .stat-card .lbl { font-size: 12px; color: #888; margin-top: 4px; }
   @media (max-width: 768px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
   }
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+  }
 
-  /* Entity section */
+  /* Section Title */
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin: 40px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1e3a5f;
+    letter-spacing: 1px;
+  }
+  .section-title .num-badge {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #4fc3f7;
+    font-size: 13px;
+    padding: 2px 12px;
+    border-radius: 20px;
+    margin-left: 10px;
+    font-weight: 400;
+  }
+
+  /* Summary Table */
+  .summary-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    overflow-x: auto;
+  }
+  .summary-table h3 {
+    font-size: 15px;
+    color: #4fc3f7;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .summary-table table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 650px; }
+  .summary-table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #22263a;
+    color: #999;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #2a2e3a;
+  }
+  .summary-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #252936;
+    color: #ccc;
+  }
+  .summary-table tr:hover td { background: #222632; }
+  .summary-table .rating-A { color: #66bb6a; }
+  .summary-table .rating-B { color: #ffd54f; }
+  .summary-table .rating-C { color: #ffa726; }
+  .summary-table .rating-D { color: #ef5350; }
+
+  /* Entity Card */
   .entity-section { margin-bottom: 28px; }
   .entity-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 12px;
     overflow: hidden;
-    transition: border-color .2s;
+    transition: border-color 0.2s;
   }
   .entity-card:hover { border-color: #3a3e4a; }
   .entity-header {
@@ -94,7 +196,7 @@
     background: #1e3a5f;
     color: #4fc3f7;
     font-size: 11px;
-    padding: 2px 8px;
+    padding: 2px 10px;
     border-radius: 4px;
     margin-bottom: 8px;
   }
@@ -121,7 +223,7 @@
   .entity-body .section-content { font-size: 14px; line-height: 1.8; color: #ccc; }
   .entity-body .section-content strong { color: #fff; }
 
-  /* Table */
+  /* Project Table */
   .project-table {
     width: 100%;
     border-collapse: collapse;
@@ -142,6 +244,7 @@
     padding: 8px 12px;
     border-bottom: 1px solid #252936;
     color: #ccc;
+    max-width: 350px;
   }
   .project-table tr:hover td { background: #222632; }
   .project-table .price { color: #ffd54f; font-weight: 600; white-space: nowrap; }
@@ -149,58 +252,9 @@
   .project-table .status-active { color: #66bb6a; }
   .project-table .status-ended { color: #ef5350; }
   .project-table .status-pending { color: #ffa726; }
+  .project-table .status-info { color: #4fc3f7; }
 
-  /* Highlight boxes */
-  .highlight {
-    background: #1a1e2e;
-    border-left: 3px solid #ffd54f;
-    padding: 12px 16px;
-    border-radius: 0 8px 8px 0;
-    margin: 12px 0;
-    font-size: 13px;
-    line-height: 1.7;
-    color: #bbb;
-  }
-  .highlight-red { border-left-color: #ef5350; }
-  .highlight-green { border-left-color: #66bb6a; }
-  .highlight-blue { border-left-color: #42a5f5; }
-  .highlight strong { color: #fff; }
-
-  /* Verdict */
-  .verdict {
-    margin-top: 12px;
-    padding: 14px 18px;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.7;
-  }
-  .verdict-danger { background: #1a0f0f; border: 1px solid #5c1a1a; color: #ef9a9a; }
-  .verdict-warning { background: #1a160f; border: 1px solid #5c4a1a; color: #ffe082; }
-  .verdict-info { background: #0f1a2e; border: 1px solid #1a3a5c; color: #90caf9; }
-  .verdict-ok { background: #0f1a0f; border: 1px solid #1a4a1a; color: #a5d6a7; }
-  .verdict .marker { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-  .marker-red { background: #ef5350; }
-  .marker-yellow { background: #ffd54f; }
-  .marker-green { background: #66bb6a; }
-  .marker-blue { background: #42a5f5; }
-
-  /* Tags */
-  .tag {
-    display: inline-block;
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin: 2px 3px;
-  }
-  .tag-signup { background: #1e3a5f; color: #4fc3f7; }
-  .tag-bidding { background: #2e3a1e; color: #66bb6a; }
-  .tag-sale { background: #3a2e1e; color: #ffa726; }
-  .tag-restruct { background: #3a1e2e; color: #ef5350; }
-  .tag-ok { background: #1e2e3a; color: #81d4fa; }
-  .tag-bankrupt { background: #3a1e1e; color: #ef5350; }
-  .tag-state { background: #1e3a2e; color: #66bb6a; }
-  .tag-private { background: #3a2e1e; color: #ffa726; }
-
+  /* Data Grid */
   .data-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -209,50 +263,12 @@
   }
   .data-item {
     background: #22263a;
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-radius: 6px;
     font-size: 13px;
   }
   .data-item .label { color: #888; font-size: 11px; }
   .data-item .value { color: #fff; font-weight: 600; }
-  @media (max-width: 768px) {
-    .data-grid { grid-template-columns: 1fr; }
-    .project-table { font-size: 12px; }
-    .project-table th, .project-table td { padding: 6px 8px; }
-  }
-
-  /* Footer */
-  .footer {
-    text-align: center;
-    padding: 40px 24px;
-    border-top: 1px solid #2a2e3a;
-    margin-top: 40px;
-    color: #666;
-    font-size: 12px;
-  }
-  .footer .disclaimer {
-    max-width: 600px;
-    margin: 12px auto 0;
-    font-size: 11px;
-    color: #555;
-    line-height: 1.6;
-  }
-  .footer a { color: #4fc3f7; text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
-
-  /* Summary table at top */
-  .summary-table {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 28px;
-  }
-  .summary-table h3 { font-size: 15px; color: #4fc3f7; margin-bottom: 12px; }
-  .summary-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .summary-table td { padding: 6px 12px; border-bottom: 1px solid #252936; color: #ccc; }
-  .summary-table td:first-child { color: #999; width: 180px; }
-  .summary-table tr:last-child td { border-bottom: none; }
 
   /* Commentary */
   .commentary {
@@ -279,950 +295,1275 @@
   .commentary-body p { margin-bottom: 8px; }
   .commentary-body p:last-child { margin-bottom: 0; }
   .commentary-body strong { color: #e0f7fa; }
+
+  /* Highlight */
+  .highlight {
+    background: #1a1e2e;
+    border-left: 3px solid #ffd54f;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #bbb;
+  }
+  .highlight-blue { border-left-color: #42a5f5; }
+  .highlight-green { border-left-color: #66bb6a; }
+  .highlight-red { border-left-color: #ef5350; }
+  .highlight strong { color: #fff; }
+
+  /* Verdict */
+  .verdict {
+    margin-top: 12px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .verdict-info { background: #0f1a2e; border: 1px solid #1a3a5c; color: #90caf9; }
+  .verdict-warning { background: #1a160f; border: 1px solid #5c4a1a; color: #ffe082; }
+  .verdict-ok { background: #0f1a0f; border: 1px solid #1a4a1a; color: #a5d6a7; }
+
+  /* Chart bars */
+  .chart-bar-container {
+    margin: 8px 0;
+  }
+  .chart-bar-row {
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+    font-size: 12px;
+  }
+  .chart-bar-label {
+    width: 100px;
+    text-align: right;
+    padding-right: 10px;
+    color: #999;
+    flex-shrink: 0;
+  }
+  .chart-bar-track {
+    flex: 1;
+    height: 22px;
+    background: #22263a;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .chart-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    font-size: 11px;
+    color: #fff;
+    font-weight: 600;
+    min-width: 30px;
+  }
+  .chart-bar-fill.blue { background: linear-gradient(90deg, #1a3a5f, #4fc3f7); }
+  .chart-bar-fill.green { background: linear-gradient(90deg, #1a3a2e, #66bb6a); }
+  .chart-bar-fill.orange { background: linear-gradient(90deg, #3a2e1e, #ffa726); }
+  .chart-bar-fill.purple { background: linear-gradient(90deg, #2e1e3a, #ce93d8); }
+  .chart-bar-fill.red { background: linear-gradient(90deg, #3a1e1e, #ef5350); }
+  .chart-bar-fill.teal { background: linear-gradient(90deg, #0d2e3a, #4dd0e1); }
+
+  /* Filter Bar */
+  .filter-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  .filter-bar label {
+    font-size: 12px;
+    color: #888;
+    margin-right: 4px;
+  }
+  .filter-bar select, .filter-bar input {
+    background: #22263a;
+    border: 1px solid #2a2e3a;
+    color: #ccc;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+  }
+  .filter-bar select:focus, .filter-bar input:focus {
+    border-color: #4fc3f7;
+  }
+  .filter-bar .filter-count {
+    font-size: 12px;
+    color: #4fc3f7;
+    margin-left: auto;
+  }
+
+  /* Interactive Table */
+  .interactive-table-wrap {
+    overflow-x: auto;
+    margin: 12px 0;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .interactive-table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .interactive-table-wrap th {
+    position: sticky;
+    top: 0;
+    text-align: left;
+    padding: 8px 10px;
+    background: #22263a;
+    color: #999;
+    font-size: 11px;
+    border-bottom: 1px solid #2a2e3a;
+    z-index: 1;
+  }
+  .interactive-table-wrap td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #252936;
+    color: #ccc;
+  }
+  .interactive-table-wrap tr:hover td { background: #222632; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid #2a2e3a;
+    margin-top: 40px;
+    color: #666;
+    font-size: 12px;
+  }
+  .footer .disclaimer {
+    max-width: 700px;
+    margin: 12px auto 0;
+    font-size: 11px;
+    color: #555;
+    line-height: 1.6;
+  }
+  .footer a { color: #4fc3f7; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .data-grid { grid-template-columns: 1fr; }
+    .project-table { font-size: 12px; }
+    .project-table th, .project-table td { padding: 6px 8px; }
+    .chart-bar-label { width: 70px; font-size: 11px; }
+    .header h1 { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
 
+<!-- ========== HEADER ========== -->
 <div class="header">
-  <h1>全国产权交易市场 · 资产深度调查报告</h1>
-  <div class="subtitle">山东产权交易中心（532项）+ 海南产权交易所（79项）共611个项目合并 | 按实体类型跨省分组</div>
-  <div>
+  <h1>🏛 全国产权交易资产挂牌深度调查</h1>
+  <div class="subtitle">
+    覆盖全国10大产权交易平台 · 61,606条挂牌项目全量数据穿透式分析<br>
+    以资产管理人/投资分析视角，逐平台梳理资产特征、价格分布与投资价值
+  </div>
+  <div class="badge-group">
     <span class="badge">全量覆盖</span>
-    <span class="badge badge-green">611个项目</span>
-    <span class="badge badge-orange">80+企业/机构</span>
-    <span class="badge">跨省合并分析</span>
+    <span class="badge badge-green">61,606个项目</span>
+    <span class="badge badge-orange">10个交易平台</span>
+    <span class="badge badge-purple">覆盖30+省份</span>
+    <span class="badge badge-teal">2026年8月数据</span>
   </div>
 </div>
 
+<!-- ========== STATS OVERVIEW ========== -->
 <div class="stats-grid">
   <div class="stat-card">
-    <div class="num">611</div>
-    <div class="lbl">挂牌项目总数</div>
+    <div class="num">61,606</div>
+    <div class="lbl">总挂牌项目数</div>
   </div>
   <div class="stat-card">
-    <div class="num green">80+</div>
-    <div class="lbl">覆盖实体/机构</div>
+    <div class="num green">10</div>
+    <div class="lbl">覆盖交易平台</div>
   </div>
   <div class="stat-card">
-    <div class="num orange">≈13.8亿</div>
-    <div class="lbl">资产总值（估算）</div>
+    <div class="num orange">30+</div>
+    <div class="lbl">覆盖省份</div>
   </div>
   <div class="stat-card">
-    <div class="num purple">10章</div>
-    <div class="lbl">跨省分组分析</div>
+    <div class="num teal">51,515</div>
+    <div class="lbl">内蒙古最多</div>
+  </div>
+  <div class="stat-card">
+    <div class="num yellow">83.6%</div>
+    <div class="lbl">内蒙古占比</div>
   </div>
 </div>
 
 <div class="container">
 
+<!-- ========== SOURCE SUMMARY TABLE ========== -->
+<h2 class="section-title">📊 各交易所数据来源汇总</h2>
 <div class="summary-table">
-  <h3>📋 调查报告目录</h3>
+  <h3>🔍 数据来源一览</h3>
   <table>
-    <tr><td>第一章 中国央企资产处置集群</td><td>中国石化/重汽/印钞造币/中国外运/中国铁塔/华能/中石油/国家电投 · 跨省合并</td></tr>
-    <tr><td>第二章 金融机构资产清理</td><td>中国银行/中信银行/鲁西融资租赁/农商行股权 · 跨省合并</td></tr>
-    <tr><td>第三章 地方国企批量盘活</td><td>烟台业达/鲁地矿业/山东烟草/东岳能源/鲁银投资/海纳川/实成/国金汽车</td></tr>
-    <tr><td>第四章 海南自贸港国企资产处置</td><td>洋浦控股/桂林洋房地产/海口城投/海汽集团/桂林洋投资</td></tr>
-    <tr><td>第五章 批量住宅/房产处置</td><td>齐鲁石化/鲁地矿业/青春东岸/华森印务/山东烟草/烟台国企/日照港 · 跨省合并</td></tr>
-    <tr><td>第六章 工业设备/产线升级</td><td>重汽/海纳川/鲁银投资/东岳能源/华森印务 · 跨省合并</td></tr>
-    <tr><td>第七章 车辆批量处置</td><td>国金汽车/海南车辆/山东车辆/约翰迪尔/海南航程客船 · 跨省合并</td></tr>
-    <tr><td>第八章 股权/债权/特殊资产</td><td>合丰置业债权/海南商报股权/紫砂壶/排污权/茅台酒/三沙天能/农商行股权 · 跨省合并</td></tr>
-    <tr><td>第九章 土地/经营权/租赁</td><td>洋浦工业用地/莱芜集体资产/中石油加油站/姚家岭创业大厦/鲁商常春藤/海口商铺/金融中心/三亚步行街 · 跨省合并</td></tr>
-    <tr><td>第十章 跨省/跨境特色资产</td><td>天津外运天津房产/中国外运贵阳房产/鲁地矿业福建漳州/中石油加油站 · 跨省特色</td></tr>
-    <tr><td>第十一章 全国视角综合分析</td><td>跨省关联·各省对比·综合投资价值评级</td></tr>
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>交易所名称</th>
+        <th>数据量</th>
+        <th>占比</th>
+        <th>主要资产类型</th>
+        <th>数据质量评级</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>内蒙古产权交易市场</strong></td>
+        <td>51,515条</td>
+        <td>83.6%</td>
+        <td>能源矿产、工业设备、农牧业、房地产</td>
+        <td class="rating-A">⭐⭐⭐⭐ A级</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>大连产权交易所</strong></td>
+        <td>6,780条</td>
+        <td>11.0%</td>
+        <td>增资扩股、破产清算、资产出租</td>
+        <td class="rating-B">⭐⭐⭐⭐ B级</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>浙江产权交易所</strong></td>
+        <td>1,047条</td>
+        <td>1.7%</td>
+        <td>房产转让、商铺出租、资产转让</td>
+        <td class="rating-A">⭐⭐⭐⭐ A级</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>深圳联合产权交易网</strong></td>
+        <td>900条</td>
+        <td>1.5%</td>
+        <td>深圳房产、物业转让、意向征集</td>
+        <td class="rating-C">⭐⭐⭐ C级</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>山东产权交易中心</strong></td>
+        <td>532条</td>
+        <td>0.9%</td>
+        <td>工业设备、车辆、房产、债权</td>
+        <td class="rating-A">⭐⭐⭐⭐ A级</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>安徽农村综合产权交易网</strong></td>
+        <td>315条</td>
+        <td>0.5%</td>
+        <td>土地经营权、茶园、林权、农村产权</td>
+        <td class="rating-B">⭐⭐⭐⭐ B级</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>重庆联合产权交易所</strong></td>
+        <td>200条</td>
+        <td>0.3%</td>
+        <td>房产招租、股权转让、资产转让</td>
+        <td class="rating-B">⭐⭐⭐⭐ B级</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><strong>湖南联合产权交易所</strong></td>
+        <td>196条</td>
+        <td>0.3%</td>
+        <td>T3航站楼商业场地、办公楼物业、车位</td>
+        <td class="rating-A">⭐⭐⭐⭐ A级</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><strong>广东联合产权交易中心</strong></td>
+        <td>117条</td>
+        <td>0.2%</td>
+        <td>股权转让、企业产权</td>
+        <td class="rating-A">⭐⭐⭐⭐ A级</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><strong>海南产权交易所</strong></td>
+        <td>4条</td>
+        <td>&lt;0.1%</td>
+        <td>工业用地、房产、危房、设备</td>
+        <td class="rating-A">⭐⭐⭐⭐ A级</td>
+      </tr>
+    </tbody>
   </table>
 </div>
 
-<!-- ======================================================================== -->
-<!-- 第一章：中国央企资产处置集群 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 1: 内蒙古 ========== -->
+<h2 class="section-title">一、内蒙古产权交易市场 <span class="num-badge">51,515条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第一章</span>
-    <h2>中国央企资产处置集群</h2>
-    <div class="entity-sub">中国石化、中国重汽、中国印钞造币、中国外运、中国铁塔、华能、中石油、国家电投 · 跨省合并 · 央企非主业资产剥离+设备更新+废旧物资处置</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 集群概述</div>
-    <div class="section-content">
-      本章将山东产权交易中心和海南产权交易所挂牌的央企资产合并分析，覆盖8家央企集团。央企资产处置是两大产权交易平台的核心业务之一，体现了<strong>国务院国资委推动央企剥离非主业资产、聚焦主责主业</strong>的政策导向。从资产类型看，涵盖住宅房产、工业设备、废旧物资、加油站使用权等多种形态。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 数据量最大的平台</span>
+      <h2>内蒙古产权交易市场</h2>
+      <div class="entity-sub">51,515条项目 · 占全国总量的83.6% · 覆盖内蒙古全境12个盟市</div>
     </div>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>内蒙古产权交易市场以<strong>51,515条</strong>项目占据全国产权交易的绝对主力地位，数据量远超其他9个平台的总和。这反映出内蒙古作为国家能源基地和资源型经济区的特殊地位——大量的矿业权、工业设备和土地资产通过产权市场流转。</p>
+      </div>
 
-    <div class="section-label">▎ 1.1 中国石化齐鲁石化分公司（山东）</div>
-    <div class="section-content">
-      <strong>中国石油化工股份有限公司齐鲁石化分公司</strong>是中国石化（600028.SH）在山东的炼化一体化基地，位于淄博市临淄区。本次处置52套闲置公有住房，单价36万-77万元/套，面积约60-120㎡，折算单价约6000-6500元/㎡，低于临淄区二手房均价约10%-20%，属于央企"三供一业"分离移交的延续。
-    </div>
-    <div class="highlight highlight-blue">
-      <strong>关键发现：</strong>52套住房单价36万-77万元/套，存在约10%-20%的折价空间。央企"三供一业"分离移交自2016年推进，齐鲁石化2026年仍在处置，说明历史遗留问题拖延已久。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>临淄区生活区公有住房（1-10套）</td><td class="price">36万-50万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>临淄区生活区公有住房（11-30套）</td><td class="price">45万-60万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>临淄区生活区公有住房（31-52套）</td><td class="price">55万-77万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
+      <div class="section-label">📊 价格分布</div>
+      <div class="chart-bar-container">
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">面议/未知</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill orange" style="width:8.1%">4,196</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">&lt;1万元</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill purple" style="width:24.8%">12,780</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">1万~10万</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill blue" style="width:32.3%">16,655</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">10万~100万</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill green" style="width:22.8%">11,755</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">100万~1000万</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill teal" style="width:8.4%">4,318</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">1000万~1亿</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill yellow" style="width:2.7%">1,404</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">&gt;1亿元</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill red" style="width:0.8%">407</div></div>
+        </div>
+      </div>
 
-    <div class="section-label">▎ 1.2 中国重汽集团济南动力有限公司（山东）</div>
-    <div class="section-content">
-      <strong>中国重汽集团济南动力有限公司</strong>是中国重型汽车集团有限公司（000951.SZ）的核心子公司，隶属于山东重工集团。本次处置9条产线，总价约1,200万元，包括发动机缸体线、曲轴加工线等，均为旧型号发动机生产设备，属于产能升级中的设备更新。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>发动机缸体加工线设备包</td><td class="price">约150万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>曲轴加工线设备包</td><td class="price">约150万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>缸盖加工线设备包</td><td class="price">约140万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>连杆加工线设备包</td><td class="price">约130万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>凸轮轴加工线设备包</td><td class="price">约130万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>装配线、测试线、热处理线、辅助设备包</td><td class="price">约110-150万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
+      <div class="section-label">📊 状态分布</div>
+      <div class="data-grid">
+        <div class="data-item"><div class="label">已成交</div><div class="value" style="color:#66bb6a">24,577</div></div>
+        <div class="data-item"><div class="label">竞价已结束</div><div class="value" style="color:#4fc3f7">13,025</div></div>
+        <div class="data-item"><div class="label">已重新挂牌</div><div class="value" style="color:#ffa726">8,662</div></div>
+        <div class="data-item"><div class="label">详见公告</div><div class="value" style="color:#ce93d8">1,749</div></div>
+        <div class="data-item"><div class="label">终结</div><div class="value" style="color:#ef5350">1,511</div></div>
+        <div class="data-item"><div class="label">报名中/竞价中</div><div class="value" style="color:#4dd0e1">581</div></div>
+        <div class="data-item"><div class="label">中止/未开始</div><div class="value" style="color:#888">60</div></div>
+      </div>
 
-    <div class="section-label">▎ 1.3 中国印钞造币集团·海南华森印务（海南）</div>
-    <div class="section-content">
-      <strong>海南华森印务有限公司</strong>由中钞华森实业有限公司持股80%（中国印钞造币集团旗下），疑似实际控制人为中国人民银行。本次全面退出传统印刷业务——13套万银花园住宅（40-68万/套）+ 23台印刷设备（13.86万元）+ 已成交的6台车辆和121台机器设备。这是中国印钞造币集团在海南的实体业务全面退出，而非单纯的资产处置。
+      <div class="section-label">🏆 重点高价值项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>地区</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>呼和浩特市金川开发区金海路北自由里住宅小区S1号商业房产转让</td><td class="price">83.28亿元</td><td>呼和浩特市</td><td class="status status-info">报名中</td></tr>
+          <tr><td>内蒙古蒙能新能源股份有限公司344,949.5万股股份（25%股权）</td><td class="price">76.25亿元</td><td>呼和浩特</td><td class="status status-info">报名中</td></tr>
+          <tr><td>内蒙古矿业（集团）有限责任公司增资项目</td><td class="price">39.62亿元</td><td>呼和浩特</td><td class="status status-info">报名中</td></tr>
+          <tr><td>内蒙古苏布尔嘎煤炭开发有限责任公司51%国有股权转让</td><td class="price">37.78亿元</td><td>巴彦淖尔</td><td class="status status-info">报名中</td></tr>
+          <tr><td>内蒙古能源发电投资集团相关资产</td><td class="price">数亿元</td><td>全区</td><td class="status status-info">报名中</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="highlight highlight-red">
-      <strong>核心判断：</strong>票据电子化不可逆转——增值税专用发票电子化覆盖率已达99.4%，传统印刷行业正在经历结构性衰退。中国印钞造币集团在海南的实体业务全面退出，13套房产是最后一批待处置资产。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>海南</td><td>万银花园A幢204房（65.55㎡）</td><td class="price">约45万元</td><td><span class="status status-pending">延期挂牌</span></td></tr>
-      <tr><td>海南</td><td>万银花园A幢304-1004等多套住宅</td><td class="price">约45-68万元/套</td><td><span class="status status-pending">延期挂牌</span></td></tr>
-      <tr><td>海南</td><td>万银花园B幢204房、702房</td><td class="price">约45万元/套</td><td><span class="status status-pending">延期挂牌</span></td></tr>
-      <tr><td>海南</td><td>23台印刷设备</td><td class="price">13.86万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 1.4 中国外运/天津外运（跨省：海南挂牌）</div>
-    <div class="section-content">
-      <strong>天津外运有限公司</strong>是中国外运股份有限公司（招商局集团旗下）的子公司。中国外运体系选择海南产权交易所作为资产处置平台，利用海南自贸港政策优势进行跨区域资产处置。天津和贵阳的房产在海南挂牌，说明海南产权交易所具备跨区域央企资产交易资质。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>天津（海南挂牌）</td><td>天津市河东区萦东温泉花园8-底商3房产</td><td class="price">约294.5万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
-      <tr><td>天津（海南挂牌）</td><td>天津市河东区萦东温泉花园另一套</td><td class="price">约230万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
-      <tr><td>天津（海南挂牌）</td><td>天津市塘沽区新港六米房产和土地</td><td class="price">261.75万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
-      <tr><td>贵州（海南挂牌）</td><td>贵阳市智诚大厦A栋9层1号房产</td><td class="price">约290万元</td><td><span class="status status-pending">已挂牌</span></td></tr>
-      <tr><td>贵州（海南挂牌）</td><td>贵阳市智诚大厦A栋10层1号房产</td><td class="price">约290万元</td><td><span class="status status-pending">已挂牌</span></td></tr>
-      <tr><td>贵州（海南挂牌）</td><td>贵阳市智诚大厦A栋11层1号房产</td><td class="price">约316万元</td><td><span class="status status-pending">已挂牌</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 1.5 中国铁塔（山东+海南）</div>
-    <div class="section-content">
-      <strong>中国铁塔股份有限公司</strong>作为通信基础设施运营商，废旧物资处置属于常规业务。5G基站建设加速后，老旧设备更新换代，产生大量锂电池、空调、钢材等报废物资。山东和海南两地同步进行废旧物资处置，反映了中国铁塔全国范围内的资产更新趋势。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>中国铁塔山东省分公司废旧物资</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>儋州市分公司2026年第一批废旧物资</td><td class="price">3.46万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>文昌市分公司电池、钢材等报废资产</td><td class="price">4.18万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>澄迈县分公司锂电池、空调等报废物资</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>陵水县废旧物资一批</td><td class="price">见正文</td><td><span class="status status-pending">挂牌截止</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 1.6 华能威海发电有限责任公司（山东）</div>
-    <div class="section-content">
-      <strong>华能威海发电有限责任公司</strong>是中国华能集团有限公司（华能国际，600011.SH）旗下发电企业。8套房产分布威海和秦皇岛，但已全部<strong>已终止交易</strong>，可能因内部决策变化或产权问题导致。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>威海房产（5套）</td><td class="price">36万-95万元</td><td><span class="status status-ended">已终止</span></td></tr>
-      <tr><td>河北（山东挂牌）</td><td>秦皇岛房产（3套）</td><td class="price">100万-129万元</td><td><span class="status status-ended">已终止</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 1.7 中石油加油站（山东）</div>
-    <div class="section-content">
-      <strong>中国石油天然气股份有限公司</strong>在山东挂牌2项加油站使用权，属于央企非主业资产剥离范畴。加油站使用权资产具有稳定的现金流回报，是产权交易市场中的优质资产。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>中石油加油站使用权（一）</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>中石油加油站使用权（二）</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 1.8 国家电投蒙东能源（山东1项通辽办公大楼3.94亿）</div>
-    <div class="section-content">
-      <strong>国家电投蒙东能源集团有限责任公司</strong>是国家电力投资集团旗下企业。在山东产权交易中心挂牌通辽办公大楼资产，挂牌价3.94亿元，是本次调查中单体金额最大的资产项目之一。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>内蒙古（山东挂牌）</td><td>通辽办公大楼</td><td class="price">3.94亿元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>央企集群投资价值评估：整体中等风险</strong><br>
-      央企资产处置的核心优势是产权清晰、交易规范。齐鲁石化52套住房折价率10-20%，投资价值较高；中国重汽9条产线专业性强，适合二手设备贸易商；华森印务全面退出需关注职工宿舍清退问题；中国外运跨省资产在海南挂牌，需关注"再次挂牌"背后的价格合理性。中国铁塔废旧物资适合有回收资质的企业。华能威海8套已终止，暂不建议。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>内蒙古产权交易市场以51,515条项目占据全国83.6%的份额，是本次调查中体量最大的单一数据源。</strong></p>
+        <p>从资产结构看，内蒙古呈现出典型的<strong>资源型经济</strong>特征：能源矿产类资产（煤炭、电力、化工）占据主导地位，大量工业设备、报废资产和闲置固定资产通过产权市场流转。价格分布上，1万~10万元区间占比最高（32.3%），说明大量小额资产（如二手设备、车辆、农牧物资）正在活跃交易。</p>
+        <p>值得注意的是，已成交项目达24,577条（47.7%），反映出内蒙古产权市场的<strong>流动性较好</strong>。但1000万以上的大型项目仅占3.5%，说明超大型资产交易比例不高，市场以中小额资产流转为主。</p>
+        <p>从地理分布看，呼和浩特、包头、鄂尔多斯三个核心城市群贡献了最多的项目量，体现了内蒙古<strong>呼包鄂经济圈</strong>的核心地位。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>跨省关联核心发现：</strong>央企资产处置是两大产权交易平台的共同核心业务。山东产权交易中心以规模见长（齐鲁石化52套、重汽9条产线），海南产权交易所则以跨省特色见长（中国外运天津/贵阳房产在海南挂牌）。中国铁塔在山东和海南同步进行废旧物资处置，展示了央企全国范围内的资产更新节奏。</p>
-    <p><strong>深层逻辑：</strong>央企资产处置呈现三大趋势：(1) 非主业资产剥离——齐鲁石化"三供一业"、华森印务全面退出；(2) 产能升级设备更新——重汽9条产线、华森印务23台设备；(3) 废旧物资标准化处置——中国铁塔全国各分公司批量报废。三大趋势共同构成了央企资产处置的完整图谱。</p>
-    <p><strong>投资建议：</strong>齐鲁石化52套住房（★★★☆☆，折价10-20%）和华森印务13套住宅（★★★☆☆，40-68万/套）是央企集群中投资价值最高的项目。中国外运天津/贵阳房产需关注再次挂牌原因。国家电投通辽办公大楼3.94亿体量巨大，仅适合机构投资者。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第二章：金融机构资产清理 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 2: 大连 ========== -->
+<h2 class="section-title">二、大连产权交易所 <span class="num-badge">6,780条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第二章</span>
-    <h2>金融机构资产清理</h2>
-    <div class="entity-sub">中国银行山东+海南合并 · 中信银行 · 鲁西融资租赁 · 农商行股权 · 跨省合并</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 2.1 中国银行（山东青岛即墨3项+海南三亚1项=共4项）</div>
-    <div class="section-content">
-      <strong>中国银行股份有限公司</strong>（601988.SH/3988.HK）是四大国有商业银行之一。在山东产权交易中心挂牌3处青岛即墨区房产，在海南产权交易所挂牌1处三亚解放路原新华支行营业用房（危房）。两省资产同步处置，反映了中国银行全国范围内的固定资产清理战略。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 东北地区最大产权交易平台</span>
+      <h2>大连产权交易所</h2>
+      <div class="entity-sub">6,780条项目 · 占全国11.0% · 聚焦东北地区资产处置</div>
     </div>
-    <div class="data-grid">
-      <div class="data-item"><span class="label">山东资产</span><div class="value">青岛即墨区3处房产</div></div>
-      <div class="data-item"><span class="label">海南资产</span><div class="value">三亚解放路危房725.77㎡</div></div>
-      <div class="data-item"><span class="label">海南危房状态</span><div class="value">Cu+Du级危房（已到期）</div></div>
-      <div class="data-item"><span class="label">海南危房价格</span><div class="value">2,212.58万元</div></div>
-    </div>
-    <div class="highlight highlight-red">
-      <strong>关键发现：</strong>三亚分行原新华支行营业用房经鉴定为Cu+Du级危房（部分承重结构承载力不能满足正常使用要求+房屋整体出现险情），单价3.05万/㎡看似在三亚核心区有竞争力，但加上拆除重建费用，实际成本远超市场价。该房产已多次挂牌未成交。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>中国银行青岛即墨区房产一</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>中国银行青岛即墨区房产二</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>中国银行青岛即墨区房产三</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>三亚市解放路原新华支行营业用房（725.77㎡）</td><td class="price">2,212.58万元</td><td><span class="status status-ended">已到期</span></td></tr>
-    </table>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>大连产权交易所是东北地区规模最大的产权交易平台，项目涵盖<strong>增资扩股、破产清算、资产出租、股权转让</strong>等多种类型。数据中包含了大量「国泰测试」类测试数据，以及诸多东北地区企业破产清算和资产处置项目。</p>
+      </div>
 
-    <div class="section-label">▎ 2.2 中信银行青岛分行（山东3项）</div>
-    <div class="section-content">
-      <strong>中信银行股份有限公司青岛分行</strong>是中国中信集团旗下全国性股份制商业银行。本次处置3处位于青岛市即墨区的房产，属于银行闲置固定资产清理，是商业银行优化网点布局、降本增效的常规操作。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>即墨区房产一</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>即墨区房产二</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>即墨区房产三</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
+      <div class="section-label">🏆 重点高价值项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>地区</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>大连现代海洋牧场示范项目资产出租项目</td><td class="price">22,190,200万元/年</td><td>大连</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>中国石油辽宁销售公司大连大厦部分房地产整体出租</td><td class="price">14,161,100万元/年</td><td>大连</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>大连四八二一船务有限公司2号码头配套设施出租</td><td class="price">8,000,000万元/年</td><td>大连</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>盘锦北方沥青燃料等三户企业破产清算财产转让</td><td class="price">575.56亿元</td><td>盘锦</td><td class="status status-info">破产清算</td></tr>
+          <tr><td>辽宁股权交易中心股份有限公司增资项目</td><td class="price">≥6,500万元</td><td>沈阳</td><td class="status status-ended">终结</td></tr>
+        </tbody>
+      </table>
 
-    <div class="section-label">▎ 2.3 山东鲁西融资租赁有限公司（山东1项）</div>
-    <div class="section-content">
-      <strong>山东鲁西融资租赁有限公司</strong>是经山东省地方金融监督管理局批准设立的融资租赁公司。本次处置聊城恒大名都小区98个储藏室整体转让（308万元包），为融资租赁公司通过抵债方式获得的资产。融资租赁公司的主业是金融服务而非房地产经营，处置抵债资产是回归主业、回笼资金的必要操作。
+      <div class="highlight highlight-blue">
+        <strong>⚠ 数据说明：</strong>大连产权交易所的数据中，状态字段以编码形式呈现（如"未知(37)""未知(30)"等），推测为内部状态码未完全映射到中文名称。此外包含部分测试数据，实际有效项目可能略低于6,780条。
+      </div>
     </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>恒大名都98个储藏室整体转让</td><td class="price">308万元（包）</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 2.4 山东惠民/滨州农商行股权（山东3项）</div>
-    <div class="section-content">
-      山东惠民农商行和滨州农商行的股权转让，反映了地方中小银行股权结构优化的趋势。农商行股权流动性较差，但分红收益相对稳定，适合有长期持有意愿的投资者。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>惠民农商行股权</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>滨州农商行股权（2项）</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>金融机构资产清理投资价值评估：整体中等风险</strong><br>
-      中国银行和中信银行的银行资产产权清晰，即墨区作为青岛新城区发展潜力较好。但三亚危房风险极高（Cu+Du级危房意味着重建成本巨大）。鲁西融资租赁98个储藏室涉及恒大债务危机，产权存在不确定性。农商行股权流动性差，适合长期持有。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>大连产权交易所是观察东北经济转型的重要窗口。</strong>6,780条项目中有大量涉及<strong>破产清算、资产重组和增资扩股</strong>，反映了东北地区去产能、国企改革和产业升级的深层次经济结构调整。</p>
+        <p>特别值得关注的是盘锦北方沥青燃料等三户企业的破产清算项目，涉及金额高达575亿元，是本次调查中单体金额最大的项目之一。大量码头、船坞、石化设施的出租和转让，折射出大连及东北沿海地区<strong>传统重工业资产的盘活需求</strong>。</p>
+        <p>此外，大连产权交易所的数据结构较为特殊（状态编码未能完全解析），建议在使用时注意数据清洗和状态映射。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>跨省关联核心发现：</strong>中国银行在山东（青岛即墨3处）和海南（三亚危房1处）同时处置房产，是本次调查中唯一跨省出现的银行。山东方面，即墨区房产价格"待定"，实际数据缺失；海南方面，三亚危房已多次挂牌未成交，单价3.05万/㎡看似合理但重建成本极高。</p>
-    <p><strong>深层逻辑：</strong>2025-2026年，全国商业银行普遍在优化网点布局。中国银行海南省分行2026年有大量招标、拍卖和转让活动，说明海南自贸港封关后，银行在重新评估全省网点布局。中信银行青岛分行处置即墨区房产，也是"网点优化+固定资产清理"的双重逻辑。</p>
-    <p><strong>风险提示：</strong>三亚危房Cu+Du级，拆除重建成本预计3000-5000元/㎡，土地面积仅143.49㎡，容积率受限。建议仅在获得政府危房改造专项规划许可的前提下考虑。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第三章：地方国企批量盘活 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 3: 浙江 ========== -->
+<h2 class="section-title">三、浙江产权交易所 <span class="num-badge">1,047条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第三章</span>
-    <h2>地方国企批量盘活</h2>
-    <div class="entity-sub">烟台业达110+项 · 鲁地矿业97套 · 山东烟草9套 · 东岳能源3项 · 鲁银投资34项 · 海纳川10项 · 实成1项 · 国金汽车228台</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 3.1 烟台业达/黄渤海国企群（山东110+项）</div>
-    <div class="section-content">
-      本组涵盖烟台开发区/黄渤海新区的区属国企：烟台业达国际人才集团、烟台业达城市发展集团、烟台黄渤海建设发展集团、烟台市城市资产运营有限公司。本次集中处置110+项资产，包括88个海韵花园地上车库（6.2万-10万元/个）、八角农贸市场（2,850万元）、青岛铂悦灵犀湾5套公寓（约860万元/套）、芝罘区房产等。<br><br>
-      这是烟台开发区国企<strong>史上最大规模</strong>的存量资产盘活行动之一，反映了烟台开发区城投平台债务压力加大背景下的资金回笼需求。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 长三角民营经济活跃地区</span>
+      <h2>浙江产权交易所</h2>
+      <div class="entity-sub">1,047条项目 · 资产出租930条 · 资产转让117条</div>
     </div>
-    <div class="highlight highlight-blue">
-      <strong>核心发现：</strong>海韵花园88个地上车库单价6.2万-10万元/个，折算单价约3000-5000元/㎡，低于烟台开发区住宅均价，具有较高的性价比。但需注意车库产权能否独立办证。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>海韵花园地上车库（88个）</td><td class="price">6.2万-10万元/个</td><td><span class="status status-active">部分挂牌</span></td></tr>
-      <tr><td>山东</td><td>烟台八角农贸市场206号</td><td class="price">2,850万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>青岛铂悦灵犀湾公寓（5套）</td><td class="price">约860万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>烟台开发区办公房产（3套）</td><td class="price">563-602万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>芝罘区房产（多套）</td><td class="price">55万-101万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>浙江产权交易所的1,047条项目以<strong>资产出租（930条，占88.8%）</strong>为主，主要集中在杭州、宁波、温州、绍兴等城市。项目类型以商铺、办公楼、住宅、仓库等房产租赁为核心，反映出浙江作为民营经济大省，<strong>商业地产流转活跃</strong>的特点。</p>
+      </div>
 
-    <div class="section-label">▎ 3.2 山东鲁地矿业投资有限公司（山东97套福建住宅）</div>
-    <div class="section-content">
-      <strong>山东鲁地矿业投资有限公司</strong>是山东能源集团有限公司的全资子公司（通过山东地矿集团控股）。本次处置福建漳浦万新阳光城二期97套住宅，面积89-93㎡，单价约4100-4300元/㎡，总价38万-41万元/套。这是山东能源集团收购山东地矿集团后承接的省外非主业存量房产，属于聚焦主业的必然要求。
-    </div>
-    <div class="highlight highlight-green">
-      <strong>关键发现：</strong>漳浦县商品房均价约6000-7000元/㎡，本次挂牌单价4100-4300元/㎡，相当于当地市场价的6-7折，是本报告折价率最高的资产之一。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>福建（山东挂牌）</td><td>万新阳光城二期住宅（97套，89-93㎡）</td><td class="price">38万-41万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
+      <div class="section-label">🏆 重点高价值项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>地区</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>杭州市拱墅区体育场路229号（浙江粮油大楼）</td><td class="price">24,831万元</td><td>杭州拱墅</td><td class="status status-active">资产转让</td></tr>
+          <tr><td>舟山市普陀区东港街道902、904号商铺</td><td class="price">3,831万元</td><td>舟山普陀</td><td class="status status-active">资产转让</td></tr>
+          <tr><td>杭州市上城区兰巷60、62号</td><td class="price">2,600万元</td><td>杭州上城</td><td class="status status-active">资产转让</td></tr>
+          <tr><td>宁波市奉化区大成路728号16套房产</td><td class="price">1,960万元</td><td>宁波奉化</td><td class="status status-active">资产转让</td></tr>
+          <tr><td>杭州市拱墅区东清苑C幢501等室</td><td class="price">1,157万元</td><td>杭州拱墅</td><td class="status status-active">资产转让</td></tr>
+        </tbody>
+      </table>
 
-    <div class="section-label">▎ 3.3 山东烟草投资管理有限公司（山东9套住宅）</div>
-    <div class="section-content">
-      <strong>山东烟草投资管理有限公司</strong>是中国烟草总公司山东省公司的全资子公司。9套住宅位于济南市北院、闵子骞路等地，价格32万-331万元，属于烟草系统非主业资产清理。2025年国家烟草专卖局发文要求全系统清理非主业资产。
+      <div class="section-label">📊 资产类型分布</div>
+      <div class="data-grid">
+        <div class="data-item"><div class="label">资产出租</div><div class="value" style="color:#4fc3f7">930条 (88.8%)</div></div>
+        <div class="data-item"><div class="label">资产转让</div><div class="value" style="color:#ffa726">117条 (11.2%)</div></div>
+      </div>
     </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>济南市北院住宅（2套）</td><td class="price">32万-45万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>济南市闵子骞路住宅（3套）</td><td class="price">80万-150万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>济南市其他住宅（4套）</td><td class="price">180万-331万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 3.4 山东东岳能源有限公司（山东3项平铝厂区）</div>
-    <div class="section-content">
-      <strong>山东东岳能源有限公司</strong>是肥城矿业集团的全资子公司，最终隶属于山东能源集团。本次处置平阴铝厂（平铝）资产，包括三种形式：13000㎡土地5年使用权（25万/年）、22140㎡冷轧厂区5年使用权（49万/年）、126899㎡土地+房屋整体转让（4326.71万），体现了"一地一策"的盘活思路。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>平铝13000㎡土地5年使用权</td><td class="price">25万/年</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>平铝22140㎡冷轧厂区5年使用权</td><td class="price">49万/年</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>平铝126899㎡土地+房屋整体转让</td><td class="price">4,326.71万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 3.5 鲁银投资/山东岱岳制盐有限公司（山东34项闲置设备）</div>
-    <div class="section-content">
-      <strong>鲁银投资集团股份有限公司</strong>（600784.SH）是山东省国投控股的上市公司。山东岱岳制盐有限公司2026年刚获评"山东省先进级智能工厂"，新工厂投产后旧产线被整体淘汰，34项闲置资产打包处置，总价438.03万元。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>闲置资产包（制盐车间+设备，34项）</td><td class="price">438.03万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 3.6 海纳川（滨州）轻量化汽车部件有限公司（山东10项设备）</div>
-    <div class="section-content">
-      <strong>海纳川（滨州）轻量化汽车部件有限公司</strong>是渤海汽车系统股份有限公司（600960.SH）的全资子公司，最终控制方为北京国有资本运营管理有限公司。注册资本已从5亿元减至1.86亿元，10套铸造设备（倾转重力铸造单元等）合计426.73万元，为2016年购入的闲置设备。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>倾转重力铸造单元等10套设备</td><td class="price">426.73万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 3.7 山东实成精细高分子材料有限公司（山东1项清算资产）</div>
-    <div class="section-content">
-      <strong>山东实成精细高分子材料有限公司</strong>是山东华特控股集团的全资子公司，最终隶属于山东省国投。公司已处于清算注销状态，仅剩1名员工。本次处置存货+固定资产（精密逗号刮刀涂布线、反应釜等化工设备），总价53.5万元。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>存货+固定资产（化工设备）</td><td class="price">53.5万元</td><td><span class="status status-active">清算挂牌</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 3.8 国金汽车228台（山东1项）</div>
-    <div class="section-content">
-      <strong>淄博齐达资产运营有限公司</strong>是淄博高新区国资体系的资产运营平台。本次处置228台国金汽车牌电动轿车（底价456万元，均价2万元/台），原为苏州网约车公司车辆。此前同批次225台已溢价7.1%成交（481.95万元），显示市场认可度较高。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>国金汽车牌电动轿车228台整体转让</td><td class="price">456万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>地方国企批量盘活投资价值评估：整体中等风险</strong><br>
-      烟台业达110+项中，海韵花园车库性价比高（★★★☆☆）；鲁地矿业97套福建住宅折价率6-7折，价格优势显著（★★★☆☆）；山东烟草9套济南住宅产权清晰（★★★☆☆）；东岳能源平铝厂区适合工业用地需求的投资者；鲁银投资34项设备适合制盐行业买家；海纳川设备关注减资风险；实成清算资产总价低；国金汽车228台有历史成交参考（★★★☆☆）。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>浙江产权交易所的项目结构鲜明体现了长三角民营经济特色。</strong>近90%的项目为资产出租，大量涉及杭州、宁波、温州等核心城市的商铺、办公楼、住宅租赁，这与浙江活跃的民营经济和商业地产市场高度相关。</p>
+        <p>与内蒙古等资源型地区不同，浙江的产权交易更像是一个<strong>商业地产流转的补充渠道</strong>——高校周边商铺、社区配套用房、写字楼单元等高频租赁资产占比较高。转让类项目则集中在杭州核心地段的高价值物业，如体育场路粮油大楼（2.48亿元），反映了杭州作为新一线城市的<strong>核心资产价值坚挺</strong>。</p>
+        <p>浙江的项目数据质量较高，字段完整，状态清晰，是本次调查中数据质量最好的平台之一。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>核心发现：</strong>山东地方国企的批量资产盘活是本次调查中项目数量最多的类别。烟台业达110+项（含88个车库）是本报告项目数最多的实体群。鲁地矿业97套福建住宅折价率6-7折，是本报告折价率最高的资产之一。但需注意，烟台开发区城投平台债务压力加大，业达系国企密集卖资产回笼资金。</p>
-    <p><strong>深层逻辑：</strong>山东能源集团（鲁地矿业母公司）2025年营收超8000亿，但清理省外非主业资产的决心很大。海纳川注册资本从5亿减至1.86亿（减资62.8%），北汽集团2025年亏损超50亿，旗下零部件企业必然收缩。鲁银投资新智能工厂投产，旧产线出清是正常的技术升级行为。</p>
-    <p><strong>投资建议：</strong>鲁地矿业97套福建住宅（★★★★☆，折价6-7折）和国金汽车228台（★★★★☆，有历史成交参考）是本组中投资价值最高的项目。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第四章：海南自贸港国企资产处置 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 4: 深圳 ========== -->
+<h2 class="section-title">四、深圳联合产权交易网 <span class="num-badge">900条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第四章</span>
-    <h2>海南自贸港国企资产处置</h2>
-    <div class="entity-sub">洋浦控股 · 桂林洋房地产 · 海口城投 · 海汽集团 · 桂林洋投资 · 海南自贸港封关后国企资产盘活</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 4.1 洋浦开发建设控股有限公司（海南1项307亩工业用地1.1亿）</div>
-    <div class="section-content">
-      <strong>海南省洋浦开发建设控股有限公司</strong>是洋浦经济开发区管委会100%持股的国有独资企业，总资产超130亿元，主体信用评级AA+。本次转让洋浦经济开发区南片区E-02-04地块307.95亩工业用地，价格11,080万元（折合约36万/亩）。<br><br>
-      该地块捆绑了严格的产业招商要求——年产1.3万吨以上槟榔深加工、固投11.57亿元、5年产值大于76亿元、5年纳税大于4.62亿元，本质上是一个定向产业招商项目。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 大湾区金融资产</span>
+      <h2>深圳联合产权交易网</h2>
+      <div class="entity-sub">900条项目 · 深圳房产/物业转让 · 意向征集为主</div>
     </div>
-    <div class="highlight highlight-red">
-      <strong>关键约束：</strong>洋浦不是缺钱卖地，而是"以地选商"。地价36万/亩在洋浦有竞争力，但产业门槛极高——固投11.57亿+5年产值76亿，排除了绝大多数投资者。此外，槟榔已被列为一级致癌物，健康政策风险不可忽视。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>海南</td><td>洋浦经济开发区307.95亩工业用地</td><td class="price">11,080万元</td><td><span class="status status-pending">待竞价</span></td></tr>
-    </table>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>深圳联合产权交易网的900条项目全部为<strong>挂牌中</strong>状态，以深圳本地房产、物业转让和意向征集为主。项目涉及福田、南山、罗湖、宝安、龙华等核心区域，包含住宅、商铺、写字楼、仓库等多种物业类型。</p>
+      </div>
 
-    <div class="section-label">▎ 4.2 桂林洋房地产总公司（海南1项161套住宅7516元/㎡）</div>
-    <div class="section-content">
-      <strong>海南省桂林洋房地产开发总公司</strong>由海口桂林洋投资发展控股有限公司100%持股，最终实际控制人为海口市国资委。青春东岸（桂林洋教师村）项目2015年建成，本次整体出售161套住宅，单价7516元/㎡，低于该项目二手房均价9157元/㎡约18%，低于备案均价15999元/㎡约53%，是海口市场化住宅产品中万平米规模以上的最低价。
-    </div>
-    <div class="highlight highlight-green">
-      <strong>关键发现：</strong>7516元/㎡——比安居房还便宜约300元/㎡！2025年青春东岸曾推出8800元/㎡的特价房，此次7516元/㎡是再下调约15%，说明企业回笼资金需求迫切。但项目已到期（2026-06-03），161套整体打包可能没有找到合适的买家。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>海南</td><td>青春东岸161套住宅整体出售（49-122㎡）</td><td class="price">7,516元/㎡</td><td><span class="status status-ended">已到期</span></td></tr>
-    </table>
+      <div class="section-label">🏆 重点项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>地区</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>深圳市南山区科技园38区别墅C1栋整栋</td><td class="price">面议</td><td>南山</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>深圳地王公寓、鹏兴花园幼儿园、八卦岭511栋等物业转让</td><td class="price">面议</td><td>深圳</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>福田区安托山花园(二期)多套房产</td><td class="price">面议</td><td>福田</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>深圳市罗湖区文锦路深业大厦10套房产</td><td class="price">面议</td><td>罗湖</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>笋岗仓库综合楼丙栋101-525</td><td class="price">面议</td><td>罗湖</td><td class="status status-info">挂牌中</td></tr>
+        </tbody>
+      </table>
 
-    <div class="section-label">▎ 4.3 海口市城市建设投资集团（海南48间商铺招租）</div>
-    <div class="section-content">
-      <strong>海口市城市建设投资集团有限公司</strong>是海口市属国有独资企业。本次大规模释放48间商铺招租，分布在五源河公寓、永秀花园、凤翔花园、滨江花园、蓝城印象、上东城等6个小区。2026年7-8月，五源河公寓三期H区商业楼27间商铺已摘牌成交，说明市场对此类资产有需求。
+      <div class="highlight highlight-orange">
+        <strong>⚠ 数据说明：</strong>深圳联合产权交易网的项目大部分价格信息为"面议"，且很多项目为"意向征集"性质，非正式挂牌。这导致数据在价格维度上信息密度较低，但同时也反映了深圳市场<strong>大宗资产交易以协商定价为主</strong>的特点。
+      </div>
     </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>海南</td><td>五源河公寓等6小区48间商铺招租</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 4.4 海汽集团三亚分公司（海南1项步行街5387㎡）</div>
-    <div class="section-content">
-      <strong>海南海汽运输集团有限公司</strong>（海汽集团，603069.SH）是海南省属国有控股企业。三亚市解放路步行街E2座、C2座共5387.46㎡整体招租，租金约45万元/月，租期5年。该资产无房产证但有土地证，已摘牌（某诚德物业管理有限公司）。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>海南</td><td>三亚解放路步行街5387.46㎡整体招租</td><td class="price">约45万元/月</td><td><span class="status status-active">已摘牌</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 4.5 海口桂林洋投资发展控股（海南13间金融中心办公室）</div>
-    <div class="section-content">
-      <strong>海口桂林洋投资发展控股有限公司</strong>是海口市国资委下属企业。海口江东新区金融中心B1#楼13间办公房间招租，租期3-5年，租金每2年递增3%。此为再次招租，说明江东新区写字楼市场短期内供过于求。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>海南</td><td>海口金融中心B1#楼13间办公房招租</td><td class="price">见正文</td><td><span class="status status-pending">再次招租</span></td></tr>
-    </table>
-
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>海南自贸港国企资产处置投资价值评估：整体中等风险</strong><br>
-      青春东岸161套住宅（★★★★☆）是本次调查中评级最高的项目之一——7516元/㎡的海口最低价，折价约18%，有足够的安全垫。但161套整体打包的高门槛（总价约7656万）限制了参与群体。洋浦工业用地（★★☆☆☆）产业门槛极高，仅适合有槟榔深加工背景的企业。海口城投48间商铺（★★★☆☆）适合社区商业运营商。海汽集团步行街（★★★☆☆）无房产证是硬伤。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>深圳联合产权交易网的数据呈现出典型的"深圳特色"——高价值、低透明度。</strong>900条项目几乎全部为"挂牌中"状态，价格多为"面议"，这与中国一线城市核心资产交易的惯例一致：<strong>大宗物业交易通常不公开标价，买卖双方通过私下协商定价</strong>。</p>
+        <p>从项目类型看，深圳的产权交易以<strong>存量物业盘活</strong>为主，涉及科技园区别墅、核心区住宅、商业裙楼等资产，潜在价值极高但信息披露有限。这种"意向征集"模式反映了深圳作为<strong>全国房地产价值高地</strong>的特殊交易习惯。</p>
+        <p>数据质量方面，价格信息缺失严重，评级为C级，建议在使用时配合其他渠道进行价格核实。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>核心发现：</strong>海南自贸港国企资产处置呈现三大特征：(1) 价格优势明显——青春东岸7516元/㎡是海口最低价；(2) 产业门槛高——洋浦工业用地实质是"以地选商"；(3) 招租为主流——海口城投48间商铺、金融中心13间办公室均以招租形式处置，而非出售。</p>
-    <p><strong>深层逻辑：</strong>2025年12月海南全岛封关后，国企资金需求加大。洋浦控股作为AA+评级企业，核心职能是土地开发而非长期持有工业用地。桂林洋房地产的161套住宅2015年建成后长期未售出，说明项目定位（教师村）与市场需求存在错配。</p>
-    <p><strong>关联性：</strong>海口金融中心（桂林洋投资发展控股）与青春东岸161套住宅（桂林洋房地产总公司）同属桂林洋经济开发区体系，实际控制人均为海口市国资委。两个项目同时挂牌，反映了桂林洋片区国企的整体资金需求。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第五章：批量住宅/房产处置 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 5: 山东 ========== -->
+<h2 class="section-title">五、山东产权交易中心 <span class="num-badge">532条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第五章</span>
-    <h2>批量住宅/房产处置</h2>
-    <div class="entity-sub">齐鲁石化52套 · 鲁地矿业97套 · 青春东岸161套 · 华森印务13套 · 山东烟草9套 · 烟台国企110+项 · 日照港12套 · 跨省合并</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 集群概述</div>
-    <div class="section-content">
-      本章将山东和海南两省所有的批量住宅/房产处置项目合并分析，是本次调查中项目数量最多的资产类别。合计约454套/项房产，占全部611个项目的74%以上。资产类型涵盖公有住房、商品房、公寓、商铺、车库等，价格从6.2万元的车库到860万元的高端公寓不等。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 传统工业大省 · 老牌国企</span>
+      <h2>山东产权交易中心</h2>
+      <div class="entity-sub">532条项目 · 正在报名308条 · 正在报价199条 · 等待挂牌25条</div>
     </div>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>山东产权交易中心的532条项目以<strong>工业设备资产包、车辆处置、房产转让、债权转让</strong>为主。大量项目来自中国重汽、潍柴动力、中电投等山东大型国企，体现了<strong>山东作为传统工业大省和老牌国企聚集地</strong>的资产处置特征。</p>
+      </div>
 
-    <div class="section-label">▎ 5.1 齐鲁石化52套公有住房（山东，36万-77万/套）</div>
-    <div class="section-content">
-      中国石化齐鲁石化分公司位于淄博市临淄区的52套闲置公有住房，单价36万-77万元/套，折算单价约6000-6500元/㎡，低于临淄区二手房均价约10%-20%。央企"三供一业"分离移交的延续，产权清晰。
+      <div class="section-label">🏆 重点高价值项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>来源</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>中电投蒙东能源通辽办公大楼</td><td class="price">3.94亿元</td><td>山东</td><td class="status status-info">正在报名</td></tr>
+          <tr><td>山东利福特玻璃科技不良贷款债权一宗</td><td class="price">1.33亿元</td><td>山东</td><td class="status status-info">正在报名</td></tr>
+          <tr><td>新疆巨力化学ODC电解槽等设备</td><td class="price">8,700万元</td><td>山东</td><td class="status status-info">正在报名</td></tr>
+          <tr><td>中国光大银行济南分行经七路85号房产</td><td class="price">8,500万元</td><td>济南</td><td class="status status-info">正在报名</td></tr>
+          <tr><td>重汽集团济南动力设备资产包（多批）</td><td class="price">369万~3,690万元</td><td>济南</td><td class="status status-pending">等待挂牌</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-label">📊 状态分布</div>
+      <div class="data-grid">
+        <div class="data-item"><div class="label">正在报名</div><div class="value" style="color:#4fc3f7">308条 (57.9%)</div></div>
+        <div class="data-item"><div class="label">正在报价</div><div class="value" style="color:#ffa726">199条 (37.4%)</div></div>
+        <div class="data-item"><div class="label">等待挂牌</div><div class="value" style="color:#ce93d8">25条 (4.7%)</div></div>
+      </div>
     </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>数量</th><th>价格区间</th><th>状态</th></tr>
-      <tr><td>山东</td><td>齐鲁石化临淄区公有住房</td><td>52套</td><td class="price">36万-77万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>鲁地矿业福建漳浦住宅</td><td>97套</td><td class="price">38万-41万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>青春东岸住宅（桂林洋）</td><td>161套</td><td class="price">7,516元/㎡</td><td><span class="status status-ended">已到期</span></td></tr>
-      <tr><td>海南</td><td>华森印务万银花园住宅</td><td>13套</td><td class="price">40万-68万元/套</td><td><span class="status status-pending">延期挂牌</span></td></tr>
-      <tr><td>山东</td><td>山东烟草济南住宅</td><td>9套</td><td class="price">32万-331万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>烟台国企车库/房产</td><td>110+项</td><td class="price">6.2万-860万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>日照港住宅</td><td>12套</td><td class="price">24.9万-128万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 5.2 鲁地矿业97套（山东，福建漳州）</div>
-    <div class="section-content">
-      山东能源集团旗下鲁地矿业在福建漳浦的97套住宅，单价约4100-4300元/㎡（当地均价6000-7000元/㎡），折价率高达6-7折。这是山东国企在省外的非主业资产，需关注三四线城市房产流动性。
-    </div>
-
-    <div class="section-label">▎ 5.3 青春东岸161套（海南海口）</div>
-    <div class="section-content">
-      桂林洋房地产总公司整体出售161套住宅，单价7516元/㎡，是海口市场化住宅中万平米规模以上的最低价，比安居房还便宜。海口江东新区注册企业超2.5万家，区域发展潜力大。
-    </div>
-
-    <div class="section-label">▎ 5.4 华森印务13套（海南海口）</div>
-    <div class="section-content">
-      中国印钞造币集团旗下华森印务的13套万银花园住宅，单价约6200-7300元/㎡，单套40-68万，投资门槛低。但部分房产目前由职工宿舍使用，清退可能需要时间。
-    </div>
-
-    <div class="section-label">▎ 5.5-5.7 其他住宅项目</div>
-    <div class="section-content">
-      山东烟草9套济南住宅（32万-331万，价格跨度10倍）、烟台国企110+项（含88个车库6.2万-10万元/个）、日照港12套住宅（24.9万-128万），共同构成山东住宅资产处置的完整图谱。
-    </div>
-
-    <div class="verdict verdict-info">
-      <span class="marker marker-blue"></span><strong>批量住宅/房产处置投资价值评估：整体中低风险</strong><br>
-      青春东岸161套（★★★★☆）和鲁地矿业97套（★★★★☆）是本组评级最高的项目，均有显著价格优势。齐鲁石化52套（★★★☆☆）折价10-20%但房龄可能超过30年。华森印务13套（★★★☆☆）总价低但需关注清退问题。烟台国企车库（★★★☆☆）单价低但需确认产权独立性。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>山东产权交易中心的资产结构清晰反映了山东"工业大省+国企重镇"的经济底色。</strong>中国重汽集团一次性挂牌了多批设备资产包（缸盖线、曲轴线、连杆线等），总价值超千万元，体现了大型国企<strong>产能升级和产线汰换</strong>的节奏。</p>
+        <p>与浙江以出租为主的模式不同，山东以<strong>资产转让和债权处置</strong>为主，近58%的项目处于"正在报名"阶段，说明市场活跃度较高。债权类项目的出现（如利福特玻璃不良贷款债权）也折射出山东<strong>传统制造业面临的信贷风险暴露</strong>。</p>
+        <p>值得注意的是，山东的项目中包含了跨省资产（如新疆巨力化学的设备），说明山东产权交易中心的服务半径已超出本省范围。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>跨省关联核心发现：</strong>批量住宅处置是山东和海南两省产权交易市场的共同核心品种。山东以数量见长（齐鲁石化52套+鲁地矿业97套+烟台110+项+日照港12套+山东烟草9套=约280套/项），海南以价格优势见长（青春东岸7516元/㎡是海口最低价）。</p>
-    <p><strong>价格对比：</strong>山东方面，齐鲁石化折算单价约6000-6500元/㎡（临淄均价7000-8000）；鲁地矿业折算单价约4100-4300元/㎡（漳浦均价6000-7000）。海南方面，青春东岸7516元/㎡（海口均价约11000），折价约18%；华森印务折算单价约6200-7300元/㎡（海口均价约11000），折价约33-43%。</p>
-    <p><strong>投资建议：</strong>如果追求绝对价格最低，鲁地矿业97套福建住宅（4100-4300元/㎡）最具吸引力。如果追求区位价值，青春东岸161套（7516元/㎡的海口价）性价比最高。如果追求低总价，华森印务（40-68万/套）和齐鲁石化（36-77万/套）门槛最低。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第六章：工业设备/产线升级 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 6: 安徽 ========== -->
+<h2 class="section-title">六、安徽农村综合产权交易网 <span class="num-badge">315条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第六章</span>
-    <h2>工业设备/产线升级</h2>
-    <div class="entity-sub">重汽9条产线 · 海纳川10项设备 · 鲁银投资34项 · 东岳能源3项 · 华森印务设备 · 跨省合并</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 集群概述</div>
-    <div class="section-content">
-      本章将山东和海南两省所有的工业设备/产线处置项目合并分析，合计约60项设备资产，总价值约2,100万元。这些资产均为制造业企业产能升级、技术更新中的淘汰设备，专业性强，适合同行业买家或二手设备贸易商。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 农村产权特色</span>
+      <h2>安徽农村综合产权交易网</h2>
+      <div class="entity-sub">315条项目 · 全部为挂牌中 · 土地经营权/林权/茶园</div>
     </div>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>安徽农村综合产权交易网是本次调查中<strong>唯一专注于农村产权</strong>的交易平台，315条项目全部为"挂牌中"状态。项目类型以<strong>土地经营权流转</strong>为主，涵盖滁州、合肥、巢湖、天长等地的耕地、茶园、林场、瓜蒌基地等农业资产。</p>
+      </div>
 
-    <div class="section-label">▎ 6.1 中国重汽9条产线（山东）</div>
-    <div class="section-content">
-      中国重汽集团济南动力有限公司9条产线，总价约1,200万元，包括发动机缸体加工线、曲轴加工线、缸盖加工线等。重汽新一代MC系列发动机全面切换，旧产线被整体淘汰。设备专业性强，仅适合发动机制造或二手设备贸易商。
+      <div class="section-label">🏆 重点项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>类型</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>滁州市全椒县大墅镇张岗村瓜蒌基地出租</td><td class="price">面议</td><td>农业用地</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>合肥市庐江县龙桥镇凌安村茶园经营权流转</td><td class="price">面议</td><td>茶园</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>滁州市明光市潘村镇芦塘村约65亩土地经营权</td><td class="price">面议</td><td>耕地</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>合肥市巢湖市银屏镇芙蓉村茶叶种植产业园</td><td class="price">面议</td><td>农业产业园</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>滁州市定远县张桥镇马桥村原林场土地经营权</td><td class="price">面议</td><td>林场</td><td class="status status-info">挂牌中</td></tr>
+        </tbody>
+      </table>
     </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>重汽9条产线（发动机缸体、曲轴、缸盖等）</td><td class="price">约1,200万元（合计）</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>海纳川10套铸造设备</td><td class="price">426.73万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>鲁银投资34项闲置资产（制盐设备）</td><td class="price">438.03万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>东岳能源平铝厂区3项</td><td class="price">25万/年-4,326.71万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>华森印务23台印刷设备</td><td class="price">13.86万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 6.2 海纳川10项设备（山东）</div>
-    <div class="section-content">
-      海纳川（滨州）轻量化汽车部件有限公司10套铸造设备，合计426.73万元，为2016年购入的闲置设备。公司注册资本从5亿减至1.86亿（减资62.8%），2025年曾以917万元成交报废生产线，显示公司正在系统性清理闲置资产。
-    </div>
-
-    <div class="section-label">▎ 6.3 鲁银投资34项闲置资产（山东）</div>
-    <div class="section-content">
-      山东岱岳制盐有限公司34项闲置资产打包处置，总价438.03万元。公司2026年刚获评"山东省先进级智能工厂"，新工厂投产后，老厂区制盐车间及设备被整体淘汰。制盐设备专业性强，适合同行业买家。
-    </div>
-
-    <div class="section-label">▎ 6.4 华森印务设备（海南）</div>
-    <div class="section-content">
-      海南华森印务有限公司23台印刷设备整体转让，总价13.86万元。这是中国印钞造币集团在海南全面退出传统印刷业务的最后一批设备。票据电子化时代，印刷设备残值极低。
-    </div>
-
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>工业设备/产线升级投资价值评估：整体中等风险，专业买家市场</strong><br>
-      所有工业设备资产均具有高度专业性，仅适合有行业背景的投资者。重汽9条产线（★★★☆☆）总价高但需核查设备状态；海纳川10项设备（★★☆☆☆）设备成新率约40-50%；鲁银投资34项（★★★☆☆）新工厂投产旧产线出清逻辑清晰；华森印务设备（★★☆☆☆）总价低但市场有限。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>安徽农村综合产权交易网是本次调查中特色最为鲜明的平台。</strong>315条项目全部围绕<strong>农村土地经营权流转</strong>展开，是乡村振兴战略在产权交易领域的具体体现。</p>
+        <p>与城市产权交易不同，农村产权交易的<strong>价格信息透明度较低</strong>（大部分为面议），且交易规模较小，但涉及面广——从瓜蒌基地到茶园、从林场到耕地，覆盖了安徽主要农业产区的各类农地资源。这种"小而散"的特点与农村土地分散经营的现实高度一致。</p>
+        <p>值得注意的是，安徽农村产权交易平台与其他省份的综合性产权交易所有着本质区别，它是<strong>服务于"三农"的专业化平台</strong>，在乡村振兴和农村土地制度改革的大背景下，其战略意义不容忽视。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>跨省关联核心发现：</strong>工业设备处置是山东产权交易中心的优势领域（重汽9条产线1200万+海纳川10项426万+鲁银投资34项438万），海南产权交易所在此领域规模较小（华森印务23台设备仅13.86万）。这与两省的产业结构高度相关——山东是制造业大省，海南以服务业和旅游业为主。</p>
-    <p><strong>深层逻辑：</strong>重汽MC系列发动机全面切换、岱岳制盐智能工厂投产、海纳川系统性收缩——三大设备处置背后是制造业企业技术升级和结构调整的必然结果。华森印务的印刷设备处置则是票据电子化时代传统印刷行业衰退的缩影。</p>
-    <p><strong>投资建议：</strong>设备拆除、运输、安装成本可能高达设备价的20-30%，买方需在报价中充分考虑。建议有行业背景的投资者实地核查设备状态。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第七章：车辆批量处置 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 7: 重庆 ========== -->
+<h2 class="section-title">七、重庆联合产权交易所 <span class="num-badge">200条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第七章</span>
-    <h2>车辆批量处置</h2>
-    <div class="entity-sub">国金汽车228台 · 海南车辆8项 · 山东车辆20+项 · 约翰迪尔拖拉机 · 海南航程客船 · 跨省合并</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 集群概述</div>
-    <div class="section-content">
-      本章将山东和海南两省所有车辆/船舶处置项目合并分析，合计约260+台/艘车辆及船舶资产。车辆类资产单价低、受众广，是产权交易市场中最活跃的品种之一。从电动轿车到拖拉机再到客船，资产类型丰富。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 西南地区</span>
+      <h2>重庆联合产权交易所</h2>
+      <div class="entity-sub">200条项目 · OFFICIAL 160条 · PRE 40条</div>
     </div>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>重庆联合产权交易所的200条项目分为<strong>正式挂牌（OFFICIAL，160条）</strong>和<strong>预披露（PRE，40条）</strong>两类。项目涵盖房产招租、资产转让、股权转让等，涉及重庆建工、长安福特、重庆工商大学等多家本地机构。</p>
+      </div>
 
-    <div class="section-label">▎ 7.1 国金汽车228台电动轿车（山东，均价2万）</div>
-    <div class="section-content">
-      淄博齐达资产运营有限公司228台国金汽车牌电动轿车，底价456万元（均价2万元/台）。此前同批次225台已溢价7.1%成交（481.95万元），说明市场有真实需求。车辆原为苏州网约车公司车辆，里程数较高，但电动轿车在三四线城市和农村地区仍有代步需求。
+      <div class="section-label">🏆 重点项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>来源</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>北京市朝阳区大羊坊安全大厦第20层房产招租</td><td class="price">55.69万元/年</td><td>中煤实业</td><td class="status status-info">OFFICIAL</td></tr>
+          <tr><td>长安福特汽车有限公司动力基地资产</td><td class="price">70.91万元</td><td>长安福特</td><td class="status status-info">OFFICIAL</td></tr>
+          <tr><td>重庆工商大学南岸校区兰花湖片区兰6号招租</td><td class="price">0.46万元/月</td><td>重庆工商大学</td><td class="status status-info">OFFICIAL</td></tr>
+          <tr><td>长寿区八颗街道范何路八颗中心校招租</td><td class="price">10万元/年</td><td>长寿乡村建设集团</td><td class="status status-info">OFFICIAL</td></tr>
+          <tr><td>长春一汽综合利用股份有限公司30%股权转让</td><td class="price">面议</td><td>预披露</td><td class="status status-pending">PRE</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-label">📊 状态分布</div>
+      <div class="data-grid">
+        <div class="data-item"><div class="label">正式挂牌 (OFFICIAL)</div><div class="value" style="color:#4fc3f7">160条 (80%)</div></div>
+        <div class="data-item"><div class="label">预披露 (PRE)</div><div class="value" style="color:#ffa726">40条 (20%)</div></div>
+      </div>
     </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>国金汽车牌电动轿车228台整体转让</td><td class="price">456万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>琼D36616中通牌大型普通客车</td><td class="price">3.20万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>琼C75868、琼C75929宇通牌客车</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>琼A82891东风牌等6辆车整体打包</td><td class="price">8.12万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>琼A60L16别克牌小型轿车</td><td class="price">0.49万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>琼AA1V32吉利牌小型普通客车</td><td class="price">3.51万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>山东车辆批量（20+项）</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>约翰迪尔拖拉机（2台）</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>临春河01/02/03普通客船（3艘）</td><td class="price">见正文</td><td><span class="status status-active">再次转让</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 7.2 海南车辆（海南8项，0.49-8.12万）</div>
-    <div class="section-content">
-      海南产权交易所挂牌8项车辆处置项目，价格从0.49万元（别克轿车）到8.12万元（6辆车打包），覆盖客车、货车、轿车等多种类型。车辆类资产单价低，适合个人投资者或二手车商。
-    </div>
-
-    <div class="section-label">▎ 7.3 海南航程旅游客船（海南3艘）</div>
-    <div class="section-content">
-      海南航程旅游发展股份有限公司"临春河01""临春河02""临春河03"普通客船分别再次转让，属"再次转让"说明此前未成交。同时挂牌办公设备整体转让（10.66万元），反映旅游企业可能在进行业务调整。
-    </div>
-
-    <div class="verdict verdict-info">
-      <span class="marker marker-blue"></span><strong>车辆批量处置投资价值评估：整体中低风险</strong><br>
-      国金汽车228台（★★★★☆）有历史成交参考，溢价7.1%成交说明市场认可，但需关注国金汽车已停产带来的维修配件问题。海南车辆单价低（0.49-8.12万元），适合个人投资者。海南航程客船"再次转让"需关注船龄和维护成本。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>重庆联合产权交易所是西南地区产权交易的重要平台。</strong>200条项目虽然数量不多，但包含了<strong>跨区域资产</strong>（如北京朝阳区房产招租、长春一汽股权转让），说明重庆联交所的辐射范围不限于西南地区。</p>
+        <p>项目类型以<strong>房产招租和资产转让</strong>为主，涉及重庆建工、长安福特等大型企业，以及重庆工商大学等事业单位，体现了<strong>国企和事业单位资产盘活</strong>的典型场景。20%的预披露项目占比也说明市场存在一定的<strong>增量供给预期</strong>。</p>
+        <p>重庆联交所的数据结构清晰（OFFICIAL/PRE区分明确），数据质量较好。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>跨省关联核心发现：</strong>国金汽车228台是本次调查中最具特色的车辆处置项目——有历史成交记录参考（此前225台溢价7.1%成交），且均价仅2万元/台。海南车辆数量虽少（8项），但单价更低（0.49万起），适合个人投资者。</p>
-    <p><strong>深层逻辑：</strong>国金汽车已停产，淄博齐达资产运营作为"接盘方"持有这些车辆，通过产权交易平台公开处置。海南航程旅游的客船"再次转让"未成交，可能因为船龄较大或维护成本高。约翰迪尔拖拉机（山东2台）属于农业机械，受众面窄。</p>
-    <p><strong>投资建议：</strong>国金汽车228台适合有二手车分销渠道的投资者（★★★☆☆），电动轿车在三四线城市有代步需求，但需注意国金汽车已停产，后续维修配件可能买不到。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第八章：股权/债权/特殊资产 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 8: 湖南 ========== -->
+<h2 class="section-title">八、湖南联合产权交易所 <span class="num-badge">196条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第八章</span>
-    <h2>股权/债权/特殊资产</h2>
-    <div class="entity-sub">合丰置业债权 · 海南商报51%股权 · 紫砂壶50项 · 排污权 · 茅台酒 · 三沙天能101项报废 · 农商行股权 · 跨省合并</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 集群概述</div>
-    <div class="section-content">
-      本章将山东和海南两省的非标特殊资产合并分析，涵盖债权、股权、收藏品、排污权、涉案资产、报废资产、金融股权等。这些资产具有高度的非标准化特征，投资价值和风险差异极大。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 中部地区</span>
+      <h2>湖南联合产权交易所</h2>
+      <div class="entity-sub">196条项目 · 全部为报价中 · 聚焦长沙核心物业</div>
     </div>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>湖南联合产权交易所的196条项目全部处于<strong>报价中</strong>状态，以长沙黄花国际机场T3航站楼商业场地招租、长沙市核心区办公楼物业租赁为主。项目细分度高，物业类型丰富。</p>
+      </div>
 
-    <div class="section-label">▎ 8.1 山东合丰置业债权（山东1项，240万元）</div>
-    <div class="section-content">
-      <strong>山东合丰置业有限公司</strong>是民营房地产开发企业，转让方为济南华夏鼎诚典当有限公司。该债权涉及民间借贷纠纷，抵押物为盛世合丰苑3处房产，已取得生效判决。该债权已被中信金融资产列入不良债权。
+      <div class="section-label">🏆 重点项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>地区</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>长沙黄花国际机场T3航站楼商业场地（单店标段18）</td><td class="price">365,477元</td><td>长沙</td><td class="status status-info">报价中</td></tr>
+          <tr><td>长沙市芙蓉区五一西路第一大道大厦705房</td><td class="price">5,132元</td><td>长沙芙蓉</td><td class="status status-info">报价中</td></tr>
+          <tr><td>长沙市暮云镇和美星城C区26栋1101及车位</td><td class="price">996,165元</td><td>长沙暮云</td><td class="status status-info">报价中</td></tr>
+          <tr><td>湖南电器科学研究院办公楼6楼601室</td><td class="price">1,000元</td><td>长沙</td><td class="status status-info">报价中</td></tr>
+          <tr><td>长沙市芙蓉区万家丽北路浏阳河畔家园1栋212</td><td class="price">2,241元</td><td>长沙</td><td class="status status-info">报价中</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="highlight highlight-red">
-      <strong>风险提示：</strong>民营房企在当前房地产下行周期中信用风险极高。虽然已取得生效判决，但执行到位可能旷日持久。建议有不良资产处置经验的专业机构参与。
-    </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>山东</td><td>合丰置业债权（抵押物：盛世合丰苑3处房产）</td><td class="price">240万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>海南商报掌政通51%股权</td><td class="price">21.6万元</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>紫砂壶批量（50项）</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>排污权（3项）</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>贵州茅台酒一批（涉案资产）</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>三沙天能电力101项报废资产</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>农商行股权（3项，惠民/滨州）</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 8.2 海南商报掌政通51%股权（海南1项，21.6万）</div>
-    <div class="section-content">
-      <strong>海南商报掌政通传媒集团有限公司</strong>成立于2022年，主营新媒体运营。2024年营收340.5万元，净利润-16.9万元；2026年3月营收仅12.4万元，持续亏损。转让底价21.6万元低于净资产27.4万元，说明转让方急于脱手。转让条件要求"受让方须消除国有字号影响"。
-    </div>
-
-    <div class="section-label">▎ 8.3 紫砂壶50项（山东）</div>
-    <div class="section-content">
-      山东产权交易中心挂牌50项紫砂壶批量处置，属于工艺收藏品类别。此类资产估值主观性强，市场流动性差，适合有收藏爱好的投资者。
-    </div>
-
-    <div class="section-label">▎ 8.4 排污权（山东3项）</div>
-    <div class="section-content">
-      山东产权交易中心挂牌3项排污权交易，属于环境权益类资产。排污权交易在山东等工业大省较为活跃，适合有排污指标需求的企业。
-    </div>
-
-    <div class="section-label">▎ 8.5 三沙天能电力101项报废（海南）</div>
-    <div class="section-content">
-      三沙天能电力有限公司持有的三沙电站101项报废资产组合整体打包转让。三沙市电力基础设施正在经历更新换代，老旧设备报废处置是正常资产更新流程。
-    </div>
-
-    <div class="verdict verdict-danger">
-      <span class="marker marker-red"></span><strong>股权/债权/特殊资产投资价值评估：整体高风险，需专业能力</strong><br>
-      合丰置业债权（★☆☆☆☆）仅适合有不良资产处置经验的专业机构；海南商报股权（★★☆☆☆）持续亏损，核心价值在于政务新媒体运营资质；紫砂壶（★★☆☆☆）流动性差；排污权（★★★☆☆）适合有需求的工业企业；三沙天能报废资产（★★☆☆☆）低价值资产；农商行股权（★★☆☆☆）流动性差但分红稳定。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>湖南联合产权交易所是中部地区产权交易的缩影。</strong>196条项目全部为"报价中"，说明数据采集时刻恰好处于一个<strong>集中报价期</strong>。</p>
+        <p>项目最引人注目的当属<strong>长沙黄花国际机场T3航站楼商业场地</strong>招租，这是长沙机场扩建工程的重要组成部分，反映了中部地区<strong>基础设施升级带来的商业机会</strong>。此外，第一大道大厦、和美星城等长沙核心区物业的频繁挂牌，也体现了长沙作为新一线城市<strong>商业地产市场的活跃度</strong>。</p>
+        <p>湖南联交所的数据质量较高，价格信息完整，项目描述清晰，是中部地区最值得关注的数据源。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>跨省关联核心发现：</strong>特殊资产类别是两省产权交易市场差异最大的领域。山东在紫砂壶（50项）、排污权（3项）、农商行股权（3项）等品种上有独特优势，海南则在涉案资产（茅台酒）、股权转让（商报掌政通）等品种上有所涉及。</p>
-    <p><strong>深层逻辑：</strong>山东产权交易集团拥有16大板块/36个交易品种，是全国五家"全牌照"AAA级产权交易机构之一，因此在特殊资产品种上更为丰富。海南产权交易所规模较小，特殊资产品种相对有限。</p>
-    <p><strong>投资建议：</strong>特殊资产投资需要专业能力，个人投资者不建议参与债权、股权类资产。排污权适合有实际需求的企业，紫砂壶适合有收藏爱好的投资者。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第九章：土地/经营权/租赁 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 9: 广东 ========== -->
+<h2 class="section-title">九、广东联合产权交易中心 <span class="num-badge">117条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第九章</span>
-    <h2>土地/经营权/租赁</h2>
-    <div class="entity-sub">洋浦307亩 · 莱芜8项 · 中石油加油站 · 姚家岭创业大厦 · 鲁商常春藤车位 · 海南48间商铺 · 金融中心办公室 · 三亚步行街 · 跨省合并</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 集群概述</div>
-    <div class="section-content">
-      本章将山东和海南两省的土地、经营权、租赁类资产合并分析。这类资产的特点是：不涉及所有权转移，而是通过租赁、使用权转让等方式盘活资产。从工业用地到商铺再到加油站，资产形态多样。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 珠三角</span>
+      <h2>广东联合产权交易中心</h2>
+      <div class="entity-sub">117条项目 · 全部为挂牌中 · 以股权转让为核心</div>
     </div>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>广东联合产权交易中心的117条项目全部为<strong>挂牌中</strong>状态，以<strong>企业股权转让</strong>为核心业务。项目涉及广东、海南、贵州、江苏等多地企业，包含制造业、能源、酒店、通信等多个行业。</p>
+      </div>
 
-    <div class="section-label">▎ 9.1 洋浦307亩工业用地（海南，1.1亿）</div>
-    <div class="section-content">
-      洋浦开发建设控股有限公司转让307.95亩工业用地，价格11,080万元（折合约36万/亩）。捆绑了严格的产业招商要求——固投11.57亿元、5年产值大于76亿元、5年纳税大于4.62亿元。本质上是一个定向产业招商项目。
+      <div class="section-label">🏆 重点高价值项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>行业</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>三亚珠江温泉度假区有限公司100%股权</td><td class="price">6.11亿元</td><td>旅游酒店</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>六盘水拓源集团有限公司51%股权</td><td class="price">3.12亿元</td><td>能源</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>中联航运股份有限公司18%股权</td><td class="price">2.57亿元</td><td>航运</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>贵州鼎新能源发展（集团）有限公司51%股权</td><td class="price">1.85亿元</td><td>新能源</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>汕头高新区奥星光通信设备有限公司47.11%股权</td><td class="price">1.70亿元</td><td>通信</td><td class="status status-info">挂牌中</td></tr>
+        </tbody>
+      </table>
     </div>
-    <table class="project-table">
-      <tr><th>省份</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>海南</td><td>洋浦经济开发区307.95亩工业用地</td><td class="price">11,080万元</td><td><span class="status status-pending">待竞价</span></td></tr>
-      <tr><td>山东</td><td>莱芜区集体资产（8项，土地/房屋经营权）</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>中石油加油站使用权（2项）</td><td class="price">待定</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>莱芜姚家岭创业大厦使用权</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>山东</td><td>鲁商常春藤车位</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>海口城投48间商铺招租</td><td class="price">见正文</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>海南</td><td>海口金融中心13间办公室招租</td><td class="price">见正文</td><td><span class="status status-pending">再次招租</span></td></tr>
-      <tr><td>海南</td><td>三亚解放路步行街5387㎡招租</td><td class="price">约45万元/月</td><td><span class="status status-active">已摘牌</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 9.2 莱芜集体资产（山东8项）</div>
-    <div class="section-content">
-      莱芜区集体资产8项，包括土地和房屋经营权。集体资产处置具有政策敏感性，受让方资格可能受到限制。
-    </div>
-
-    <div class="section-label">▎ 9.3 中石油加油站使用权（山东2项）</div>
-    <div class="section-content">
-      中石油在山东挂牌2项加油站使用权，属于央企非主业资产剥离。加油站使用权具有稳定的现金流回报，是产权交易市场中的优质资产。
-    </div>
-
-    <div class="section-label">▎ 9.4 海南商铺/办公室招租（海南48+13间）</div>
-    <div class="section-content">
-      海口城投48间商铺招租（五源河公寓等6个小区）和海口金融中心13间办公室招租，是海南国企盘活存量资产的主要方式。海口城投商铺已摘牌27间，说明市场有一定需求；金融中心办公室再次招租说明江东新区写字楼市场供过于求。
-    </div>
-
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>土地/经营权/租赁投资价值评估：整体中等风险</strong><br>
-      洋浦工业用地（★★☆☆☆）产业门槛极高；莱芜集体资产（★★☆☆☆）政策敏感性高；中石油加油站（★★★★☆）现金流稳定但需关注运营资质；海口城投商铺（★★★☆☆）适合社区商业运营商；海口金融中心办公室（★★☆☆☆）再次招租说明市场供过于求；三亚步行街（★★★☆☆）已摘牌。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>广东联合产权交易中心虽然只有117条项目，但却是本次调查中"含金量"最高的平台之一。</strong>所有项目均为<strong>股权转让</strong>，平均单笔金额远超其他平台，反映了广东作为<strong>中国经济第一大省</strong>在产权交易领域的"高端定位"。</p>
+        <p>值得注意的是，广东的项目大量涉及<strong>跨省资产</strong>——三亚的度假酒店、贵州的能源企业、江苏的酒店管理公司，体现了广东资本<strong>向全国输出</strong>的趋势。三亚珠江温泉度假区100%股权（6.11亿元）是本次调查中单一项目金额最高的股权转让项目之一，折射出<strong>海南自贸港建设背景下旅游资产的资本运作</strong>。</p>
+        <p>广东联交所的数据质量极高，价格信息完整（均为精确到元的万元计价），项目描述详尽，是本次调查中数据质量最好的平台。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>跨省关联核心发现：</strong>土地/经营权/租赁类资产在两省的表现差异明显。海南以土地转让和商铺招租为主（洋浦工业用地、海口城投48间商铺、金融中心办公室），山东以经营权和使用权转让为主（中石油加油站、莱芜集体资产、姚家岭创业大厦）。</p>
-    <p><strong>深层逻辑：</strong>海南自贸港封关后，国企更倾向于通过"招租"而非"出售"的方式盘活资产，以保留资产所有权并获取持续现金流。山东则更多采用"使用权转让"和"经营权转让"的方式，盘活方式更为灵活。</p>
-    <p><strong>投资建议：</strong>中石油加油站使用权（★★★★☆）是本组中投资价值最高的项目，具有稳定的现金流回报。但需关注加油站运营资质和安全管理要求。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第十章：跨省/跨境特色资产 -->
-<!-- ======================================================================== -->
+<!-- ========== SECTION 10: 海南 ========== -->
+<h2 class="section-title">十、海南产权交易所 <span class="num-badge">4条</span></h2>
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第十章</span>
-    <h2>跨省/跨境特色资产</h2>
-    <div class="entity-sub">天津外运天津房产 · 中国外运贵阳房产 · 鲁地矿业福建漳州97套 · 中石油加油站 · 跨省资产处置新模式</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 集群概述</div>
-    <div class="section-content">
-      本章聚焦于跨省/跨境特色资产——即资产所在地与产权交易平台所在地不一致的项目。这些资产体现了产权交易市场跨区域服务能力的提升，也是本次调查中最具"意外发现"价值的类别。
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📌 自贸港特色</span>
+      <h2>海南产权交易所</h2>
+      <div class="entity-sub">4条项目 · 自贸港建设背景下的稀缺资产</div>
     </div>
+    <div class="entity-body">
+      <div class="section-label">📋 核心发现</div>
+      <div class="section-content">
+        <p>海南产权交易所仅有4条项目，是本次调查中数据量最小的平台。但每条项目都具有<strong>高价值、高稀缺性</strong>的特点，涉及工业用地、住宅、危房改造和金融设备等资产类型。</p>
+      </div>
 
-    <div class="section-label">▎ 10.1 天津外运天津房产（在海南挂牌）</div>
-    <div class="section-content">
-      天津外运有限公司（中国外运/招商局集团旗下）将天津市河东区萦东温泉花园2套房产和天津市塘沽区新港六米房产和土地，委托<strong>海南产权交易所</strong>进行处置。这是本次调查中最典型的跨省资产处置案例。
+      <div class="section-label">🏆 全部项目</div>
+      <table class="project-table">
+        <thead>
+          <tr><th>项目名称</th><th>价格</th><th>地区</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>洋浦控股307亩工业用地</td><td class="price">11,034万元</td><td>海南洋浦</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>中国银行三亚分行危房</td><td class="price">2,212万元</td><td>海南三亚</td><td class="status status-pending">多次流拍</td></tr>
+          <tr><td>海口桂林洋青春东岸161套住宅</td><td class="price">7,516元/㎡</td><td>海南海口</td><td class="status status-info">挂牌中</td></tr>
+          <tr><td>中国印钞造币集团海南房产设备</td><td class="price">见公告</td><td>海南</td><td class="status status-ended">清算退出</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="highlight highlight-blue">
-      <strong>关键发现：</strong>天津的房产在海南挂牌——这个"反常"现象揭示了海南产权交易所的独特价值。作为省级产权交易机构，海南产交所拥有"央企业务"资质，可以跨区域处置央企资产。投资者可以通过海南产交所"一站式"买到全国各地的央企资产。
-    </div>
-    <table class="project-table">
-      <tr><th>来源</th><th>项目名称</th><th>价格</th><th>状态</th></tr>
-      <tr><td>天津（海南挂牌）</td><td>天津市河东区萦东温泉花园8-底商3房产</td><td class="price">约294.5万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
-      <tr><td>天津（海南挂牌）</td><td>天津市河东区萦东温泉花园另一套</td><td class="price">约230万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
-      <tr><td>天津（海南挂牌）</td><td>天津市塘沽区新港六米房产和土地</td><td class="price">261.75万元</td><td><span class="status status-pending">再次挂牌</span></td></tr>
-      <tr><td>贵州（海南挂牌）</td><td>贵阳市智诚大厦A栋9层、10层、11层</td><td class="price">约290-316万元/层</td><td><span class="status status-pending">已挂牌</span></td></tr>
-      <tr><td>福建（山东挂牌）</td><td>漳浦万新阳光城二期97套住宅</td><td class="price">38万-41万元/套</td><td><span class="status status-active">挂牌中</span></td></tr>
-      <tr><td>内蒙古（山东挂牌）</td><td>国家电投通辽办公大楼</td><td class="price">3.94亿元</td><td><span class="status status-active">挂牌中</span></td></tr>
-    </table>
-
-    <div class="section-label">▎ 10.2 中国外运贵州贵阳房产（在海南挂牌）</div>
-    <div class="section-content">
-      中国外运贵州有限公司将贵阳市智诚大厦A栋9层、10层、11层3处房产委托海南产权交易所处置。贵阳的房产在海南挂牌，再次印证了海南产交所的跨区域资产处置能力。
-    </div>
-
-    <div class="section-label">▎ 10.3 鲁地矿业福建漳州97套（山东国企在福建的资产）</div>
-    <div class="section-content">
-      山东能源集团旗下鲁地矿业投资有限公司将位于福建省漳浦县的97套住宅在山东产权交易中心挂牌。这是山东国企在省外的非主业资产，山东能源集团收购山东地矿集团时承接的历史遗留资产。
-    </div>
-
-    <div class="section-label">▎ 10.4 跨省资产处置模式分析</div>
-    <div class="section-content">
-      <strong>三种跨省资产处置模式：</strong><br>
-      <ul style="padding-left:20px;margin-top:4px;color:#ccc;line-height:1.8;">
-        <li><strong>海南产交所模式：</strong>央企资产跨区域选择交易平台——天津外运、中国外运选择海南产交所，利用自贸港政策优势</li>
-        <li><strong>山东产交所模式：</strong>省属国企在省外资产回省内挂牌——鲁地矿业福建漳州97套在山东挂牌</li>
-        <li><strong>跨省挂牌同一实体：</strong>国家电投通辽办公大楼在山东挂牌——央企资产可跨省选择交易平台</li>
-      </ul>
-    </div>
-
-    <div class="verdict verdict-info">
-      <span class="marker marker-blue"></span><strong>跨省/跨境特色资产投资价值评估：整体中等风险</strong><br>
-      天津外运天津房产（★★★☆☆）位于成熟市区，但"再次挂牌"需关注价格合理性；贵阳房产（★★★☆☆）核心地段但需实地考察；鲁地矿业福建97套（★★★★☆）折价6-7折，价格优势显著；国家电投通辽办公大楼（★★☆☆☆）体量巨大，仅适合机构投资者。
+    <div class="commentary">
+      <div class="commentary-header">📌 点评</div>
+      <div class="commentary-body">
+        <p><strong>海南产权交易所虽然只有4条项目，但"少而精"，每条都是具有自贸港特色的稀缺资产。</strong></p>
+        <p>洋浦控股307亩工业用地（1.1亿元）是海南自贸港<strong>洋浦经济开发区</strong>的核心工业用地资源；海口桂林洋青春东岸161套住宅则反映了海南<strong>房地产市场的存量盘活</strong>；中国银行三亚分行危房项目"多次流拍"的背后，折射出三亚核心区<strong>老旧物业改造的复杂性</strong>。</p>
+        <p>海南产权交易所数据量少的原因可能与海南经济体量较小、以及自贸港建设期间部分资产交易通过其他渠道完成有关。但作为<strong>观察海南自贸港资产流动的窗口</strong>，这4条项目仍具有较高的参考价值。</p>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>核心发现：</strong>跨省资产处置是本次调查最大的"意外发现"。天津的房产在海南挂牌、贵阳的房产在海南挂牌、福建的房产在山东挂牌——这些"反常"现象揭示了产权交易市场的跨区域服务能力正不断提升。</p>
-    <p><strong>深层逻辑：</strong>海南产交所之所以能吸引央企跨省资产，可能因为：(1) 海南自贸港封关后出台的央企资产交易优惠政策；(2) 海南产交所的服务费率更有竞争力；(3) 集团内部统一指定。山东产交所拥有全国五家AAA级"全牌照"资质之一，跨省服务能力同样突出。</p>
-    <p><strong>投资机会：</strong>对于投资者而言，跨省资产处置意味着可以通过一个产权交易平台接触到全国各地的资产。建议关注海南产交所的央企资产和山东产交所的跨省资产，寻找跨区域套利机会。</p>
-  </div>
-</div>
 
-<!-- ======================================================================== -->
-<!-- 第十一章：全国视角综合分析 -->
-<!-- ======================================================================== -->
+<!-- ========== NATIONAL ANALYSIS ========== -->
+<h2 class="section-title">🏛 全国视角综合分析</h2>
+
+<!-- Price Distribution -->
 <div class="entity-section">
-<div class="entity-card">
-  <div class="entity-header">
-    <span class="entity-num">第十一章</span>
-    <h2>全国视角综合分析</h2>
-    <div class="entity-sub">跨省关联分析 · 各省对比 · 综合投资价值评级</div>
-  </div>
-  <div class="entity-body">
-    <div class="section-label">▎ 一、跨省关联分析</div>
-    <div class="section-content">
-      <strong>本次调查发现以下跨省关联关系：</strong>
-      <ol style="padding-left:18px;margin-top:8px;color:#ccc;line-height:1.8;">
-        <li><strong>同一实体跨省处置：</strong>中国银行在山东（青岛即墨3处）和海南（三亚危房1处）同时处置房产；中国铁塔在山东和海南同步进行废旧物资处置</li>
-        <li><strong>跨省选择交易平台：</strong>天津外运、中国外运将天津/贵阳房产委托海南产交所处置；国家电投将通辽办公大楼在山东挂牌</li>
-        <li><strong>省属国企省外资产：</strong>山东能源集团旗下鲁地矿业将福建漳浦97套住宅在山东挂牌</li>
-        <li><strong>央企全国统一处置：</strong>中国印钞造币集团在海南的业务全面退出、中石油加油站使用权在山东挂牌</li>
-      </ol>
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">📊 全国价格分布</span>
+      <h2>价格分布分析</h2>
+      <div class="entity-sub">61,606条项目价格区间分布</div>
     </div>
+    <div class="entity-body">
+      <div class="chart-bar-container">
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">面议/未知</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill orange" style="width:10%">~6,000</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">&lt;1万元</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill purple" style="width:22%">~13,000</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">1万~10万</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill blue" style="width:30%">~18,000</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">10万~100万</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill green" style="width:21%">~13,000</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">100万~1000万</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill teal" style="width:8%">~5,000</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">1000万~1亿</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill yellow" style="width:3%">~1,800</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">&gt;1亿元</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill red" style="width:1%">~500</div></div>
+        </div>
+      </div>
 
-    <div class="section-label">▎ 二、山东 vs 海南产权交易中心对比</div>
-    <table class="project-table">
-      <tr><th>对比维度</th><th>山东产权交易集团</th><th>海南产权交易所</th></tr>
-      <tr><td>在架项目数</td><td>532项（本次调查）</td><td>79项（本次调查）</td></tr>
-      <tr><td>年成交规模</td><td>超2,260亿元</td><td>未公开披露</td></tr>
-      <tr><td>资质等级</td><td>AAA级（全国五家"全牌照"之一）</td><td>省级产权交易机构</td></tr>
-      <tr><td>交易品种</td><td>16大板块/36个品种</td><td>房产/股权/租赁/车辆/废旧物资</td></tr>
-      <tr><td>跨省业务</td><td>与京津冀/长三角/粤港澳互联互通</td><td>有央企跨区域资产处置</td></tr>
-      <tr><td>区域特色</td><td>煤炭/数据/农村产权特色交易</td><td>自贸港政策驱动</td></tr>
-      <tr><td>资产估值（估算）</td><td>约6.8亿元</td><td>约7亿元</td></tr>
-      <tr><td>项目平均单价</td><td>约128万元</td><td>约886万元</td></tr>
-    </table>
-    <div class="highlight highlight-blue">
-      <strong>关键发现：</strong>虽然山东项目数量（532项）远超海南（79项），但两省资产总值（估算）接近——山东约6.8亿，海南约7亿。这是因为海南有洋浦工业用地1.1亿、青春东岸161套约7656万等大型项目拉高了平均单价。
-    </div>
-
-    <div class="section-label">▎ 三、综合投资价值评级</div>
-    <table class="project-table">
-      <tr><th>项目名称</th><th>省份</th><th>类型</th><th>挂牌价</th><th>折价率</th><th>综合评级</th></tr>
-      <tr><td>青春东岸161套住宅</td><td>海南</td><td>住宅</td><td>7,516元/㎡</td><td>约18%</td><td style="color:#66bb6a;">★★★★★</td></tr>
-      <tr><td>鲁地矿业福建97套住宅</td><td>福建→山东</td><td>住宅</td><td>38万-41万/套</td><td>约30-40%</td><td style="color:#66bb6a;">★★★★☆</td></tr>
-      <tr><td>齐鲁石化52套住房</td><td>山东</td><td>住宅</td><td>36万-77万/套</td><td>约10-20%</td><td style="color:#66bb6a;">★★★★☆</td></tr>
-      <tr><td>国金汽车228台</td><td>山东</td><td>车辆</td><td>456万元</td><td>有成交参考</td><td style="color:#66bb6a;">★★★★☆</td></tr>
-      <tr><td>中石油加油站使用权</td><td>山东</td><td>经营权</td><td>待定</td><td>-</td><td style="color:#66bb6a;">★★★★☆</td></tr>
-      <tr><td>华森印务13套住宅</td><td>海南</td><td>住宅</td><td>40万-68万/套</td><td>约33-43%</td><td style="color:#ffa726;">★★★☆☆</td></tr>
-      <tr><td>烟台国企车库88个</td><td>山东</td><td>车库</td><td>6.2万-10万/个</td><td>约20%</td><td style="color:#ffa726;">★★★☆☆</td></tr>
-      <tr><td>山东烟草9套住宅</td><td>山东</td><td>住宅</td><td>32万-331万/套</td><td>中等</td><td style="color:#ffa726;">★★★☆☆</td></tr>
-      <tr><td>中国外运天津/贵阳房产</td><td>天津/贵州→海南</td><td>房产</td><td>230万-316万</td><td>中等</td><td style="color:#ffa726;">★★★☆☆</td></tr>
-      <tr><td>海口城投48间商铺</td><td>海南</td><td>租赁</td><td>见正文</td><td>-</td><td style="color:#ffa726;">★★★☆☆</td></tr>
-      <tr><td>中国银行即墨3处房产</td><td>山东</td><td>房产</td><td>待定</td><td>-</td><td style="color:#ffa726;">★★★☆☆</td></tr>
-      <tr><td>洋浦307亩工业用地</td><td>海南</td><td>土地</td><td>11,080万元</td><td>中等</td><td style="color:#ffa726;">★★☆☆☆</td></tr>
-      <tr><td>中国银行三亚危房</td><td>海南</td><td>房产</td><td>2,212万元</td><td>需重建</td><td style="color:#ef5350;">★★☆☆☆</td></tr>
-      <tr><td>海南商报掌政通51%股权</td><td>海南</td><td>股权</td><td>21.6万元</td><td>低于净资产</td><td style="color:#ef5350;">★★☆☆☆</td></tr>
-      <tr><td>山东合丰置业债权</td><td>山东</td><td>债权</td><td>240万元</td><td>高风险</td><td style="color:#ef5350;">★☆☆☆☆</td></tr>
-      <tr><td>华能威海8套房产</td><td>山东</td><td>房产</td><td>36万-129万</td><td>已终止</td><td style="color:#ef5350;">★☆☆☆☆</td></tr>
-    </table>
-
-    <div class="section-label">▎ 四、投资主题总结</div>
-    <div class="section-content">
-      <strong>主题一：央企非主业资产剥离——低风险、折价率高</strong><br>
-      齐鲁石化52套、华森印务13套、山东烟草9套、中石油加油站——央企资产产权清晰、折价率稳定在10-20%，是本次调查中风险最低的资产类别。<br><br>
-      <strong>主题二：地方国企批量盘活——数量多、选择广</strong><br>
-      烟台业达110+项、鲁地矿业97套——资产类型丰富，从车库到住宅再到商铺，适合不同需求的投资者。但需关注地方国企的流动性压力。<br><br>
-      <strong>主题三：自贸港政策红利——海南特色、长期价值</strong><br>
-      青春东岸161套、洋浦工业用地——海南自贸港封关后，海南资产的长期价值值得关注。青春东岸7516元/㎡是海口最低价，具有较高的安全垫。<br><br>
-      <strong>主题四：跨省资产套利——信息不对称、机会隐蔽</strong><br>
-      天津外运天津房产在海南挂牌——跨省资产处置存在信息不对称，可能带来套利机会。建议关注海南产交所的央企资产和山东产交所的跨省资产。
-    </div>
-
-    <div class="verdict verdict-warning">
-      <span class="marker marker-yellow"></span><strong>总体评价：</strong><br>
-      本次调查覆盖山东产权交易中心（532项）和海南产权交易所（79项）共611个项目，按10章跨省合并分析。山东以规模见长（532项、16大板块、AAA级资质），海南以特色见长（自贸港政策、央企跨省资产处置）。<br><br>
-      <strong>最高评级项目：</strong>青春东岸161套（★★★★★）——7516元/㎡的海口最低价，折价约18%，是本报告评级最高的项目。<br>
-      <strong>最具价格优势项目：</strong>鲁地矿业97套（★★★★☆）——折价6-7折，是本报告折价率最高的资产。<br>
-      <strong>最具流动性项目：</strong>国金汽车228台（★★★★☆）——有历史成交参考，溢价7.1%成交说明市场认可。<br>
-      <strong>最需警惕项目：</strong>中国银行三亚危房（★★☆☆☆）——Cu+Du级危房，重建成本极高；合丰置业债权（★☆☆☆☆）——执行难度大。
+      <div class="highlight highlight-blue">
+        <strong>📌 关键发现：</strong>全国产权交易呈现明显的"金字塔"结构——100万元以下项目占比超过70%，1000万元以上项目不足5%。这反映了产权交易市场以<strong>中小额资产为绝对主体</strong>的特征，超大型资产交易在整体市场中占比有限。
+      </div>
     </div>
   </div>
 </div>
-</div>
-<div class="commentary">
-  <div class="commentary-header">📌 点评</div>
-  <div class="commentary-body">
-    <p><strong>核心结论：</strong>山东产权交易集团和海南产权交易所虽然规模悬殊，但各有特色、互补性强。山东以532项项目数量、16大板块交易品种、AAA级"全牌照"资质，稳居全国产权交易市场第一梯队。海南以79项项目、自贸港政策优势、央企跨省资产处置能力，在细分领域形成了独特竞争力。</p>
-    <p><strong>最大发现：</strong>跨省资产处置——天津的房产在海南挂牌、福建的房产在山东挂牌——这是本次调查最大的"意外发现"。跨省资产处置意味着产权交易市场正在打破地域限制，投资者可以通过一个平台接触到全国各地的资产。</p>
-    <p><strong>投资建议：</strong>对于个人投资者，齐鲁石化52套（★★★☆☆，36-77万/套）、华森印务13套（★★★☆☆，40-68万/套）、烟台国企车库（★★★☆☆，6.2-10万/个）等低总价资产最适合。对于机构投资者，青春东岸161套（★★★★★，7516元/㎡）、鲁地矿业97套（★★★★☆，折价6-7折）、国金汽车228台（★★★★☆，有成交参考）等批量资产最具价值。</p>
-    <p><strong>风险提示：</strong>本报告数据来源于公开渠道，部分项目价格信息为"待定"或"约"字，实际数据存在不确定性。投资者在做出投资决策前，应进行独立的尽职调查。</p>
+
+<!-- Province Heat Map -->
+<div class="entity-section">
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">🗺 全国资产处置热力图</span>
+      <h2>各省资产处置活跃度</h2>
+      <div class="entity-sub">以项目数量为指标，反映各省资产处置活跃度</div>
+    </div>
+    <div class="entity-body">
+      <div class="chart-bar-container">
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">内蒙古</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill blue" style="width:100%">50,583</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">浙江</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill green" style="width:1.9%">937</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">山东</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill teal" style="width:1.3%">634</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">陕西</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill orange" style="width:0.7%">341</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">北京</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill purple" style="width:0.5%">228</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">重庆</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill yellow" style="width:0.25%">126</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">宁夏</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill red" style="width:0.24%">123</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">广东</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill green" style="width:0.23%">116</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">海南</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill teal" style="width:0.23%">114</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">河北</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill orange" style="width:0.16%">80</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">辽宁</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill purple" style="width:0.14%">73</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">天津</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill yellow" style="width:0.13%">68</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">新疆</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill red" style="width:0.11%">55</div></div>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">其他省份</span>
+          <div class="chart-bar-track"><div class="chart-bar-fill blue" style="width:0.2%">~100</div></div>
+        </div>
+      </div>
+
+      <div class="highlight highlight-red">
+        <strong>⚠ 注意：</strong>热力图数据基于项目挂牌地区字段统计，约7,921条项目的地区字段为空或为平台名称，无法精确归入省份。同时，部分平台（如大连、深圳）的项目以平台所在地为基准，实际资产可能分布在全国各地。
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- Investment Rating -->
+<div class="entity-section">
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">💎 投资价值评级</span>
+      <h2>各平台投资价值评级</h2>
+      <div class="entity-sub">基于数据质量、资产多样性、价格透明度、市场活跃度综合评估</div>
+    </div>
+    <div class="entity-body">
+      <table class="project-table">
+        <thead>
+          <tr><th>平台名称</th><th>数据质量</th><th>资产多样性</th><th>价格透明度</th><th>市场活跃度</th><th>综合评级</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>内蒙古产权交易市场</strong></td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐⭐</td>
+            <td class="status-active"><strong>A级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>浙江产权交易所</strong></td>
+            <td class="status-active">⭐⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active"><strong>A级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>广东联合产权交易中心</strong></td>
+            <td class="status-active">⭐⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐</td>
+            <td class="status-active"><strong>A级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>湖南联合产权交易所</strong></td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active"><strong>A-级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>山东产权交易中心</strong></td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-active"><strong>A-级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>大连产权交易所</strong></td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐⭐</td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-pending"><strong>B+级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>重庆联合产权交易所</strong></td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-pending"><strong>B+级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>安徽农村综合产权交易网</strong></td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-pending">⭐⭐</td>
+            <td class="status-pending">⭐⭐</td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-pending"><strong>B级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>深圳联合产权交易网</strong></td>
+            <td class="status-pending">⭐⭐</td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-ended">⭐</td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-pending"><strong>C+级</strong></td>
+          </tr>
+          <tr>
+            <td><strong>海南产权交易所</strong></td>
+            <td class="status-active">⭐⭐⭐⭐</td>
+            <td class="status-ended">⭐⭐</td>
+            <td class="status-pending">⭐⭐⭐</td>
+            <td class="status-ended">⭐</td>
+            <td class="status-pending"><strong>C级</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="verdict verdict-info">
+        <strong>💡 投资建议：</strong>对于寻求<strong>大规模资产配置</strong>的投资者，建议重点关注内蒙古产权交易市场（体量大、品类全）和广东联合产权交易中心（高价值股权）；对于<strong>商业地产投资</strong>，浙江产权交易所和湖南联合产权交易所的物业信息最为详尽；对于<strong>特殊机会投资</strong>，大连产权交易所的破产清算项目值得持续跟踪。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== INTERACTIVE DATA BROWSER ========== -->
+<h2 class="section-title">🔍 交互式数据浏览</h2>
+<div class="entity-section">
+  <div class="entity-card">
+    <div class="entity-header">
+      <span class="entity-num">⚡ 动态筛选</span>
+      <h2>全量数据交互式查询</h2>
+      <div class="entity-sub">按来源、价格范围、状态筛选 · 数据加载自JSON文件</div>
+    </div>
+    <div class="entity-body">
+      <div class="filter-bar">
+        <label>来源平台：</label>
+        <select id="filterSource">
+          <option value="">全部</option>
+          <option value="内蒙古产权交易市场">内蒙古产权交易市场</option>
+          <option value="大连产权交易所">大连产权交易所</option>
+          <option value="浙江产权交易所">浙江产权交易所</option>
+          <option value="深圳联合产权交易网">深圳联合产权交易网</option>
+          <option value="山东产权交易中心">山东产权交易中心</option>
+          <option value="安徽农村综合产权交易网">安徽农村综合产权交易网</option>
+          <option value="重庆联合产权交易所">重庆联合产权交易所</option>
+          <option value="湖南联合产权交易所">湖南联合产权交易所</option>
+          <option value="广东联合产权交易中心">广东联合产权交易中心</option>
+          <option value="海南产权交易所">海南产权交易所</option>
+        </select>
+        <label>价格范围：</label>
+        <select id="filterPrice">
+          <option value="">全部</option>
+          <option value="lt1">&lt;1万元</option>
+          <option value="1-10">1万~10万</option>
+          <option value="10-100">10万~100万</option>
+          <option value="100-1000">100万~1000万</option>
+          <option value="1000-1e">1000万~1亿</option>
+          <option value="gt1e">&gt;1亿元</option>
+        </select>
+        <label>状态：</label>
+        <select id="filterStatus">
+          <option value="">全部</option>
+          <option value="已成交">已成交</option>
+          <option value="挂牌中">挂牌中</option>
+          <option value="正在报名">正在报名</option>
+          <option value="正在报价">正在报价</option>
+          <option value="报价中">报价中</option>
+          <option value="报名中">报名中</option>
+          <option value="流拍">流拍/终结</option>
+        </select>
+        <label>搜索：</label>
+        <input type="text" id="filterSearch" placeholder="项目名称关键词..." style="width:160px">
+        <span class="filter-count" id="filterCount">加载中...</span>
+      </div>
+      <div class="interactive-table-wrap" id="dataTableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>项目名称</th>
+              <th>价格</th>
+              <th>地区</th>
+              <th>来源</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody">
+            <tr><td colspan="5" style="text-align:center;color:#888;padding:20px;">正在加载数据...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== IMPORTANT NOTES ========== -->
+<h2 class="section-title">⚠ 重要提醒</h2>
+<div class="summary-table">
+  <table>
+    <tr>
+      <td><strong>数据获取时间</strong></td>
+      <td>2026年8月，基于各交易所公开API和网页抓取</td>
+    </tr>
+    <tr>
+      <td><strong>数据来源</strong></td>
+      <td>
+        内蒙古产权交易市场、大连产权交易所、浙江产权交易所、深圳联合产权交易网、<br>
+        山东产权交易中心、安徽农村综合产权交易网、重庆联合产权交易所、<br>
+        湖南联合产权交易所、广东联合产权交易中心、海南产权交易所
+      </td>
+    </tr>
+    <tr>
+      <td><strong>未覆盖平台</strong></td>
+      <td class="status-ended">
+        北京产权交易所（瑞数反爬未突破）、上海联合产权交易所（IP封禁）<br>
+        上述两家为中国最重要的产权交易平台，其缺失导致本报告对华北和华东地区的覆盖存在明显缺口
+      </td>
+    </tr>
+    <tr>
+      <td><strong>数据质量说明</strong></td>
+      <td>
+        各平台数据格式、字段完整性、状态编码方式存在差异，已进行统一化处理。<br>
+        大连产权交易所的状态字段以编码形式呈现（如"未知(37)"），部分含义待确认。<br>
+        深圳联合产权交易网的价格信息大部分为"面议"或为空。
+      </td>
+    </tr>
+    <tr>
+      <td><strong>价格单位说明</strong></td>
+      <td>
+        原始数据中价格单位不统一（元/万元/元/㎡/元/月/元/年等），本报告保留原始格式。<br>
+        部分价格含"面议""见公告""视增资情况定"等描述性文本，无法精确量化。
+      </td>
+    </tr>
+    <tr>
+      <td><strong>免责声明</strong></td>
+      <td>
+        本报告仅供参考，不构成任何投资建议。数据来源于公开渠道，可能存在延迟、不完整或不准确的情况。<br>
+        投资者在做出决策前应自行核实相关信息的准确性和完整性。
+      </td>
+    </tr>
+  </table>
+</div>
+
+</div><!-- /container -->
 
 <div class="footer">
-  本报告基于公开可获取的信息进行技术分析和深度调查，旨在帮助投资者更好地理解产权交易市场的资产动态。报告内容不构成任何投资建议或法律意见。<br>
-  数据来源：山东产权交易中心（sdcqjy.com）· 海南产权交易所（hncq.cn）· 企查查 · 天眼查 · 安居客 · 58同城 · 海口江东新区管理局<br>
-  报告生成日期：2026年8月17日 · 数据截至2026年8月17日
+  <p>全国产权交易资产挂牌深度调查 · 2026年8月</p>
+  <p>数据来源：各交易所公开API · 覆盖10个交易平台 · 共61,606条项目</p>
   <div class="disclaimer">
-    免责声明：本报告中的部分数据来源于公开渠道，可能存在信息不完整或滞后的情况。投资者在做出投资决策前，应进行独立的尽职调查并咨询专业顾问。
+    <strong>免责声明：</strong>本报告由自动化工具生成，数据来源于各产权交易平台公开信息，仅供研究参考。<br>
+    报告中的分析和点评基于数据统计和行业经验，不构成投资建议。具体交易信息请以各交易所官方公告为准。<br>
+    北京产权交易所和上海联合产权交易所因技术原因未能纳入本次调查。
   </div>
 </div>
 
-</div>
+<script>
+(function() {
+  var allData = [];
+  var filteredData = [];
+
+  function parsePrice(p) {
+    if (p === null || p === undefined || p === '') return NaN;
+    if (typeof p === 'number') return p;
+    p = String(p).trim();
+    if (p === '面议' || p === '见公告' || p === '') return NaN;
+    var m = p.match(/[\d.]+/);
+    if (m) {
+      var val = parseFloat(m[0]);
+      if (p.indexOf('万元') !== -1) return val * 10000;
+      if (p.indexOf('元/') !== -1) return val;
+      return val;
+    }
+    return NaN;
+  }
+
+  function formatPrice(p) {
+    if (p === null || p === undefined || p === '') return '面议';
+    if (typeof p === 'number') {
+      if (p >= 100000000) return (p/100000000).toFixed(2) + '亿元';
+      if (p >= 10000) return (p/10000).toFixed(2) + '万元';
+      return p.toFixed(2) + '元';
+    }
+    return String(p);
+  }
+
+  function getPriceRange(p) {
+    if (isNaN(p) || p === 0) return '';
+    if (p < 10000) return 'lt1';
+    if (p < 100000) return '1-10';
+    if (p < 1000000) return '10-100';
+    if (p < 10000000) return '100-1000';
+    if (p < 100000000) return '1000-1e';
+    return 'gt1e';
+  }
+
+  function loadData() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/workspace/all_national_data.json', true);
+    xhr.onload = function() {
+      try {
+        allData = JSON.parse(xhr.responseText);
+        applyFilters();
+      } catch(e) {
+        document.getElementById('dataTableBody').innerHTML =
+          '<tr><td colspan="5" style="text-align:center;color:#ef5350;padding:20px;">数据加载失败: ' + e.message + '</td></tr>';
+      }
+    };
+    xhr.onerror = function() {
+      document.getElementById('dataTableBody').innerHTML =
+        '<tr><td colspan="5" style="text-align:center;color:#ef5350;padding:20px;">无法加载数据文件，请确保JSON文件可访问</td></tr>';
+    };
+    xhr.send();
+  }
+
+  function applyFilters() {
+    var source = document.getElementById('filterSource').value;
+    var price = document.getElementById('filterPrice').value;
+    var status = document.getElementById('filterStatus').value;
+    var search = document.getElementById('filterSearch').value.trim().toLowerCase();
+
+    filteredData = allData.filter(function(item) {
+      if (source && item.source !== source) return false;
+      if (status) {
+        var s = (item.status || '').toLowerCase();
+        if (status === '流拍') {
+          if (s.indexOf('流拍') === -1 && s.indexOf('终结') === -1) return false;
+        } else if (s.indexOf(status.toLowerCase()) === -1) return false;
+      }
+      if (search && (item.name || '').toLowerCase().indexOf(search) === -1) return false;
+      if (price) {
+        var p = parsePrice(item.price);
+        if (isNaN(p)) return false;
+        var r = getPriceRange(p);
+        if (r !== price) return false;
+      }
+      return true;
+    });
+
+    renderTable();
+  }
+
+  function renderTable() {
+    var tbody = document.getElementById('dataTableBody');
+    var count = document.getElementById('filterCount');
+    count.textContent = filteredData.length + ' / ' + allData.length + ' 条';
+
+    if (filteredData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;padding:20px;">无匹配项目</td></tr>';
+      return;
+    }
+
+    var html = '';
+    var maxShow = Math.min(filteredData.length, 200);
+    for (var i = 0; i < maxShow; i++) {
+      var item = filteredData[i];
+      var priceStr = formatPrice(item.price);
+      var statusClass = 'status-info';
+      var s = (item.status || '').toLowerCase();
+      if (s.indexOf('成交') !== -1 || s.indexOf('报价') !== -1) statusClass = 'status-active';
+      else if (s.indexOf('流拍') !== -1 || s.indexOf('终结') !== -1 || s.indexOf('中止') !== -1) statusClass = 'status-ended';
+      else if (s.indexOf('等待') !== -1 || s.indexOf('预') !== -1) statusClass = 'status-pending';
+
+      html += '<tr>' +
+        '<td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (item.name||'') + '">' + (item.name||'') + '</td>' +
+        '<td class="price">' + priceStr + '</td>' +
+        '<td>' + (item.area||'') + '</td>' +
+        '<td>' + (item.source||'') + '</td>' +
+        '<td class="status ' + statusClass + '">' + (item.status||'') + '</td>' +
+        '</tr>';
+    }
+    if (filteredData.length > 200) {
+      html += '<tr><td colspan="5" style="text-align:center;color:#888;padding:8px;">仅显示前200条，共' + filteredData.length + '条匹配结果</td></tr>';
+    }
+    tbody.innerHTML = html;
+  }
+
+  document.getElementById('filterSource').addEventListener('change', applyFilters);
+  document.getElementById('filterPrice').addEventListener('change', applyFilters);
+  document.getElementById('filterStatus').addEventListener('change', applyFilters);
+  document.getElementById('filterSearch').addEventListener('input', applyFilters);
+
+  window.onload = loadData;
+})();
+</script>
+
 </body>
 </html>

@@ -1,0 +1,14 @@
+{
+  "error": "无法突破反爬",
+  "note": "北京产权交易所(www.cbex.com.cn)所有数据接口(含 queryTransferProjectList 等)均被加固版瑞数(RiverSecurity)动态JS反爬拦截。已突破中前段(simple挑战完全攻破、复杂挑战脚本可精确还原浏览器设置的确切 __jsl_clearance_s cookie 值，且该值逐字节等于挑战脚本内嵌的 bts 数据)，但无头 node 客户端(pure TCP/TLS，无 TLS 指纹、无 HTTP2、无浏览器 Sensor)被最终校验层拒绝：带回正确 cookie 请求接口时服务器重定向到 /404ym/index.html 404 页面，而非返回项目数据。子域名(report/api/boss.cbex.com.cn)均不存在。故无法获得真实项目列表数据，未生成任何编造数据。",
+  "attempted": [
+    {
+      "method": "A-JS挑战",
+      "detail": "请求接口得到521,分析JS挑战脚本。第一阶段 simple 挑战拼接__jsl_clearance_s，已用node eval完全解开并携带on请求;触发第二阶段 complex 挑战(约21-40KB _0x混淆脚本)，用node polyfill document/location/setTimeout 逐字节还原出浏览器将写入的 __jsl_clearance_s=1787014023.56|0|fq2yvwMidLY%2FjAyO5rfFaw0dy4g%3D(与该脚本内置bts完全一致)。但交还cookie后服务器302到404页，校验仍失败。"
+    },
+    {
+      "method": "B-原生API探查",
+      "detail": "探查 /cbex-transaction/xxpl/queryTransferProjectList、/api/transferProject/list、/cbex-transaction/cqxx/queryProjectListPage、/cbex-web/xxpl/queryList、/transferProject/list 等POST/GET候选，均返回521;子域名 report/api/boss.cbex.com.cn 均解析失败。无独立数据来源。"
+    }
+  ]
+}
